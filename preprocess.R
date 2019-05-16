@@ -26,6 +26,7 @@ auto_preprocess<-function(filename="peptides.txt",tech_rep_f="technical_rep.txt"
   
   #read annotation
   anno<-read.table(tech_rep_f,header=theader,sep=tsep)
+  colnames(anno)<-c("V1","V2")
   rownames(anno)<-anno$V1
   anno<-anno[colnames(pep.data.log2.qn),]
   replicates<-split(as.vector(anno$V1),as.factor(anno$V2))

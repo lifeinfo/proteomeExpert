@@ -9,6 +9,60 @@ shinyApp(
     navbarPage(
       theme = shinytheme("sandstone"),  # <--- To use a theme, uncomment this
       "ProteomeExpert |",
+      ####################################################Introducation
+      tabPanel("Introducation", "",
+               sidebarPanel(
+                 tags$h5("Click to estimate:"),
+                 HTML("<p>This page remains for what?</p>")
+      
+               ),
+               mainPanel(
+                 tabsetPanel(
+                   tabPanel("Introduction",
+                            h4("Summary"),
+                            HTML("<p>proteomeExpert was pulibed in nature method 2019 </p>")
+                            
+                   )),
+                   tabsetPanel(
+                     tabPanel("Citation",
+                              h4(""),
+                              HTML("<p>proteomeExpert was pulibed in nature method 2019 </p>")
+                              
+                     )
+                   )
+               )),
+      ####################################################Data console
+      tabPanel("Data Console", "",
+               sidebarPanel(
+                 tags$h5("Upload Data:"),
+                 fileInput("peptide_matrix", "Select your peptide file (optional):",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")),
+                 fileInput("protein_matrix", "Select your protein file (optional):",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")),
+                 fileInput("sample_info", "Select your sample file (optional):",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")),
+                 fileInput("individual_info", "Select your individual file (optional):",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv"))
+               ),
+               mainPanel(
+                 tabsetPanel(
+                   conditionalPanel("input.n >= 50",
+                                    plotOutput("scatterPlot", height = 300)
+                   )
+                 )
+               )),
       ####################################################power analysis
       tabPanel("Power Analysis", "",
                sidebarPanel(
