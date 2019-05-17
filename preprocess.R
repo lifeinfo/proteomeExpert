@@ -2,11 +2,19 @@ library(preprocessCore)
 source("lr_2prot.R")
 source("combat.R")
 options(stringsAsFactors = F)
+##############################
+pepstat<-function(d){
+  tgs<-length(d$peptide_group_label)
+  prot_groups<-length(unique(d$prot))
+  protetrypic<-length(grep("^1/",unique(d$prot)))
+  return(data.frame(transition_groups=tgs,protein_groups=prot_groups,protetrypic=protetrypic))
+}
 ###########format peptide data matrix tg,prot,int; tech_rep_f:no header, sample name,replicate label
 auto_preprocess<-function(filename="peptides.txt",tech_rep_f="technical_rep.txt",batchf='F',psep="\t",tsep="\t",pheader=TRUE,theader=FALSE,
                           bheader=TRUE,bsep="\t"){
   pep.data<-read.table(filename,header=pheader,sep=psep)
-  pep.data<-pep.data[!grepl("/CON",pep.data[,2],fixed = T),]
+  pep.data<-pep.data[!grepl("^1/CON",pep.data[,2],fixed = F),]
+  
   pep.data[pep.data==0]<-NA
   pep<-as.vector(as.matrix(pep.data[,3:ncol(pep.data)]))
   #print(paste("missing rate is: ",sum(is.na(pep))/length(pep),sep=""))

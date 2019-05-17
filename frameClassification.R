@@ -9,6 +9,7 @@ shinyApp(
     navbarPage(
       theme = shinytheme("sandstone"),  # <--- To use a theme, uncomment this
       "ProteomeExpert |",
+
       ####################################################Introducation
       tabPanel("Introducation", "",
                sidebarPanel(
@@ -34,27 +35,37 @@ shinyApp(
       ####################################################Data console
       tabPanel("Data Console", "",
                sidebarPanel(
-                 tags$h5("Upload Data:"),
+                 tags$h2("Upload Data:"),
+                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
                  fileInput("peptide_matrix", "Select your peptide file (optional):",
                            multiple = TRUE,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
+                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                 
                  fileInput("protein_matrix", "Select your protein file (optional):",
                            multiple = TRUE,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
+                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                 
                  fileInput("sample_info", "Select your sample file (optional):",
                            multiple = TRUE,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
+                 actionButton("sampleInfo", "annotation", class = "btn-primary"),
+                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                 
                  fileInput("individual_info", "Select your individual file (optional):",
                            multiple = TRUE,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
-                                      ".csv"))
+                                      ".csv")),
+                 actionButton("individualInfo", "annotation", class = "btn-primary")
+                 
                ),
                mainPanel(
                  tabsetPanel(
