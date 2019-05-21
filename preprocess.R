@@ -12,7 +12,7 @@ pepstat<-function(d){
 ###########format peptide data matrix tg,prot,int; tech_rep_f:no header, sample name,replicate label
 auto_preprocess<-function(filename="peptides.txt",tech_rep_f="technical_rep.txt",batchf='F',psep="\t",tsep="\t",pheader=TRUE,theader=FALSE,
                           bheader=TRUE,bsep="\t"){
-  pep.data<-read.table(filename,header=pheader,sep=psep)
+  pep.data<-read.table(filename,header=pheader,sep=psep,check.names =F)
   pep.data<-pep.data[!grepl("^1/CON",pep.data[,2],fixed = F),]
   
   pep.data[pep.data==0]<-NA
@@ -33,7 +33,7 @@ auto_preprocess<-function(filename="peptides.txt",tech_rep_f="technical_rep.txt"
   #write.table(pep.data.log2.qn, "data/qn_log2_pep.txt",col.names=T,row.names=T,quote = F,sep = "\t",na = "NA")
   
   #read annotation
-  anno<-read.table(tech_rep_f,header=theader,sep=tsep)
+  anno<-read.table(tech_rep_f,header=theader,sep=tsep, check.names =F)
   colnames(anno)<-c("V1","V2")
   rownames(anno)<-anno$V1
   anno<-anno[colnames(pep.data.log2.qn),]

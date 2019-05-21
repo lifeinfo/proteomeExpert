@@ -21,13 +21,13 @@ shinyApp(
                  tabsetPanel(
                    tabPanel("Introduction",
                             h4("Summary"),
-                            HTML("<p>proteomeExpert was pulibed in nature method 2019 </p>")
+                            HTML("<p>proteomeExpert was published in * 2019 </p>")
                             
                    )),
                    tabsetPanel(
                      tabPanel("Citation",
                               h4(""),
-                              HTML("<p>proteomeExpert was pulibed in nature method 2019 </p>")
+                              HTML("<p>proteomeExpert was published in * 2019 </p>")
                               
                      )
                    )
@@ -38,41 +38,58 @@ shinyApp(
                  tags$h2("Upload Data:"),
                  tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
                  fileInput("peptide_matrix", "Select your peptide file (optional):",
-                           multiple = TRUE,
+                           multiple = F,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
                  tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                  
                  fileInput("protein_matrix", "Select your protein file (optional):",
-                           multiple = TRUE,
+                           multiple = F,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
                  tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                  
                  fileInput("sample_info", "Select your sample file (optional):",
-                           multiple = TRUE,
+                           multiple = F,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
                                       ".csv")),
-                 actionButton("sampleInfo", "annotation", class = "btn-primary"),
+                 #actionButton("sampleInfo", "annotation", class = "btn-primary"),
                  tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                  
                  fileInput("individual_info", "Select your individual file (optional):",
-                           multiple = TRUE,
+                           multiple = F,
                            accept = c("text/csv",
                                       "text/comma-separated-values,text/plain",
-                                      ".csv")),
-                 actionButton("individualInfo", "annotation", class = "btn-primary")
+                                      ".csv"))
+                 #actionButton("individualInfo", "annotation", class = "btn-primary")
                  
                ),
                mainPanel(
-                 tabsetPanel(
-                   conditionalPanel("input.n >= 50",
-                                    plotOutput("scatterPlot", height = 300)
-                   )
-                 )
+                 fluidRow(
+                   column(3, wellPanel(
+                     tags$h4("Annotate sample columns:"),
+                     tags$hr(style="algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+                     
+                     # This outputs the dynamic UI component
+                     uiOutput("sampleUi")
+                   )),
+
+                   column(3, offset = 0.5, wellPanel(
+                     tags$h4("Annotate individual columns:"),
+                     tags$hr(style="algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+                     
+                     # This outputs the dynamic UI component
+                     uiOutput("individualUi")
+                   ))
+                 ),
+                 fluidRow(column(width = 6, wellPanel(
+                   # This outputs the dynamic UI component
+                     textOutput("sampleRes")
+
+                 )))
                )),
       ####################################################power analysis
       tabPanel("Power Analysis", "",
@@ -343,6 +360,7 @@ shinyApp(
      )
     )
   ),
+  ################################################server############################################################################################
   server = function(input, output) {
     output$txtout <- renderText({
       paste(input$n, input$m, sep = ", ")
@@ -359,7 +377,6 @@ shinyApp(
     })
     ###############################data preprocess
     # updated when the user clicks the button
-    flag<<-TRUE
     DdatasetInput <- eventReactive(input$process,{
       if(is.null(input$PeptideMatrix))
         "Please upload your files!"
@@ -392,5 +409,100 @@ shinyApp(
         write.table(DdatasetInput(), file, row.names = FALSE,quote = F,sep = "\t")
       }
     )
+    ############################data console##############################################################
+    output$sampleUi <- renderUI({
+      if (is.null(input$sample_info))
+        "Please upload your files!"
+      else{#print(input$sample_info)
+      sample_info<-read.csv(input$sample_info$datapath,header = T,sep = ",",nrow=1)
+      sample_header<<-colnames(sample_info)
+      tagList(
+      selectInput("sample_info_id", "select sample id",
+                  choices = sample_header,
+                  selected = sample_header[1]
+      ),
+      selectInput("sample_info_type", "select sample type",
+                  choices = sample_header,
+                  selected = sample_header[2]
+      ),
+      selectInput("sample_info_batch_id", "select batch id",
+                  choices = c(sample_header,"select..."),
+                  selected = "select..."
+      ),
+      selectInput("sample_info_technicalRep_id", "select technical replica id",
+                  choices = c(sample_header,"select..."),
+                  selected = "select..."
+      ),
+      selectInput("sample_info_individual_id", "select individual id",
+                  choices = c(sample_header,"select..."),
+                  selected = "select..."
+      ),
+      actionButton("sample_info_annotation", "Submit", class = "btn-primary")
+      )
+      }
+    })
+    # sample_annotation <- eventReactive(input$sample_info_annotation,{
+    #   str(input$sample_info_id)
+    #        
+    # }, ignoreNULL = FALSE)
+    # output$dynamic_value <- renderPrint({
+    #   
+    #   sample_annotation()
+    #   #read.csv(input$sample_info$datapath,header = F,sep = "\t",nrows = 1)
+    # })
+    
+    output$individualUi <- renderUI({
+      if (is.null(input$individual_info))
+        "Please upload your files!"
+      else{#print(input$sample_info)
+        individual_info<-read.csv(input$individual_info$datapath,header = T,sep = ",",nrow=1)
+        individual_header<-colnames(individual_info)
+        tagList(
+          selectInput("individual_info_id", "select individual id/name",
+                      choices = individual_header,
+                      selected = individual_header[1]
+          ),
+          selectInput("individual_info_type", "select individual type",
+                      choices = individual_header,
+                      selected = individual_header[2]
+          ),
+
+          actionButton("individual_info_annotation", "Submit", class = "btn-primary")
+        )
+      }
+    })
+    sampleInfoInput <- eventReactive(input$sample_info_annotation,{
+       sampleInfo<-read.csv(input$sample_info$datapath,header = T,sep = ",")
+       sample_header<-colnames(sampleInfo)
+       colnames(sampleInfo)[which(sample_header==input$sample_info_id)]<-"sampleId"
+       colnames(sampleInfo)[which(sample_header==input$sample_info_type)]<-"sampleType"
+    
+      if(input$sample_info_batch_id!='select...')
+         colnames(sampleInfo)[which(sample_header==input$sample_info_batch_id)]<-"batchId"
+      if(input$sample_info_technicalRep_id!='select...')
+         colnames(sampleInfo)[which(sample_header==input$sample_info_technicalRep_id)]<-"technicalId"
+      if(input$sample_info_individual_id!='select...')
+         colnames(sampleInfo)[which(sample_header==input$sample_info_individual_id)]<-"individualId"
+      #print(head(sampleInfoInput()))
+      sampleInfo
+    }, ignoreNULL = T)
+    
+    sampleResInput<-eventReactive(input$sample_info_annotation,{
+      sampleInfoInput()
+    })
+    output$sampleRes <- renderText({
+        if(class(sampleResInput())=="data.frame")
+          "Sucessed annotation sample column!"
+        else "failed annotation sample column"
+    })
+    # output$dynamic_table <- renderTable({
+    #   
+    #   t<-data.frame(sampleInfoInput())
+    #   n=5
+    #   if(ncol(t)<5)
+    #     n=ncol(t)
+    #   head(t[,1:n])
+    # 
+    # })
   }
 )
