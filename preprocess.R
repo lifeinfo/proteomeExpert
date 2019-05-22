@@ -12,7 +12,7 @@ pepstat<-function(d){
 ###########format peptide data matrix tg,prot,int; tech_rep_f:no header, sample name,replicate label
 auto_preprocess<-function(filename="peptides.txt",tech_rep_f="technical_rep.txt",batchf='F',psep="\t",tsep="\t",pheader=TRUE,theader=FALSE,
                           bheader=TRUE,bsep="\t"){
-  pep.data<-read.table(filename,header=pheader,sep=psep,check.names =F)
+  pep.data<-read.table(filename,header=pheader,sep=psep,check.names =F,quote = "",fill = TRUE)
   pep.data<-pep.data[!grepl("^1/CON",pep.data[,2],fixed = F),]
   
   pep.data[pep.data==0]<-NA
