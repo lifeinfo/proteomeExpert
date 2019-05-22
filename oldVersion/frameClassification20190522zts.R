@@ -202,33 +202,56 @@ shinyApp(
                  )
                )),
     
-      ######################################            QC             ##################################################################################
+      #######################QC
       tabPanel("QC", "",
                sidebarPanel(
-                 tags$h2("Select modules you want to process:"),
+                 # Input: Checkbox if file has header ----
+                 checkboxInput("Qheader", "Header", TRUE),
+                 
+                 
+                 # Input: Select separator ----
+                 radioButtons("Qsep", "Separator",
+                              choices = c(Comma = ",",
+                                          Semicolon = ";",
+                                          Tab = "\t"),
+                              selected = "\t"),
+                 
+                 # Input: Select quotes ----
+                 radioButtons("Qquote", "Quote",
+                              choices = c(None = "",
+                                          "Double Quote" = '"',
+                                          "Single Quote" = "'"),
+                              selected = ''),
+                 
+                 
+                 # Horizontal line ----
+                 tags$hr(),
+                 # Input: Select a file ----
+                 fileInput("Qfile", "Choose protein/peptide CSV/TXT File",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")),
+                 fileInput("anno", "Choose annotation File",
+                           multiple = TRUE,
+                           accept = c("text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")),
                  tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
-                 checkboxInput("MissingValueExplore", "MissingValueExplore", TRUE),
-                 checkboxInput("reproducibility", "Reproducibility", TRUE),
-                 checkboxInput("qcPca", "PCA", TRUE),
-                 checkboxInput("qcUmap", "UMAP", FALSE),
-
-                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
-             
+                 
                  tags$h5("Click to process:"),
-                 actionButton("QC", "Submit", class = "btn-primary")
+                 actionButton("qc", "Submit", class = "btn-primary")
                  
                ),
                
                mainPanel(
                  tabsetPanel(
                    tabPanel("Missing value",
-                            tags$hr(),
-                            h3(textOutput("caption")),
-                            plotOutput("missingPlot"),
-
-                            verbatimTextOutput("QMparameters"),
-                            width = 8,
-                            height=15
+                            h4("Summary"),
+                            tableOutput("QMtable"),
+                            h4("Your input info."),
+                            verbatimTextOutput("QMparameters")
+                            
                             
                    ),
                    
@@ -342,7 +365,7 @@ shinyApp(
      )
     )
   ),
-  ############################################   server           ###################################################################################
+  ################################################server############################################################################################
   server = function(input, output) {
     output$txtout <- renderText({
       paste(input$n, input$m, sep = ", ")
@@ -357,7 +380,7 @@ shinyApp(
     output$Ptable <- renderTable({
       head(iris, 4)
     })
-    ###############################     data preprocess        ##############################
+    ###############################data preprocess
     # updated when the user clicks the button
     DdatasetInput <- eventReactive(input$process,{
       if(is.null(input$PeptideMatrix))
@@ -391,39 +414,7 @@ shinyApp(
         write.table(DdatasetInput(), file, row.names = FALSE,quote = F,sep = "\t")
       }
     )
-    ############################              QC             ##############################################################
-    
-    QCdatasetInput <- eventReactive(input$QC,{
-      if(is.null(readProteinM()))
-        "Please upload your protein files!"
-      else
-        readProteinM()
-      
-    }, ignoreNULL = FALSE)
-    
-    # output$QMparameters <- renderText({
-    #   QCdatasetInput()
-    # })
-    ##############missing value explore 
-    
-    output$missingPlot <- renderPlot({
-      if(class(QCdatasetInput())=="data.frame"){
-         source("missingValueExplore_zts.R")
-         missing_plot(readProteinM())
-      }
-      else
-        plot(1,1,main="Please upload your protein matrix!",col="white")
-    },height=800,units="px")
-    
-    
-    ############################              data console             ##############################################################
-    
-    ### for read protein matrix
-    readProteinM<-reactive({
-      if(!is.null(input$protein_matrix))
-           prot<-read.table(input$protein_matrix$datapath,header = T,sep = "\t",check.names = F)
-      })
-    ### for column annotation
+    ############################data console##############################################################
     output$sampleUi <- renderUI({
       if (is.null(input$sample_info))
         "Please upload your files!"
@@ -455,7 +446,15 @@ shinyApp(
       )
       }
     })
-
+    # sample_annotation <- eventReactive(input$sample_info_annotation,{
+    #   str(input$sample_info_id)
+    #        
+    # }, ignoreNULL = FALSE)
+    # output$dynamic_value <- renderPrint({
+    #   
+    #   sample_annotation()
+    #   #read.csv(input$sample_info$datapath,header = F,sep = "\t",nrows = 1)
+    # })
     
     output$individualUi <- renderUI({
       if (is.null(input$individual_info))
