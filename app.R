@@ -415,7 +415,7 @@ shinyApp(
     output$missingPlot <- renderPlot({
       if(class(QCdatasetInput())=="data.frame"){
          output$QMparameters<-renderText({"Results are showed below:"})
-         source("missingValueExplore_zts.R")
+         source("missingValueExplore_zts.R",local = T )
          missing_plot(readProteinM())
       }
       else if(!is.null(readProteinM())){
