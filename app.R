@@ -32,7 +32,58 @@ shinyApp(
                      )
                    )
                )),
-      ####################################################Data console
+
+      ####################################################power analysis
+      tabPanel("Power Analysis", "",
+               sidebarPanel(
+                 #fileInput("file", "File input:"),
+                 textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
+                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
+                 textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
+                 
+                 tags$h5("Click to estimate:"),
+                 actionButton("power", "Submit", class = "btn-primary")
+               ),
+               mainPanel(
+                 tabsetPanel(
+                   tabPanel("Results",
+                            h4("Summary"),
+                            tableOutput("Ptable"),
+                            h4("Your input info."),
+                            verbatimTextOutput("Pparameters")
+                            
+                   )
+                 )
+               )),
+      
+      #####################################################Batch design
+      tabPanel("Batch Design",
+               sidebarPanel(
+                 fileInput("file", "File input:"),
+                 #textInput("txt", "Text input:", "general"),
+                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
+                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
+                 
+                 tags$h5("Click to design:"),
+                 actionButton("design", "Submit", class = "btn-primary")
+               ),
+               mainPanel(
+                 tabsetPanel(
+                   tabPanel("Result",
+                            h4("Summary"),
+                            tableOutput("table"),
+                            h4("Your input info."),
+                            verbatimTextOutput("txtout")
+
+                   )
+                   #tabPanel("", "This panel is intentionally left blank"),
+                   #tabPanel("Tab 3", "This panel is intentionally left blank")
+                 )
+               )
+      ),
+      
+
+      ####################################################        Data console    #################################### 
       tabPanel("Data Console", "",
                sidebarPanel(
                  tags$h2("Upload Data:"),
@@ -76,7 +127,7 @@ shinyApp(
                      # This outputs the dynamic UI component
                      uiOutput("sampleUi")
                    )),
-
+                   
                    column(3, offset = 0.5, wellPanel(
                      tags$h4("Annotate individual columns:"),
                      tags$hr(style="algin:right;height:2px;border:none;border-top:2px ridge gray;"),
@@ -87,63 +138,17 @@ shinyApp(
                  ),
                  fluidRow(column(width = 6, wellPanel(
                    # This outputs the dynamic UI component
-                     textOutput("sampleRes")
-
+                   textOutput("sampleRes")
+                   
                  ))),
                  fluidRow(column(width = 6, wellPanel(
                    # This outputs the dynamic UI component
                    textOutput("individualRes")
                    
                  )))
-               )),
-      ####################################################power analysis
-      tabPanel("Power Analysis", "",
-               sidebarPanel(
-                 #fileInput("file", "File input:"),
-                 textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
-                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-                 textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
-                 
-                 tags$h5("Click to estimate:"),
-                 actionButton("power", "Submit", class = "btn-primary")
-               ),
-               mainPanel(
-                 tabsetPanel(
-                   tabPanel("Results",
-                            h4("Summary"),
-                            tableOutput("Ptable"),
-                            h4("Your input info."),
-                            verbatimTextOutput("Pparameters")
-                            
-                   )
-                 )
-               )),
-      #####################################################Batch design
-      tabPanel("Batch Design",
-               sidebarPanel(
-                 fileInput("file", "File input:"),
-                 #textInput("txt", "Text input:", "general"),
-                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-                 
-                 tags$h5("Click to design:"),
-                 actionButton("design", "Submit", class = "btn-primary")
-               ),
-               mainPanel(
-                 tabsetPanel(
-                   tabPanel("Result",
-                            h4("Summary"),
-                            tableOutput("table"),
-                            h4("Your input info."),
-                            verbatimTextOutput("txtout")
-
-                   )
-                   #tabPanel("", "This panel is intentionally left blank"),
-                   #tabPanel("Tab 3", "This panel is intentionally left blank")
-                 )
-               )
-      ),
-
+               )),      
+            
+###################################################    data preprocessing      ####################################
       tabPanel("Data Preprocessing", "",
                sidebarPanel(
                  # Input: Select separator ----
@@ -394,7 +399,7 @@ shinyApp(
     ############################              QC             ##############################################################
     
     QCdatasetInput <- eventReactive(input$QC,{
-      if(is.null(readProteinM()))
+      if(class(readProteinM())!="data.frame")
         "Please upload your protein files!"
       else
         readProteinM()
@@ -411,8 +416,7 @@ shinyApp(
          source("missingValueExplore_zts.R")
          missing_plot(readProteinM())
       }
-      else
-        plot(1,1,main="Please upload your protein matrix!",col="white")
+      else plot(1,1,main="Please upload your protein matrix!",col="white")
     },height=800,units="px")
     
     
