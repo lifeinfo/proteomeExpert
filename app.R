@@ -228,10 +228,11 @@ shinyApp(
                  tabsetPanel(
                    tabPanel("Missing value",
                             tags$hr(),
-                            h3(textOutput("caption")),
+                            #h3(textOutput("caption")),
+                            verbatimTextOutput("QMparameters"),
+                            
                             plotOutput("missingPlot"),
 
-                            verbatimTextOutput("QMparameters"),
                             width = 8,
                             height=15
                             
@@ -413,10 +414,14 @@ shinyApp(
     
     output$missingPlot <- renderPlot({
       if(class(QCdatasetInput())=="data.frame"){
+         output$QMparameters<-renderText({"Results are showed below:"})
          source("missingValueExplore_zts.R")
          missing_plot(readProteinM())
       }
-      else plot(1,1,main="Please upload your protein matrix!",col="white")
+      else if(!is.null(readProteinM())){
+        output$QMparameters<-renderText({"Please select PCA checkbox and sumbit!"})
+      }
+      else output$QMparameters<-renderText({"Please upload your protein files!"})
     },height=800,units="px")
     
     
