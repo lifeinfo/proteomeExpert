@@ -421,7 +421,7 @@ shinyApp(
          missing_plot(readProteinM())
       }
       else if(!is.null(readProteinM())){
-        output$QMparameters<-renderText({"Please select PCA checkbox and sumbit!"})
+        output$QMparameters<-renderText({"Please select MissingValueExplore checkbox and sumbit!"})
       }
       else output$QMparameters<-renderText({"Please upload your protein files in 'data console' tab!"})
     },height=800,units="px")
