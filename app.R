@@ -212,7 +212,7 @@ shinyApp(
                sidebarPanel(
                  tags$h2("Select modules you want to process:"),
                  tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
-                 checkboxInput("MissingValueExplore", "MissingValueExplore", TRUE),
+                 checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
                  checkboxInput("reproducibility", "Reproducibility", TRUE),
                  checkboxInput("qcPca", "PCA", TRUE),
                  checkboxInput("qcUmap", "UMAP", FALSE),
@@ -403,7 +403,7 @@ shinyApp(
     
     QCdatasetInput <- eventReactive(input$QC,{
       if(class(readProteinM())!="data.frame")
-        "Please upload your protein files!"
+        return(NULL)
       else
         readProteinM()
       
@@ -415,15 +415,19 @@ shinyApp(
     ##############missing value explore 
     
     output$missingPlot <- renderPlot({
-      if(class(QCdatasetInput())=="data.frame"){
+      if(input$MissingValueExplore_check){
+         if(class(QCdatasetInput())=="data.frame"){
          output$QMparameters<-renderText({"Results are showed below:"})
          source("missingValueExplore_zts.R",local = T )
          missing_plot(readProteinM())
+         }
+         else if(is.null(readProteinM())) 
+           {output$QMparameters<-renderText({"Please upload your protein files in 'data console' tab!"})}
+         else output$QMparameters<-renderText({"Please click the submit button!"})
       }
-      else if(!is.null(readProteinM())){
-        output$QMparameters<-renderText({"Please select MissingValueExplore checkbox and sumbit!"})
-      }
-      else output$QMparameters<-renderText({"Please upload your protein files in 'data console' tab!"})
+      
+      else output$QMparameters<-renderText({"Please select MissingValueExplore checkbox and sumbit!"})
+    
     },height=800,units="px")
     
     output$downloadMissingPlot <- downloadHandler(
