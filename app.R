@@ -230,9 +230,11 @@ shinyApp(
                             tags$hr(),
                             #h3(textOutput("caption")),
                             verbatimTextOutput("QMparameters"),
+                            conditionalPanel("output.QMparameters == 'Results are showed below:'",
+                            downloadButton('downloadMissingPlot')),
                             
                             plotOutput("missingPlot"),
-
+                            
                             width = 8,
                             height=15
                             
@@ -421,10 +423,19 @@ shinyApp(
       else if(!is.null(readProteinM())){
         output$QMparameters<-renderText({"Please select PCA checkbox and sumbit!"})
       }
-      else output$QMparameters<-renderText({"Please upload your protein files!"})
+      else output$QMparameters<-renderText({"Please upload your protein files in 'data console' tab!"})
     },height=800,units="px")
     
-    
+    output$downloadMissingPlot <- downloadHandler(
+      filename = function() {
+        paste("missingValueExplore",Sys.time(), ".pdf", sep = "")
+      },
+      content = function(file) {
+       pdf(file)
+       missing_plot(readProteinM())
+       dev.off()
+      }
+    )
     ############################              data console             ##############################################################
     
     ### for read protein matrix
