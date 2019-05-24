@@ -1,8 +1,6 @@
 library(shiny)
 library(shinythemes)
-options(shiny.maxRequestSize=300*1024^2)
-source(file = "test.R")
-source(file = "preprocess.R")
+
 shinyApp(
   ui = tagList(
     #shinythemes::themeSelector(),
@@ -32,17 +30,70 @@ shinyApp(
                      )
                    )
                )),
-
+      ################################ Study design
+      tabPanel("Study Design", "",
+               # sidebarPanel(
+               #   HTML("<p>This page remains for what?</p>"),
+               #   width=2
+               # ),
+               #mainPanel(     
+      tabsetPanel(
+        tabPanel("Power Analysis",
+                 h4("Your input info."),
+                 sidebarPanel(
+                   tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
+                   
+                   tags$h2("Power analysis with pre-experiment:"),
+                   tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                   
+                   fileInput("file", "Select pre-experiment protein matrix:"),
+                   actionButton("powera", "Submit", class = "btn-primary"),
+                   
+                   tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
+                   tags$h2("Power analysis by direct set parameters:"),
+                   tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                   textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
+                   textInput("Pmu", "Mean abundance:", 13, width = "30%"),
+                   textInput("Pmu0", "Mean abundance 0:", 13, width = "30%"),
+                   
+                   textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
+                   
+                   tags$h5("Click to estimate:"),
+                   actionButton("powerb", "Submit", class = "btn-primary"),
+                   tags$hr(style="height:3px;border:none;border-top:3px ridge green;")
+                   
+                 )
+                 
+        ),
+        tabPanel("Batch Design",
+                 h4("Your input info."),
+                 verbatimTextOutput("Pparameters")
+        )
+        
+      )
+      ),
       ####################################################power analysis
       tabPanel("Power Analysis", "",
                sidebarPanel(
-                 #fileInput("file", "File input:"),
+                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
+                 
+                 tags$h2("Power analysis with pre-experiment:"),
+                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
+                 
+                 fileInput("file", "Select pre-experiment protein matrix:"),
+                 actionButton("powera", "Submit", class = "btn-primary"),
+                 
+                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
+                 tags$h2("Power analysis by direct set parameters:"),
+                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                  textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
                  textInput("Pmu", "Mean abundance:", 13, width = "30%"),
+                 textInput("Pmu0", "Mean abundance 0:", 13, width = "30%"),
+                 
                  textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
                  
                  tags$h5("Click to estimate:"),
-                 actionButton("power", "Submit", class = "btn-primary")
+                 actionButton("powerb", "Submit", class = "btn-primary")
                ),
                mainPanel(
                  tabsetPanel(
@@ -446,14 +497,14 @@ shinyApp(
     ### for read protein matrix
     readProteinM<-reactive({
       if(!is.null(input$protein_matrix))
-           prot<-read.table(input$protein_matrix$datapath,header = T,sep = "\t",check.names = F)
+           prot<-read.table(input$protein_matrix$datapath,header = T,sep = "\t",check.names = F,encoding ="UTF-8")
       })
     ### for column annotation
     output$sampleUi <- renderUI({
       if (is.null(input$sample_info))
         "Please upload your files!"
       else{#print(input$sample_info)
-      sample_info<-read.csv(input$sample_info$datapath,header = T,sep = ",",nrow=1)
+      sample_info<-read.csv(input$sample_info$datapath,header = T,sep = ",",nrow=1,check.names = F,encoding ="UTF-8")
       sample_header<<-colnames(sample_info)
       tagList(
       selectInput("sample_info_id", "select sample id",
@@ -486,7 +537,7 @@ shinyApp(
       if (is.null(input$individual_info))
         "Please upload your files!"
       else{#print(input$sample_info)
-        individual_info<-read.csv(input$individual_info$datapath,header = T,sep = ",",nrow=1)
+        individual_info<-read.csv(input$individual_info$datapath,header = T,sep = ",",nrow=1,check.names = F,encoding ="UTF-8")
         individual_header<-colnames(individual_info)
         tagList(
           selectInput("individual_info_id", "select individual id/name",

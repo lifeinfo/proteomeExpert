@@ -1,0 +1,5 @@
+options(encoding = "UTF-8")
+options(shiny.maxRequestSize=300*1024^2)
+options(stringsAsFactors = F)
+source(file = "test.R")
+source(file = "preprocess.R")
