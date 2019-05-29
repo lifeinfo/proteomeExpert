@@ -53,16 +53,25 @@ shinyApp(
                    tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                    textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
                    textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-                   textInput("Pmu0", "Mean abundance 0:", 13, width = "30%"),
-                   
-                   textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
-                   
+                   textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
+                   textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
+
+                   textInput("Palpha", "Alpha:", 0.05, width = "30%"),
+                   textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
+
                    tags$h5("Click to estimate:"),
                    actionButton("powerb", "Submit", class = "btn-primary"),
                    tags$hr(style="height:3px;border:none;border-top:3px ridge green;")
-                   
+                 ),
+
+                 mainPanel(
+                   tabsetPanel(
+                     tabPanel("Sample size",
+                              h4("Sample size"),
+                              verbatimTextOutput("powerSize")
+                     )
+                   )
                  )
-                 
         ),
         tabPanel("Batch Design",
                  sidebarPanel(
@@ -81,7 +90,6 @@ shinyApp(
                               tableOutput("table"),
                               h4("Your input info."),
                               verbatimTextOutput("txtout")
-                              
                      )
                      #tabPanel("", "This panel is intentionally left blank"),
                      #tabPanel("Tab 3", "This panel is intentionally left blank")
@@ -374,8 +382,27 @@ shinyApp(
     output$Pparameters <- renderText({
       paste(input$Pm, input$Pmu,input$Palpha, sep = ", ")
     })
+
     output$Ptable <- renderTable({
       head(iris, 4)
+    })
+
+    observeEvent(input$powerb, {
+      print("here")
+      output$powerSize <-renderPrint({
+        mean_null = as.numeric(input$Pmu)
+        mean_alt = as.numeric(input$Pmu0)
+        sd = as.numeric(input$Psd)
+        ap = as.numeric(input$Palpha)/as.numeric(input$Pm)
+        z1 = qnorm(1-ap/2)
+        zb = qnorm(1-as.numeric(input$Pbeta))
+        proN = 2*(sd*(z1+zb)/(mean_null-mean_alt))^2
+
+        print(paste0("Alpha: ", input$Palpha))
+        print(paste0("Power: ", 1-as.numeric(input$Pbeta)))
+        print(paste0("Number of proteins: ", input$Pm))
+        print(paste0("Sample size required for cases (controls) is: ", ceiling(proN)))
+      })
     })
     ###############################     data preprocess        ##############################
     # updated when the user clicks the button
