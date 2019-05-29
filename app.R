@@ -39,14 +39,13 @@ shinyApp(
                #mainPanel(     
       tabsetPanel(
         tabPanel("Power Analysis",
-                 h4("Your input info."),
                  sidebarPanel(
                    tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
                    
-                   tags$h2("Power analysis with pre-experiment:"),
+                   tags$h2("Power analysis with pilot experiment:"),
                    tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
                    
-                   fileInput("file", "Select pre-experiment protein matrix:"),
+                   fileInput("file", "Select pilot experiment protein matrix:"),
                    actionButton("powera", "Submit", class = "btn-primary"),
                    
                    tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
@@ -66,74 +65,33 @@ shinyApp(
                  
         ),
         tabPanel("Batch Design",
-                 h4("Your input info."),
-                 verbatimTextOutput("Pparameters")
+                 sidebarPanel(
+                   fileInput("file", "File input:"),
+                   #textInput("txt", "Text input:", "general"),
+                   sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
+                   sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
+                   
+                   tags$h5("Click to design:"),
+                   actionButton("design", "Submit", class = "btn-primary")
+                 ),
+                 mainPanel(
+                   tabsetPanel(
+                     tabPanel("Result",
+                              h4("Summary"),
+                              tableOutput("table"),
+                              h4("Your input info."),
+                              verbatimTextOutput("txtout")
+                              
+                     )
+                     #tabPanel("", "This panel is intentionally left blank"),
+                     #tabPanel("Tab 3", "This panel is intentionally left blank")
+                   )
+                 )
         )
         
       )
       ),
-      ####################################################power analysis
-      tabPanel("Power Analysis", "",
-               sidebarPanel(
-                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
-                 
-                 tags$h2("Power analysis with pre-experiment:"),
-                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
-                 
-                 fileInput("file", "Select pre-experiment protein matrix:"),
-                 actionButton("powera", "Submit", class = "btn-primary"),
-                 
-                 tags$hr(style="height:3px;border:none;border-top:3px ridge green;"),
-                 tags$h2("Power analysis by direct set parameters:"),
-                 tags$hr(style="height:2px;border:none;border-top:2px ridge gray;"),
-                 textInput("Pm", "Number of Proteins (estimated):", 5000,width = "30%"),
-                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-                 textInput("Pmu0", "Mean abundance 0:", 13, width = "30%"),
-                 
-                 textInput("Palpha", "Significance Level:", 0.05, width = "30%"),
-                 
-                 tags$h5("Click to estimate:"),
-                 actionButton("powerb", "Submit", class = "btn-primary")
-               ),
-               mainPanel(
-                 tabsetPanel(
-                   tabPanel("Results",
-                            h4("Summary"),
-                            tableOutput("Ptable"),
-                            h4("Your input info."),
-                            verbatimTextOutput("Pparameters")
-                            
-                   )
-                 )
-               )),
-      
-      #####################################################Batch design
-      tabPanel("Batch Design",
-               sidebarPanel(
-                 fileInput("file", "File input:"),
-                 #textInput("txt", "Text input:", "general"),
-                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-                 
-                 tags$h5("Click to design:"),
-                 actionButton("design", "Submit", class = "btn-primary")
-               ),
-               mainPanel(
-                 tabsetPanel(
-                   tabPanel("Result",
-                            h4("Summary"),
-                            tableOutput("table"),
-                            h4("Your input info."),
-                            verbatimTextOutput("txtout")
-
-                   )
-                   #tabPanel("", "This panel is intentionally left blank"),
-                   #tabPanel("Tab 3", "This panel is intentionally left blank")
-                 )
-               )
-      ),
-      
-
+     
       ####################################################        Data console    #################################### 
       tabPanel("Data Console", "",
                sidebarPanel(
@@ -395,6 +353,9 @@ shinyApp(
                            tableOutput("DMrmtable"),
                            h4("Your input info."),
                            verbatimTextOutput("DMrmparameters")
+                  ),
+                  tabPanel("HelpMe",
+                           h4("help info.")
                   )
                 )
               )
@@ -473,7 +434,7 @@ shinyApp(
          missing_plot(readProteinM())
          }
          else if(is.null(readProteinM())) 
-           {output$QMparameters<-renderText({"Please upload your protein files in 'data console' tab!"})}
+           {output$QMparameters<-renderText({"Please upload your protein file in 'data console' tab!"})}
          else output$QMparameters<-renderText({"Please click the submit button!"})
       }
       
