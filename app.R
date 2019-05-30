@@ -68,8 +68,8 @@ shinyApp(
                    tabsetPanel(
                      tabPanel("Sample size",
                               h4("Sample size"),
-                              verbatimTextOutput("powerSize")
-                     )
+                              verbatimTextOutput("powerSize"),
+                              plotOutput("powerPlot"))
                    )
                  )
         ),
@@ -388,7 +388,6 @@ shinyApp(
     })
 
     observeEvent(input$powerb, {
-      print("here")
       output$powerSize <-renderPrint({
         mean_null = as.numeric(input$Pmu)
         mean_alt = as.numeric(input$Pmu0)
@@ -398,10 +397,29 @@ shinyApp(
         zb = qnorm(1-as.numeric(input$Pbeta))
         proN = 2*(sd*(z1+zb)/(mean_null-mean_alt))^2
 
+        print(paste0("Number of proteins: ", input$Pm))
         print(paste0("Alpha: ", input$Palpha))
         print(paste0("Power: ", 1-as.numeric(input$Pbeta)))
-        print(paste0("Number of proteins: ", input$Pm))
         print(paste0("Sample size required for cases (controls) is: ", ceiling(proN)))
+      })
+
+      output$powerPlot <-renderPlot({
+        mean_null = as.numeric(input$Pmu)
+        mean_alt = as.numeric(input$Pmu0)
+        sd = as.numeric(input$Psd)
+        ap = as.numeric(input$Palpha)/as.numeric(input$Pm)
+        z1 = qnorm(1-ap/2)
+        zb = qnorm(1-as.numeric(input$Pbeta))
+        proN = 2*(sd*(z1+zb)/(mean_null-mean_alt))^2
+
+        nc=c(0.25, 0.5, 0.75, 1, 1.25, 1.5)*proN
+        NCP=(mean_null-mean_alt)^2/sd^2*(nc/2)
+        print(NCP)
+        PW=pchisq(qchisq(ap, 1, lower.tail = F), 1, ncp = NCP, lower.tail = F)
+        PWmat=matrix(PW, 1, length(PW))
+        colnames(PWmat)=ceiling(nc)
+        barplot(PWmat, beside = T, col="grey", ylim=c(0, 1), border = F, ylab="Statistical power", xlab="Sample size")
+        abline(h=c(0.5, 0.8), col=c("blue", "red"), lty=2)
       })
     })
     ###############################     data preprocess        ##############################
