@@ -414,12 +414,12 @@ shinyApp(
 
         nc=c(0.25, 0.5, 0.75, 1, 1.25, 1.5)*proN
         NCP=(mean_null-mean_alt)^2/sd^2*(nc/2)
-        print(NCP)
+#        print(NCP)
         PW=pchisq(qchisq(ap, 1, lower.tail = F), 1, ncp = NCP, lower.tail = F)
         PWmat=matrix(PW, 1, length(PW))
         colnames(PWmat)=ceiling(nc)
         barplot(PWmat, beside = T, col="grey", ylim=c(0, 1), border = F, ylab="Statistical power", xlab="Sample size")
-        abline(h=c(0.5, 0.8), col=c("blue", "red"), lty=2)
+        abline(h=c(0.5, 1-as.numeric(input$Pbeta)), col=c("blue", "red"), lty=2)
       })
     })
     ###############################     data preprocess        ##############################
