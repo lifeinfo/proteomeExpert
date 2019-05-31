@@ -1,7 +1,3 @@
-library(shiny)
-library(shinythemes)
-
-
 #shinythemes::themeSelector(),
 navbarPage(
   theme = shinytheme("sandstone"),  # <--- To use a theme, uncomment this

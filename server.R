@@ -1,8 +1,3 @@
-library(RColorBrewer)
-library(scales)
-library(lattice)
-library(dplyr)
-library(sva)
 
 function(input, output) {
   output$txtout <- renderText({
