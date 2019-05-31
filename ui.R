@@ -27,90 +27,192 @@ navbarPage(
     )))
   ),
   ################################ Study design
-  tabPanel("Study Design", "",
-           # sidebarPanel(
-           #   HTML("<p>This page remains for what?</p>"),
-           #   width=2
-           # ),
-           #mainPanel(
-           tabsetPanel(
-             tabPanel(
-               "Power Analysis",
-               sidebarPanel(
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-                 
-                 tags$h2("Power analysis with pilot experiment:"),
-                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-                 
-                 fileInput("file", "Select pilot experiment protein matrix:"),
-                 actionButton("powera", "Submit", class = "btn-primary"),
-                 
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-                 tags$h2("Power analysis by direct set parameters:"),
-                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-                 textInput("Pm", "Number of Proteins (estimated):", 5000, width = "30%"),
-                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-                 textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
-                 textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
-                 
-                 textInput("Palpha", "Alpha:", 0.05, width = "30%"),
-                 textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
-                 
-                 tags$h5("Click to estimate:"),
-                 
-                 #----------------------------test----------------------------------------
-                 HTML(
-                   '<label for="tt">input (test)</label>',
-                   '<textarea id="tt" class="form-control" style="resize:none"></textarea>'
-                 ),
-                 HTML(
-                   '<label for="clx">pick (test)</label>',
-                   '<input id="clx" type="color" class="form-control" value="#FF0000">',
-                   '<input id="cl" type="text" class="form-control" value="#FF0000" style="display:none">',
-                   '<script>',
-                   '$(function(){$("#clx").change(function(){$("#cl").val($(this).val()).trigger("change");});})',
-                   '</script>',
-                   '</br>'
-                 ),
-                 #------------------------------------------------------------------------
-                 actionButton("powerb", "Submit", class = "btn-primary"),
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
-               ),
-               
-               mainPanel(tabsetPanel(
-                 tabPanel(
-                   "Sample size",
-                   h4("Sample size"),
-                   verbatimTextOutput("powerSize"),
-                   plotOutput("powerPlot")
-                 )
-               ))
-             ),
-             tabPanel(
-               "Batch Design",
-               sidebarPanel(
-                 fileInput("file", "File input:"),
-                 #textInput("txt", "Text input:", "general"),
-                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-                 
-                 tags$h5("Click to design:"),
-                 actionButton("design", "Submit", class = "btn-primary")
-               ),
-               mainPanel(tabsetPanel(
-                 tabPanel(
-                   "Result",
-                   h4("Summary"),
-                   tableOutput("table"),
-                   h4("Your input info."),
-                   verbatimTextOutput("txtout")
-                 )
-                 #tabPanel("", "This panel is intentionally left blank"),
-                 #tabPanel("Tab 3", "This panel is intentionally left blank")
-               ))
-             )
-             
-           )),
+  tabPanel(
+    "Study Design",
+    "",
+    # sidebarPanel(
+    #   HTML("<p>This page remains for what?</p>"),
+    #   width=2
+    # ),
+    #mainPanel(
+    tabsetPanel(
+      tabPanel(
+        "Power Analysis",
+        sidebarPanel(
+          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+          
+          tags$h2("Power analysis with pilot experiment:"),
+          tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+          
+          fileInput("file", "Select pilot experiment protein matrix:"),
+          actionButton("powera", "Submit", class = "btn-primary"),
+          
+          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+          tags$h2("Power analysis by direct set parameters:"),
+          tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+          textInput("Pm", "Number of Proteins (estimated):", 5000, width = "30%"),
+          textInput("Pmu", "Mean abundance:", 13, width = "30%"),
+          textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
+          textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
+          
+          textInput("Palpha", "Alpha:", 0.05, width = "30%"),
+          textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
+          
+          tags$h5("Click to estimate:"),
+          
+          #----------------------------test----------------------------------------
+          HTML(
+            '<label for="tt">input (test)</label>',
+            '<textarea id="tt" class="form-control" style="resize:none"></textarea>'
+          ),
+          HTML(
+            '<label for="clx">pick (test)</label>',
+            '<input id="clx" type="color" class="form-control" value="#FF0000">',
+            '<input id="cl" type="text" class="form-control" value="#FF0000" style="display:none">',
+            '<script>',
+            '$(function(){$("#clx").change(function(){$("#cl").val($(this).val()).trigger("change");});})',
+            '</script>',
+            '</br>'
+          ),
+          #------------------------------------------------------------------------
+          actionButton("powerb", "Submit", class = "btn-primary"),
+          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
+        ),
+        
+        mainPanel(tabsetPanel(
+          tabPanel(
+            "Sample size",
+            h4("Sample size"),
+            verbatimTextOutput("powerSize"),
+            plotOutput("powerPlot")
+          )
+        ))
+      ),
+      fluidRow(column(width = 6, wellPanel(
+        # This outputs the dynamic UI component
+        textOutput("sampleRes")
+        
+      ))),
+      fluidRow(column(width = 6, wellPanel(
+        # This outputs the dynamic UI component
+        textOutput("individualRes")
+        
+      ))),
+      tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+      actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
+      fluidRow(column(width = 8, wellPanel(
+        # This outputs the dynamic UI component
+        DT::dataTableOutput("annoTable")
+        
+      )))
+    )
+  ),
+  
+  ###################################################    data preprocessing      ####################################
+  tabPanel(
+    "Data Preprocessing",
+    "",
+    sidebarPanel(
+      # Input: Select separator ----
+      
+      fileInput(
+        "PeptideMatrix",
+        "Select your peptide matrix (required):",
+        multiple = TRUE,
+        accept = c("text/csv",
+                   "text/comma-separated-values,text/plain",
+                   ".csv")
+      ),
+      checkboxInput("Dpheader", "Header", TRUE),
+      radioButtons(
+        "Dpsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      
+      fileInput(
+        "TechnicalReplicate",
+        "Select your technical replicate file (required):"
+      ),
+      checkboxInput("Dtheader", "Header", FALSE),
+      radioButtons(
+        "Dtsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      
+      fileInput("BatchFile", "Select your batch effect file (optional):"),
+      checkboxInput("Dbheader", "Header", TRUE),
+      radioButtons(
+        "Dbsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      
+      tags$h5("Click to process:"),
+      actionButton("process", "Submit", class = "btn-primary")
+      
+    ),
+    mainPanel(tabsetPanel(
+      tabPanel(
+        "Results",
+        h4("Summary"),
+        tableOutput("Dtable"),
+        h4("Get all protein matrix"),
+        downloadButton("downloadData", "Download", class = "btn-primary")
+        
+      ),
+      #tabPanel("", "This panel is intentionally left blank"),
+      #tabPanel("Tab 3", "This panel is intentionally left blank")
+      tabPanel(
+        "Batch Design",
+        sidebarPanel(
+          fileInput("file", "File input:"),
+          #textInput("txt", "Text input:", "general"),
+          sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
+          sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
+          
+          tags$h5("Click to design:"),
+          actionButton("design", "Submit", class = "btn-primary")
+        ),
+        mainPanel(tabsetPanel(
+          tabPanel(
+            "Result",
+            h4("Summary"),
+            tableOutput("table"),
+            h4("Your input info."),
+            verbatimTextOutput("txtout")
+          )
+          #tabPanel("", "This panel is intentionally left blank"),
+          #tabPanel("Tab 3", "This panel is intentionally left blank")
+        ))
+      )
+      
+    ))
+  ),
   
   ####################################################        Data console    ####################################
   tabPanel(

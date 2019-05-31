@@ -11,13 +11,18 @@ library(scales)
 library(lattice)
 library(dplyr)
 library(sva)
+library(DT)
 library(htmltools)
 library(preprocessCore)
+
+#model
 source("lr_2prot.R")
 source("combat.R")
 source(file = "test.R")
 source(file = "preprocess.R")
 
+
+#library(keras)
 # ML
 #library(keras)
 #install
