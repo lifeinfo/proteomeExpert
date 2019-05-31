@@ -1,1 +1,1 @@
-# GUomics Team
+# Guomics Team

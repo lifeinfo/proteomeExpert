@@ -15,7 +15,12 @@ library(htmltools)
 library(preprocessCore)
 source("lr_2prot.R")
 source("combat.R")
-#library(keras)
 source(file = "test.R")
 source(file = "preprocess.R")
 
+# ML
+#library(keras)
+#install
+#1.install.packages("keras")
+#2.library(keras)
+#3.install_keras()

@@ -1,4 +1,3 @@
-
 function(input, output) {
   output$txtout <- renderText({
     paste(input$n, input$m, sep = ", ")

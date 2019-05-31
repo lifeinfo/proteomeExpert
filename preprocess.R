@@ -1,5 +1,3 @@
-
-
 options(stringsAsFactors = F)
 ##############################
 pepstat <- function(d) {
