@@ -228,13 +228,10 @@ function(input, output) {
       paste("Successfully annotated the individual column!",Sys.time())
     else paste("Unsuccessfully annotated individual column",Sys.time())
   })
-  # output$dynamic_table <- renderTable({
-  #   
-  #   t<-data.frame(sampleInfoInput())
-  #   n=5
-  #   if(ncol(t)<5)
-  #     n=ncol(t)
-  #   head(t[,1:n])
-  # 
-  # })
+  getAnnoTable<-eventReactive(input$DoAnnoTable,{
+    anno<-merge(individualInfoInput(),sampleInfoInput(),by='individualId')
+  })
+  output$annoTable <- DT::renderDataTable(DT::datatable({
+    getAnnoTable()
+  }))
 }

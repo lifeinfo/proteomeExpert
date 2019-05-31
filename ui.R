@@ -157,6 +157,13 @@ navbarPage(
                # This outputs the dynamic UI component
                textOutput("individualRes")
                
+             ))),
+             tags$hr(style="algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+             actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
+             fluidRow(column(width = 8, wellPanel(
+               # This outputs the dynamic UI component
+               DT::dataTableOutput("annoTable")
+               
              )))
            )),      
   
