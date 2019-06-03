@@ -27,71 +27,70 @@ navbarPage(
     )))
   ),
   ################################ Study design
-  tabPanel(
-    "Study Design",
-    "",
-    # sidebarPanel(
-    #   HTML("<p>This page remains for what?</p>"),
-    #   width=2
-    # ),
-    #mainPanel(
-    tabsetPanel(
-      tabPanel(
-        "Power Analysis",
-        sidebarPanel(
-          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-          
-          tags$h2("Power analysis with pilot experiment:"),
-          tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-          
-          fileInput("file", "Select pilot experiment protein matrix:"),
-          actionButton("powera", "Submit", class = "btn-primary"),
-          
-          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-          tags$h2("Power analysis by direct set parameters:"),
-          tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-          textInput("Pm", "Number of Proteins (estimated):", 5000, width = "30%"),
-          textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-          textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
-          textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
-          
-          textInput("Palpha", "Alpha:", 0.05, width = "30%"),
-          textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
-          
-          tags$h5("Click to estimate:"),
-          
-          
-          actionButton("powerb", "Submit", class = "btn-primary"),
-          tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
-        ),
-        
-        mainPanel(tabsetPanel(
-          tabPanel(
-            "Sample size",
-            h4("Sample size"),
-            verbatimTextOutput("powerSize"),
-            plotOutput("powerPlot")
-          )
-        )),
-      fluidRow(column(width = 6, wellPanel(
-        # This outputs the dynamic UI component
-        textOutput("sampleRes")
-        
-      ))),
-      fluidRow(column(width = 6, wellPanel(
-        # This outputs the dynamic UI component
-        textOutput("individualRes")
-        
-      ))),
-      tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
-      actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
-      fluidRow(column(width = 8, wellPanel(
-        # This outputs the dynamic UI component
-        DT::dataTableOutput("annoTable")
-        
-      )))
-    ))
-  ),
+  tabPanel("Study Design",
+           "",
+           # sidebarPanel(
+           #   HTML("<p>This page remains for what?</p>"),
+           #   width=2
+           # ),
+           #mainPanel(
+           tabsetPanel(
+             tabPanel(
+               "Power Analysis",
+               sidebarPanel(
+                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+                 
+                 tags$h2("Power analysis with pilot experiment:"),
+                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+                 
+                 fileInput("file", "Select pilot experiment protein matrix:"),
+                 actionButton("powera", "Submit", class = "btn-primary"),
+                 
+                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+                 tags$h2("Power analysis by direct set parameters:"),
+                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+                 textInput("Pm", "Number of Proteins (estimated):", 5000, width = "30%"),
+                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
+                 textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
+                 textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
+                 
+                 textInput("Palpha", "Alpha:", 0.05, width = "30%"),
+                 textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
+                 
+                 tags$h5("Click to estimate:"),
+                 
+                 
+                 actionButton("powerb", "Submit", class = "btn-primary"),
+                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
+               ),
+               
+               mainPanel(tabsetPanel(
+                 tabPanel(
+                   "Sample size",
+                   h4("Sample size"),
+                   verbatimTextOutput("powerSize"),
+                   plotOutput("powerPlot")
+                 )
+               )),
+               fluidRow(column(width = 6, wellPanel(
+                 # This outputs the dynamic UI component
+                 textOutput("sampleRes")
+                 
+               ))),
+               fluidRow(column(width = 6, wellPanel(
+                 # This outputs the dynamic UI component
+                 textOutput("individualRes")
+                 
+               ))),
+               tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+               actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
+               fluidRow(column(width = 8, wellPanel(
+                 # This outputs the dynamic UI component
+                 DT::dataTableOutput("annoTable")
+                 
+               )))
+             )
+           )),
   
   ###################################################    data preprocessing      ####################################
   tabPanel(
@@ -429,12 +428,84 @@ navbarPage(
     "",
     sidebarPanel(
       HTML(
-        '<label for="tt">Proteins list:</label>',
+        '<label for="tt">Protein list:</label>',
         '<textarea id="tt" class="form-control" style="resize:none"></textarea>'
       ),
-      helpText("Info:"),
-      selectInput("Database", "Choose a Database:", 
-                  choices = c("Uniport", "String-db", "KEGG", "GO", "Reactome"))
+      #helpText("Example:"),
+      #helpText("Q9Y6B6"),
+      #helpText("P35659"),
+      #helpText("O43759"),
+      #helpText("A0A0B4J1V6"),
+      #helpText("E9PAV3"),
+      HTML(
+        '<p>
+        <strong><span style="font-size: 14px;">Example:</span></strong>
+        </p>
+        <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">Q9Y6B6</span>
+        </p>
+        <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">P35659</span>
+        </p>
+        <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">O43759</span>
+        </p>
+        <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">A0A0B4J1V6</span>
+        </p>
+        <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">E9PAV3</span>
+        </p>'
+      ),
+      selectInput("Organism:", "Choose Organism:",
+                  choices = c("Homo sapiens")),
+      helpText("More Organism will be comming soon!"),
+      selectInput(
+        "Database",
+        "Choose a Database:",
+        choices = c("Uniport", "String-db", "KEGG", "GO", "Reactome")
+      ),
+      #helpText("Info:"),
+      #helpText("Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.web:https://www.uniprot.org"),
+      #helpText("String-db:Protein-Protein Interaction Networks.Web:https://string-db.org/cgi/input.pl"),
+      #helpText("KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.web:https://www.kegg.jp"),
+      #helpText("Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.web:http://geneontology.org"),
+      #helpText("Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.web:https://www.reactome.org"),
+      HTML(
+        '<p>
+        <strong>Info:</strong>
+        </p>
+        <ul class=" list-paddingleft-2" style="list-style-type: disc;">
+        <li>
+        <p>
+        Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.<span style="color: rgb(255, 0, 0);">web:https://www.uniprot.org</span>
+        </p>
+        </li>
+        <li>
+        <p>
+        String-db:Protein-Protein Interaction Networks.<span style="color: rgb(255, 0, 0);">web:https://string-db.org/cgi/input.pl</span>
+        </p>
+        </li>
+        <li>
+        <p>
+        KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.<span style="color: rgb(255, 0, 0);">web:https://www.kegg.jp</span>
+        </p>
+        </li>
+        <li>
+        <p>
+        Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.<span style="color: rgb(255, 0, 0);">web:http://geneontology.org</span>
+        </p>
+        </li>
+        <li>
+        <p>
+        Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.<span style="color: rgb(255, 0, 0);">web:https://www.reactome.org</span>
+        </p>
+        </li>
+        </ul>
+        <p>
+        <br/>
+        </p>'
+      ),
       #HTML(
       #  '<label for="clx">pick (test)</label>',
       #  '<input id="clx" type="color" class="form-control" value="#FF0000">',
@@ -444,8 +515,10 @@ navbarPage(
       #  '</script>',
       #  '</br>'
       #),
-    )
-    ),
+      submitButton("Submit"),
+      verbatimTextOutput("Annoparameters")
+      )
+      ),
   
   ##############################################################################################################
   #######################data mining
@@ -555,18 +628,23 @@ navbarPage(
         tabPanel(
           "ML",
           h4("Summary"),
-          selectInput("framework", "Choose a ML framework:", 
-                      choices = c("Tensorflow", "MxNet", "Others")),
-          selectInput("method", "Choose a ML method:", 
+          selectInput(
+            "framework",
+            "Choose a ML framework:",
+            choices = c("Tensorflow", "MxNet", "Others")
+          ),
+          selectInput("method", "Choose a ML method:",
                       choices = c("1", "2", "3")),
           #numericInput("obs", "Number of observations to view:", 10),
           helpText("Info:"),
           helpText(
-                   "Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud. See the sections below to get started.",
-                   "Web:https://tensorflow.google.cn"),
+            "Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud. See the sections below to get started.",
+            "Web:https://tensorflow.google.cn"
+          ),
           helpText(
-                   "MxNet:A flexible and efficient library for deep learning.",
-                   "Web:http://mxnet.incubator.apache.org"),
+            "MxNet:A flexible and efficient library for deep learning.",
+            "Web:http://mxnet.incubator.apache.org"
+          ),
           
           submitButton("Submit"),
           verbatimTextOutput("DMmlparameters")
@@ -576,4 +654,4 @@ navbarPage(
       )
     )
   )
-)
+  )
