@@ -60,21 +60,7 @@ navbarPage(
           
           tags$h5("Click to estimate:"),
           
-          #----------------------------test----------------------------------------
-          HTML(
-            '<label for="tt">input (test)</label>',
-            '<textarea id="tt" class="form-control" style="resize:none"></textarea>'
-          ),
-          HTML(
-            '<label for="clx">pick (test)</label>',
-            '<input id="clx" type="color" class="form-control" value="#FF0000">',
-            '<input id="cl" type="text" class="form-control" value="#FF0000" style="display:none">',
-            '<script>',
-            '$(function(){$("#clx").change(function(){$("#cl").val($(this).val()).trigger("change");});})',
-            '</script>',
-            '</br>'
-          ),
-          #------------------------------------------------------------------------
+          
           actionButton("powerb", "Submit", class = "btn-primary"),
           tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
         ),
@@ -86,8 +72,7 @@ navbarPage(
             verbatimTextOutput("powerSize"),
             plotOutput("powerPlot")
           )
-        ))
-      ),
+        )),
       fluidRow(column(width = 6, wellPanel(
         # This outputs the dynamic UI component
         textOutput("sampleRes")
@@ -105,7 +90,7 @@ navbarPage(
         DT::dataTableOutput("annoTable")
         
       )))
-    )
+    ))
   ),
   
   ###################################################    data preprocessing      ####################################
@@ -438,6 +423,30 @@ navbarPage(
       )
     ))
   ),
+  ######################################################################ANNO###################
+  tabPanel(
+    "Annotations",
+    "",
+    sidebarPanel(
+      HTML(
+        '<label for="tt">Proteins list:</label>',
+        '<textarea id="tt" class="form-control" style="resize:none"></textarea>'
+      ),
+      helpText("Info:"),
+      selectInput("Database", "Choose a Database:", 
+                  choices = c("Uniport", "String-db", "KEGG", "GO", "Reactome"))
+      #HTML(
+      #  '<label for="clx">pick (test)</label>',
+      #  '<input id="clx" type="color" class="form-control" value="#FF0000">',
+      #  '<input id="cl" type="text" class="form-control" value="#FF0000" style="display:none">',
+      #  '<script>',
+      #  '$(function(){$("#clx").change(function(){$("#cl").val($(this).val()).trigger("change");});})',
+      #  '</script>',
+      #  '</br>'
+      #),
+    )
+    ),
+  
   ##############################################################################################################
   #######################data mining
   tabPanel(
@@ -542,6 +551,25 @@ navbarPage(
           tableOutput("DMrmtable"),
           h4("Your input info."),
           verbatimTextOutput("DMrmparameters")
+        ),
+        tabPanel(
+          "ML",
+          h4("Summary"),
+          selectInput("framework", "Choose a ML framework:", 
+                      choices = c("Tensorflow", "MxNet", "Others")),
+          selectInput("method", "Choose a ML method:", 
+                      choices = c("1", "2", "3")),
+          #numericInput("obs", "Number of observations to view:", 10),
+          helpText("Info:"),
+          helpText(
+                   "Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud. See the sections below to get started.",
+                   "Web:https://tensorflow.google.cn"),
+          helpText(
+                   "MxNet:A flexible and efficient library for deep learning.",
+                   "Web:http://mxnet.incubator.apache.org"),
+          
+          submitButton("Submit"),
+          verbatimTextOutput("DMmlparameters")
         ),
         tabPanel("HelpMe",
                  h4("help info."))

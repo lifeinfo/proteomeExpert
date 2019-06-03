@@ -14,6 +14,9 @@ library(sva)
 library(DT)
 library(htmltools)
 library(preprocessCore)
+library(httr)
+library(jsonlite)
+library(xml2)
 
 #model
 source("lr_2prot.R")
