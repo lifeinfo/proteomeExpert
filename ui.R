@@ -532,7 +532,7 @@ navbarPage(
           selectInput(
             "mlframework",
             "Choose a ML framework:",
-            choices = c("Tensorflow", "MxNet", "Others")
+            choices = c("Tensorflow", "MxNet", "R Packages", "Others")
           ),
           selectInput("mlmethod", "Choose a ML method:",
                       choices = c("1", "2", "3")),

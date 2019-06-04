@@ -51,6 +51,7 @@ function(input, output) {
                   lower.tail = F)
       PWmat = matrix(PW, 1, length(PW))
       colnames(PWmat) = ceiling(nc)
+      print(PWmat)
       barplot(
         PWmat,
         beside = T,
@@ -330,8 +331,9 @@ function(input, output) {
     else
       paste("Unsuccessfully annotated individual column", Sys.time())
   })
-  getAnnoTable<-eventReactive(input$DoAnnoTable,{
-    anno<-merge(individualInfoInput(),sampleInfoInput(),by='individualId')
+  getAnnoTable <- eventReactive(input$DoAnnoTable, {
+    anno <-
+      merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
     getAnnoTable()
