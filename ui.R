@@ -58,8 +58,6 @@ navbarPage(
                  textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
                  
                  tags$h5("Click to estimate:"),
-                 
-                 
                  actionButton("powerb", "Submit", class = "btn-primary"),
                  tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
                ),
@@ -71,25 +69,32 @@ navbarPage(
                    verbatimTextOutput("powerSize"),
                    plotOutput("powerPlot")
                  )
-               )),
-               fluidRow(column(width = 6, wellPanel(
-                 # This outputs the dynamic UI component
-                 textOutput("sampleRes")
+               ))
+             ),
+             tabPanel(
+               "Batch Design",
+               sidebarPanel(
+                 fileInput("file", "File input:"),
+                 #textInput("txt", "Text input:", "general"),
+                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
+                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
                  
-               ))),
-               fluidRow(column(width = 6, wellPanel(
-                 # This outputs the dynamic UI component
-                 textOutput("individualRes")
-                 
-               ))),
-               tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
-               actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
-               fluidRow(column(width = 8, wellPanel(
-                 # This outputs the dynamic UI component
-                 DT::dataTableOutput("annoTable")
-                 
-               )))
+                 tags$h5("Click to design:"),
+                 actionButton("design", "Submit", class = "btn-primary")
+               ),
+               mainPanel(tabsetPanel(
+                 tabPanel(
+                   "Result",
+                   h4("Summary"),
+                   tableOutput("table"),
+                   h4("Your input info."),
+                   verbatimTextOutput("txtout")
+                 )
+                 #tabPanel("", "This panel is intentionally left blank"),
+                 #tabPanel("Tab 3", "This panel is intentionally left blank")
+               ))
              )
+             
            )),
   
   ###################################################    data preprocessing      ####################################
@@ -168,31 +173,6 @@ navbarPage(
         h4("Get all protein matrix"),
         downloadButton("downloadData", "Download", class = "btn-primary")
         
-      ),
-      #tabPanel("", "This panel is intentionally left blank"),
-      #tabPanel("Tab 3", "This panel is intentionally left blank")
-      tabPanel(
-        "Batch Design",
-        sidebarPanel(
-          fileInput("file", "File input:"),
-          #textInput("txt", "Text input:", "general"),
-          sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-          sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-          
-          tags$h5("Click to design:"),
-          actionButton("design", "Submit", class = "btn-primary")
-        ),
-        mainPanel(tabsetPanel(
-          tabPanel(
-            "Result",
-            h4("Summary"),
-            tableOutput("table"),
-            h4("Your input info."),
-            verbatimTextOutput("txtout")
-          )
-          #tabPanel("", "This panel is intentionally left blank"),
-          #tabPanel("Tab 3", "This panel is intentionally left blank")
-        ))
       )
       
     ))
@@ -279,90 +259,8 @@ navbarPage(
       )))
     )
   ),
-  
-  ###################################################    data preprocessing      ####################################
-  tabPanel(
-    "Data Preprocessing",
-    "",
-    sidebarPanel(
-      # Input: Select separator ----
-      
-      fileInput(
-        "PeptideMatrix",
-        "Select your peptide matrix (required):",
-        multiple = TRUE,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv")
-      ),
-      checkboxInput("Dpheader", "Header", TRUE),
-      radioButtons(
-        "Dpsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-      
-      fileInput(
-        "TechnicalReplicate",
-        "Select your technical replicate file (required):"
-      ),
-      checkboxInput("Dtheader", "Header", FALSE),
-      radioButtons(
-        "Dtsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-      
-      fileInput("BatchFile", "Select your batch effect file (optional):"),
-      checkboxInput("Dbheader", "Header", TRUE),
-      radioButtons(
-        "Dbsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-      
-      tags$h5("Click to process:"),
-      actionButton("process", "Submit", class = "btn-primary")
-      
-    ),
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "Results",
-        h4("Summary"),
-        tableOutput("Dtable"),
-        h4("Get all protein matrix"),
-        downloadButton("downloadData", "Download", class = "btn-primary")
-        
-      )
-      #tabPanel("", "This panel is intentionally left blank"),
-      #tabPanel("Tab 3", "This panel is intentionally left blank")
-    ))
-  ),
-  
-  ######################################            QC             ##################################################################################
+
+  ######################################QC#########################
   tabPanel(
     "QC",
     "",
@@ -457,7 +355,7 @@ navbarPage(
         &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 14px;">E9PAV3</span>
         </p>'
       ),
-      selectInput("Organism:", "Choose Organism:",
+      selectInput("Organism", "Choose Organism:",
                   choices = c("Homo sapiens")),
       helpText("More Organism will be comming soon!"),
       selectInput(
@@ -515,7 +413,8 @@ navbarPage(
       #  '</script>',
       #  '</br>'
       #),
-      submitButton("Submit"),
+      #submitButton("Submit"),
+      actionButton("annosubmit", "Submit", class = "btn-primary"),
       verbatimTextOutput("Annoparameters")
       )
       ),
@@ -581,7 +480,7 @@ navbarPage(
       
       tags$h5("Click to process:"),
       checkboxInput("dmheatmap", "HeatMap", TRUE),
-      checkboxInput("ttest", "t-test", TRUE),
+      checkboxInput("test", "t-test", TRUE),
       checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
       checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
       actionButton("dm", "Submit", class = "btn-primary")
@@ -595,6 +494,8 @@ navbarPage(
           tableOutput("DMhmtable"),
           h4("Your input info."),
           verbatimTextOutput("DMhmparameters")
+          
+          
         ),
         
         tabPanel(
@@ -629,11 +530,11 @@ navbarPage(
           "ML",
           h4("Summary"),
           selectInput(
-            "framework",
+            "mlframework",
             "Choose a ML framework:",
             choices = c("Tensorflow", "MxNet", "Others")
           ),
-          selectInput("method", "Choose a ML method:",
+          selectInput("mlmethod", "Choose a ML method:",
                       choices = c("1", "2", "3")),
           #numericInput("obs", "Number of observations to view:", 10),
           #helpText("Info:"),
@@ -645,8 +546,11 @@ navbarPage(
           #  "MxNet:A flexible and efficient library for deep learning.",
           #  "Web:http://mxnet.incubator.apache.org"
           #),
-          selectInput("ptype", "Select the column name that you want to classify:",
-                      choices = c("1", "2", "3")),
+          selectInput(
+            "mlptype",
+            "Select the column name that you want to classify:",
+            choices = c("1", "2", "3")
+          ),
           HTML(
             '<p>
             <strong><span style="font-size: 14px;"></span></strong>
@@ -673,18 +577,20 @@ navbarPage(
             </li>
             </ul>
             <p>
-                (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
+            (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
             </p>
             <p>
             <span style="font-size: 14px;"></span>
             </p>'
           ),
-          submitButton("Submit"),
+          #textAreaInput("caption", "Caption", "Data Summary", width = "1000px"),
+          #submitButton("Submit"),
+          actionButton("mlsubmit", "Submit", class = "btn-primary"),
           verbatimTextOutput("DMmlparameters")
           ),
-        tabPanel("HelpMe",
+        tabPanel("Help",
                  h4("help info."))
         )
       )
-      )
+    )
   )
