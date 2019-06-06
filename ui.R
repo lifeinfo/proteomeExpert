@@ -532,10 +532,10 @@ navbarPage(
           selectInput(
             "mlframework",
             "Choose a ML framework:",
-            choices = c("Tensorflow", "MxNet", "R Packages", "Others")
+            choices = c("R Packages", "Tensorflow", "MxNet")
           ),
           selectInput("mlmethod", "Choose a ML method:",
-                      choices = c("1", "2", "3")),
+                      choices = c("Decision Tree", "Random Forest", "k-NearestNeighbor", "Support Vector Machine", "Artificial Neural Network")),
           #numericInput("obs", "Number of observations to view:", 10),
           #helpText("Info:"),
           #helpText(
