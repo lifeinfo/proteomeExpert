@@ -23,6 +23,9 @@ library(xml2)
 #library(igraph)
 #library(ggvis)
 
+#plotly provides high-level bindings for working directly with plotly.js.
+library(ggplot2)
+library(plotly)
 
 #model
 source("lr_2prot.R")

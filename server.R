@@ -41,7 +41,7 @@ function(input, output) {
       z1 = qnorm(1 - ap / 2)
       zb = qnorm(1 - as.numeric(input$Pbeta))
       proN = 2 * (sd * (z1 + zb) / (mean_null - mean_alt)) ^ 2
-      print(proN)
+      #print(proN)
       nc = c(0.25, 0.5, 0.75, 1, 1.25, 1.5) * proN
       NCP = (mean_null - mean_alt) ^ 2 / sd ^ 2 * (nc / 2)
       #        print(NCP)
