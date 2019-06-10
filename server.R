@@ -51,7 +51,7 @@ function(input, output) {
                   lower.tail = F)
       PWmat = matrix(PW, 1, length(PW))
       colnames(PWmat) = ceiling(nc)
-      print(PWmat)
+      #print(PWmat)
       barplot(
         PWmat,
         beside = T,
@@ -173,7 +173,7 @@ function(input, output) {
       dev.off()
     }
   )
-  ############################              data console             ##############################################################
+  ############################              data console       #####################################################
   
   ### for read protein matrix
   readProteinM <- reactive({

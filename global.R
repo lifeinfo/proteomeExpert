@@ -18,6 +18,12 @@ library(httr)
 library(jsonlite)
 library(xml2)
 
+#d3
+#library(networkD3)
+#library(igraph)
+#library(ggvis)
+
+
 #model
 source("lr_2prot.R")
 source("combat.R")
