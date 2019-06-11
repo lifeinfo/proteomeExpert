@@ -340,9 +340,33 @@ function(input, output) {
   }))
   
   ############################################################ ANNO #######################################
+  observeEvent(input$proteinlist, {
+    output$anno_parameters1 <- renderPrint({
+      print(paste0("Protein list: ", input$proteinlist))
+      print(paste0("Organism: ", input$Organism))
+      print(paste0("Database: ", input$Database))
+    })
+  })
+  output$anno_parameters2 <- renderText({
+    if (input$Database == "Uniport") {
+      print(iris[1,])
+    } else if (input$Database == "String-db") {
+      print("String-db")
+    } else if (input$Database == "KEGG") {
+      print("KEGG")
+    } else if (input$Database == "GO") {
+      print("GO")
+    } else if (input$Database == "Reactome") {
+      print("Reactome")
+    } else{
+      print("Null")
+      
+    }
+  })
   
-  
-  
+  output$anno_table <- DT::renderDataTable(DT::datatable({
+    iris
+  }))
   ############################################################ ML #########################################
   
 }

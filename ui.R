@@ -1,6 +1,6 @@
 #shinythemes::themeSelector(),
 navbarPage(
-  theme = shinytheme("sandstone"),
+  theme = shinytheme("cerulean"),
   # <--- To use a theme, uncomment this
   "ProteomeExpert |",
   
@@ -256,6 +256,13 @@ navbarPage(
         # This outputs the dynamic UI component
         textOutput("individualRes")
         
+      ))),
+      tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+      actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
+      fluidRow(column(width = 8, wellPanel(
+        # This outputs the dynamic UI component
+        DT::dataTableOutput("annoTable")
+        
       )))
     )
   ),
@@ -374,16 +381,23 @@ navbarPage(
         <br/>
         </p>'
       ),
-      actionButton("annosubmit", "Submit", class = "btn-primary"),
-      verbatimTextOutput("Annoparameters")
+      actionButton("annosubmit", "Submit", class = "btn-primary")
+      #verbatimTextOutput("Annoparameters")
       ),
     mainPanel(tabsetPanel(
       tabPanel(
         "Result",
         h4("Summary"),
-        tableOutput("anno_table"),
-        verbatimTextOutput("anno_parameters")
-      )))
+        HTML("<p><strong>Input:</strong></p>"),
+        verbatimTextOutput("anno_parameters1")
+      ),
+      hr(),
+      h2('Display'),
+      fluidRow(column(
+        6, verbatimTextOutput("anno_parameters2")
+      ),
+      column(6, DTOutput("anno_table")))
+    ))
     ),
   
   ##############################################################################################################
@@ -495,66 +509,71 @@ navbarPage(
         ),
         tabPanel(
           "ML",
-          h4("Summary"),
-          selectInput(
-            "mlframework",
-            "Choose a ML framework:",
-            choices = c("R Packages", "Tensorflow", "MxNet")
-          ),
-          selectInput(
-            "mlmethod",
-            "Choose a ML method:",
-            choices = c(
-              "Decision Tree",
-              "Random Forest",
-              "k-NearestNeighbor",
-              "Support Vector Machine",
-              "Artificial Neural Network"
-            )
-          ),
-          selectInput(
-            "mlptype",
-            "Select the column name that you want to classify:",
-            choices = c("1", "2", "3")
-          ),
-          HTML(
-            '<p>
-            <strong><span style="font-size: 14px;"></span></strong>
-            </p>
-            <p>
-            <strong>Info:</strong>
-            </p>
-            <ul class=" list-paddingleft-2" style="list-style-type: disc;">
-            <li>
-            <p>
-            Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud.
-            </p>
-            <p>
-            <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">https://tensorflow.google.cn</span>
-            </p>
-            </li>
-            <li>
-            <p>
-            MxNet:A flexible and efficient library for deep learning.&nbsp;
-            </p>
-            <p>
-            <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">http://mxnet.incubator.apache.org</span>
-            </p>
-            </li>
-            </ul>
-            <p>
-            (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
-            </p>
-            <p>
-            <span style="font-size: 14px;"></span>
-            </p>'
-          ),
-          actionButton("mlsubmit", "Submit", class = "btn-primary"),
-          verbatimTextOutput("DMmlparameters")
+          column(
+            4,
+            h4("Summary"),
+            selectInput(
+              "mlframework",
+              "Choose a ML framework:",
+              choices = c("R Packages", "Tensorflow", "MxNet")
+            ),
+            selectInput(
+              "mlmethod",
+              "Choose a ML method:",
+              choices = c(
+                "Decision Tree",
+                "Random Forest",
+                "k-NearestNeighbor",
+                "Support Vector Machine",
+                "Artificial Neural Network"
+              )
+            ),
+            selectInput(
+              "mlptype",
+              "Select the column name that you want to classify:",
+              choices = c("1", "2", "3")
+            ),
+            HTML(
+              '<p>
+              <strong><span style="font-size: 14px;"></span></strong>
+              </p>
+              <p>
+              <strong>Info:</strong>
+              </p>
+              <ul class=" list-paddingleft-2" style="list-style-type: disc;">
+              <li>
+              <p>
+              Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud.
+              </p>
+              <p>
+              <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">https://tensorflow.google.cn</span>
+              </p>
+              </li>
+              <li>
+              <p>
+              MxNet:A flexible and efficient library for deep learning.&nbsp;
+              </p>
+              <p>
+              <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">http://mxnet.incubator.apache.org</span>
+              </p>
+              </li>
+              </ul>
+              <p>
+              (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
+              </p>
+              <p>
+              <span style="font-size: 14px;"></span>
+              </p>'
+            ),
+            actionButton("mlsubmit", "Submit", class = "btn-primary")
+            ),
+          column(4,
+                 h3("Result"),
+                 verbatimTextOutput("DMmlparameters"))
           ),
         tabPanel("Help",
                  h4("help info."))
-        )
+          )
       )
       )
-  )
+      )
