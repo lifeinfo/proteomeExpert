@@ -349,7 +349,7 @@ function(input, output) {
   })
   output$anno_parameters2 <- renderText({
     if (input$Database == "Uniport") {
-      print(iris[1,])
+      print("Uniport")
     } else if (input$Database == "String-db") {
       print("String-db")
     } else if (input$Database == "KEGG") {
