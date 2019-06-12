@@ -336,9 +336,10 @@ function(input, output) {
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
+    anno_name<<-colnames(getAnnoTable())
+    print(anno_name)
     getAnnoTable()
   }))
-  
   ############################################################ ANNO #######################################
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({

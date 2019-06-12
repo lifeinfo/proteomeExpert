@@ -409,57 +409,8 @@ navbarPage(
     "Data Mining",
     "",
     sidebarPanel(
-      # Input: Checkbox if file has header ----
-      checkboxInput("DMheader", "Header", TRUE),
-      
-      
-      # Input: Select separator ----
-      radioButtons(
-        "DMsep",
-        "Separator",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        selected = "\t"
-      ),
-      
-      # Input: Select quotes ----
-      radioButtons(
-        "DMquote",
-        "Quote",
-        choices = c(
-          None = "",
-          "Double Quote" = '"',
-          "Single Quote" = "'"
-        ),
-        selected = ''
-      ),
-      
-      
-      # Horizontal line ----
-      tags$hr(),
-      # Input: Select a file ----
-      fileInput(
-        "DMfile",
-        "Choose protein/peptide CSV/TXT File",
-        multiple = TRUE,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv")
-      ),
-      # Horizontal line ----
-      tags$hr(),
-      # Input: Select a file ----
-      fileInput(
-        "anno",
-        "Choose annotation File",
-        multiple = TRUE,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv")
-      ),
+      selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
+      selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE),
       tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
       
       tags$h5("Click to process:"),
@@ -509,6 +460,13 @@ navbarPage(
           tableOutput("DMrmtable"),
           h4("Your input info."),
           verbatimTextOutput("DMrmparameters")
+        ),
+        tabPanel(
+          "FeatureSel",
+          h4("Summary"),
+          tableOutput("DMfltable"),
+          h4("Your input info."),
+          verbatimTextOutput("DMfsparameters")
         ),
         tabPanel(
           "ML",
