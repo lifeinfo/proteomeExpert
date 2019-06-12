@@ -33,8 +33,8 @@ library(rhandsontable)
 #model
 source("lr_2prot.R")
 source("combat.R")
-source(file = "test.R")
-source(file = "preprocess.R")
+source("test.R")
+source("preprocess.R")
 
 
 #library(keras)
