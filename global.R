@@ -36,6 +36,9 @@ source("combat.R")
 source(file = "test.R")
 source(file = "preprocess.R")
 
+#######################################global variable
+protM_name<-c("original","featureSelected")
+anno_name<-"Please annotation first"
 
 #library(keras)
 # ML
