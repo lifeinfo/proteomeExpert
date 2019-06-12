@@ -364,9 +364,132 @@ function(input, output) {
     }
   })
   
-  output$anno_table <- DT::renderDataTable(DT::datatable({
-    iris
-  }))
-  ############################################################ ML #########################################
+  #output$anno_table <- DT::renderDataTable(DT::datatable({
+  #  iris
+  #}))
+  
+  output$anno_table <- renderRHandsontable({
+    #DF = iris
+    #if (!is.null(DF)) {
+    #  rhandsontable(
+    #    DF,
+    #    stretchH = "all",
+    #    contextMenu = TRUE,
+    #    maxRows = 20,
+    #    autoWrapRow = TRUE,
+    #    dropdownMenu = TRUE,
+    #    filters = TRUE,
+    #    exportFile = TRUE,
+    #    manualRowMove = TRUE,
+    #    manualColumnMove = TRUE,
+    #    colHeaders = colnames(iris),
+    #    search = TRUE
+    #  ) %>% hot_cols(columnSorting = TRUE)
+    #}
+    DF = data.frame(
+      protein = c(
+        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
+        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>"
+      ),
+      database = c(
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>",
+        "<a href='https://www.uniprot.org'>uniport</a>"
+      ),
+      desc = c(
+        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
+        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
+        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
+        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
+        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
+        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
+        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
+        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
+        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
+        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
+        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
+        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers."
+      ),
+      comments = c(
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial",
+        "Aspartate aminotransferase, mitochondrial"
+      ), 
+      cover = c(
+        "http://geneontology.org/assets/go-logo.large.png",
+        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
+        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
+        "http://geneontology.org/assets/go-logo.large.png",
+        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
+        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
+        "https://www.uniprot.org/images/logos/Logo_medium.png",
+        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
+        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
+        "https://www.uniprot.org/images/logos/Logo_medium.png",
+        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
+        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg"
+      ),
+      stringsAsFactors = FALSE
+    )
+    
+    rhandsontable(DF, allowedTags = "<em><b><strong><a><big>", 
+                  height = 500, rowHeaders = FALSE, readOnly = TRUE) %>%
+      hot_cols(colWidths = c(80, 80, 200, 200, 80)) %>%
+      hot_col(1:2, renderer = "html") %>%
+      hot_col(1:4, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
+      hot_col(5, renderer = "
+    function(instance, td, row, col, prop, value, cellProperties) {
+      var escaped = Handsontable.helper.stringify(value),
+        img;
+  
+      if (escaped.indexOf('http') === 0) {
+        img = document.createElement('IMG');
+        img.src = value;
+        img.width = 80;
+  
+        Handsontable.dom.addEvent(img, 'mousedown', function (e){
+          e.preventDefault(); // prevent selection quirk
+        });
+  
+        Handsontable.dom.empty(td);
+        td.appendChild(img);
+      }
+      else {
+        // render as text
+        Handsontable.renderers.TextRenderer.apply(this, arguments);
+      }
+  
+      return td;
+    }") %>% hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
+  })
+  ############################################ ML #########################################
   
 }

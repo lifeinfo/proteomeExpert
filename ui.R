@@ -344,7 +344,7 @@ navbarPage(
       selectInput(
         "Database",
         "Choose a Database:",
-        choices = c("Uniport", "String-db", "KEGG", "GO", "Reactome")
+        choices = c("All", "Uniport", "String-db", "KEGG", "GO", "Reactome")
       ),
       HTML(
         '<p>
@@ -394,9 +394,12 @@ navbarPage(
       hr(),
       h2('Display'),
       fluidRow(column(
-        6, verbatimTextOutput("anno_parameters2")
+        4, verbatimTextOutput("anno_parameters2")
       ),
-      column(6, DTOutput("anno_table")))
+      #column(6, DTOutput("anno_table")))
+      column(8, rHandsontableOutput("anno_table"))),
+      hr(),
+      downloadButton('downloadAnno_db')
     ))
     ),
   

@@ -27,6 +27,9 @@ library(xml2)
 library(ggplot2)
 library(plotly)
 
+#table
+library(rhandsontable)
+
 #model
 source("lr_2prot.R")
 source("combat.R")
