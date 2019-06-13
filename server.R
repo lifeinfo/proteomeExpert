@@ -336,10 +336,19 @@ function(input, output) {
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
-    anno_name<<-colnames(getAnnoTable())
-    print(anno_name)
+    #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
+  # observeEvent(input$DoAnnoTable, {
+  #   anno_name<<-colnames(getAnnoTable())
+  # })
+  output$DMprot_anno_Ui <- renderUI({
+    anno_name<<-colnames(getAnnoTable())
+    tagList(
+      selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
+      selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE)
+    )
+    })
   ############################################################ ANNO #######################################
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
