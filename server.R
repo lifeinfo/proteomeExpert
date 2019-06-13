@@ -116,7 +116,7 @@ function(input, output) {
       )
     }
   )
-  ############################              QC             ##############################################################
+  ############################QC
   
   QCdatasetInput <- eventReactive(input$QC, {
     if (class(readProteinM()) != "data.frame")
@@ -173,7 +173,7 @@ function(input, output) {
       dev.off()
     }
   )
-  ############################              data console       #####################################################
+  ############################data console
   
   ### for read protein matrix
   readProteinM <- reactive({
@@ -349,7 +349,7 @@ function(input, output) {
       selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE)
     )
     })
-  ############################################################ ANNO #######################################
+  ############################################################ ANNO
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
@@ -379,95 +379,31 @@ function(input, output) {
   #}))
   
   output$anno_table <- renderRHandsontable({
-    #DF = iris
-    #if (!is.null(DF)) {
-    #  rhandsontable(
-    #    DF,
-    #    stretchH = "all",
-    #    contextMenu = TRUE,
-    #    maxRows = 20,
-    #    autoWrapRow = TRUE,
-    #    dropdownMenu = TRUE,
-    #    filters = TRUE,
-    #    exportFile = TRUE,
-    #    manualRowMove = TRUE,
-    #    manualColumnMove = TRUE,
-    #    colHeaders = colnames(iris),
-    #    search = TRUE
-    #  ) %>% hot_cols(columnSorting = TRUE)
-    #}
     DF = data.frame(
       protein = c(
-        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>",
         "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
         "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
         "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>"
       ),
       database = c(
         "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>uniport</a>"
+        "<a href='https://www.uniprot.org'>KEGG</a>",
+        "<a href='https://www.uniprot.org'>String-db</a>"
       ),
       desc = c(
-        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
-        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
-        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
-        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
-        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
-        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
-        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
-        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
-        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers.",
-        "Catalyzes the irreversible transamination of the L-tryptophan metabolite L-kynurenine to form kynurenic acid (KA). Plays a key role in amino acid metabolism. Important for metabolite exchange between mitochondria and cytosol. Facilitates cellular uptake of long-chain free fatty acids (By similarity).",
-        "This book provides a developer-level introduction along with <b>more advanced</b> and useful features of JavaScript.",
-        "<em>JavaScript: The Definitive Guide</em> provides a thorough description of the core <b>JavaScript</b> language and both the legacy and standard DOMs implemented in web browsers."
+        "Defects in ABI3BP has been found in a patient with isolated coloboma, a defect of the eye characterized by the absence of ocular structures due to abnormal morphogenesis of the optic cup and stalk, and the fusion of the fetal fissure (optic fissure). Isolated colobomas may be associated with an abnormally small eye (microphthalmia) or small cornea.",
+        "Expressed in brain, heart, lung, liver, pancreas kidney and placenta.",
+        "Isolated colobomas may be associated with an abnormally small eye (microphthalmia) or small cornea."
       ),
       comments = c(
         "Aspartate aminotransferase, mitochondrial",
         "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        
-        
         "Aspartate aminotransferase, mitochondrial"
       ), 
-      cover = c(
-        "http://geneontology.org/assets/go-logo.large.png",
-        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
-        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
-        "http://geneontology.org/assets/go-logo.large.png",
-        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
-        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
-        "https://www.uniprot.org/images/logos/Logo_medium.png",
-        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
-        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg",
-        "https://www.uniprot.org/images/logos/Logo_medium.png",
-        "http://ecx.images-amazon.com/images/I/51gdVAEfPUL._SL50_.jpg",
-        "http://ecx.images-amazon.com/images/I/51VFNL4T7kL._SL50_.jpg"
+      Pathway = c(
+        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions",
+        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions",
+        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions"
       ),
       stringsAsFactors = FALSE
     )

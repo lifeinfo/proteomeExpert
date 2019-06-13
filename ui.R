@@ -1,17 +1,13 @@
 #shinythemes::themeSelector(),
 navbarPage(
   theme = shinytheme("cerulean"),
-  # <--- To use a theme, uncomment this
   "ProteomeExpert |",
-  
-  ####################################################Introducation
+  ####################################################Home
   tabPanel(
-    "Introducation",
-    "",
+    "Home",
     sidebarPanel(
       tags$h5("Click to estimate:"),
       HTML("<p>This page remains for what?</p>")
-      
     ),
     mainPanel(tabsetPanel(tabPanel(
       "Introduction",
@@ -26,91 +22,71 @@ navbarPage(
       
     )))
   ),
-  ################################ Study design
-  tabPanel("Study Design",
-           "",
-           # sidebarPanel(
-           #   HTML("<p>This page remains for what?</p>"),
-           #   width=2
-           # ),
-           #mainPanel(
-           tabsetPanel(
-             tabPanel(
-               "Power Analysis",
-               sidebarPanel(
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-                 
-                 tags$h2("Power analysis with pilot experiment:"),
-                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-                 
-                 fileInput("file", "Select pilot experiment protein matrix:"),
-                 actionButton("powera", "Submit", class = "btn-primary"),
-                 
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-                 tags$h2("Power analysis by direct set parameters:"),
-                 tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
-                 textInput("Pm", "Number of Proteins (estimated):", 5000, width = "30%"),
-                 textInput("Pmu", "Mean abundance:", 13, width = "30%"),
-                 textInput("Pmu0", "Mean abundance 0:", 13.5, width = "30%"),
-                 textInput("Psd", "Standard deviation:", 0.75, width = "30%"),
-                 
-                 textInput("Palpha", "Alpha:", 0.05, width = "30%"),
-                 textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "30%"),
-                 
-                 tags$h5("Click to estimate:"),
-                 actionButton("powerb", "Submit", class = "btn-primary"),
-                 tags$hr(style = "height:3px;border:none;border-top:3px ridge green;")
-               ),
-               
-               mainPanel(tabsetPanel(
-                 tabPanel(
-                   "Sample size",
-                   h4("Sample size"),
-                   verbatimTextOutput("powerSize"),
-                   plotOutput("powerPlot")
-                 )
-               ))
-             ),
-             tabPanel(
-               "Batch Design",
-               sidebarPanel(
-                 fileInput("file", "File input:"),
-                 #textInput("txt", "Text input:", "general"),
-                 sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-                 sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-                 
-                 tags$h5("Click to design:"),
-                 actionButton("design", "Submit", class = "btn-primary")
-               ),
-               mainPanel(tabsetPanel(
-                 tabPanel(
-                   "Result",
-                   h4("Summary"),
-                   tableOutput("table"),
-                   h4("Your input info."),
-                   verbatimTextOutput("txtout")
-                 )
-                 #tabPanel("", "This panel is intentionally left blank"),
-                 #tabPanel("Tab 3", "This panel is intentionally left blank")
-               ))
-             )
-             
-           )),
+  ################################ Experimental Design
+  navbarMenu(
+    "Experimental Design",
+    tabPanel(
+      "Study Design",
+      sidebarPanel(
+        tags$h4("Power analysis by direct set parameters:"),
+        hr(),
+        textInput("Pm", "Number of Proteins (estimated):", 5000, width = "60%"),
+        textInput("Pmu", "Mean abundance:", 13, width = "60%"),
+        textInput("Pmu0", "Mean abundance 0:", 13.5, width = "60%"),
+        textInput("Psd", "Standard deviation:", 0.75, width = "60%"),
+        textInput("Palpha", "Alpha:", 0.05, width = "60%"),
+        textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "60%"),
+        hr(),
+        tags$h5("Click to estimate:"),
+        actionButton("powerb", "Submit", class = "btn-primary")
+      ),
+      
+      mainPanel(tabsetPanel(
+        tabPanel(
+          "Sample size",
+          h4("Sample size"),
+          verbatimTextOutput("powerSize"),
+          plotOutput("powerPlot")
+        )
+      ))
+    ),
+    tabPanel(
+      "Batch Design",
+      sidebarPanel(
+        tags$h4("Batch Design"),
+        hr(),
+        fileInput("file", "File input:"),
+        sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
+        sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
+        
+        tags$h5("Click to design:"),
+        actionButton("design", "Submit", class = "btn-primary")
+      ),
+      mainPanel(tabsetPanel(
+        tabPanel(
+          "Result",
+          h4("Summary"),
+          tableOutput("table"),
+          h4("Your input info."),
+          verbatimTextOutput("txtout")
+        )
+      ))
+    )
+  ),
   
-  ###################################################    data preprocessing      ####################################
+  ###################################################data preprocessing
   tabPanel(
     "Data Preprocessing",
     "",
     sidebarPanel(
-      # Input: Select separator ----
-      
       fileInput(
         "PeptideMatrix",
         "Select your peptide matrix (required):",
         multiple = TRUE,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv")
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
       ),
       checkboxInput("Dpheader", "Header", TRUE),
       radioButtons(
@@ -124,11 +100,12 @@ navbarPage(
         inline = TRUE,
         selected = "\t"
       ),
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      hr(),
       
       fileInput(
         "TechnicalReplicate",
-        "Select your technical replicate file (required):"
+        "Select your technical replicate file (required):",
+        placeholder = "*.csv or *.TXT required!"
       ),
       checkboxInput("Dtheader", "Header", FALSE),
       radioButtons(
@@ -143,9 +120,13 @@ navbarPage(
         selected = "\t"
       ),
       
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      hr(),
       
-      fileInput("BatchFile", "Select your batch effect file (optional):"),
+      fileInput(
+        "BatchFile",
+        "Select your batch effect file (optional):",
+        placeholder = "*.csv or *.TXT required!"
+      ),
       checkboxInput("Dbheader", "Header", TRUE),
       radioButtons(
         "Dbsep",
@@ -159,7 +140,7 @@ navbarPage(
         selected = "\t"
       ),
       
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      hr(),
       
       tags$h5("Click to process:"),
       actionButton("process", "Submit", class = "btn-primary")
@@ -167,10 +148,10 @@ navbarPage(
     ),
     mainPanel(tabsetPanel(
       tabPanel(
-        "Results",
+        "Result",
         h4("Summary"),
         tableOutput("Dtable"),
-        h4("Get all protein matrix"),
+        h4("Download all protein matrix"),
         downloadButton("downloadData", "Download", class = "btn-primary")
         
       )
@@ -178,22 +159,23 @@ navbarPage(
     ))
   ),
   
-  ####################################################        Data console    ####################################
+  ####################################################Data console
   tabPanel(
     "Data Console",
     "",
     sidebarPanel(
-      tags$h2("Upload Data:"),
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      tags$h3("Upload Data:"),
+      hr(),
       fileInput(
         "peptide_matrix",
         "Select your peptide file (optional):",
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv")
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
       ),
-      tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+      hr(),
       
       fileInput(
         "protein_matrix",
@@ -201,9 +183,10 @@ navbarPage(
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv")
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
       ),
-      tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+      hr(),
       
       fileInput(
         "sample_info",
@@ -211,10 +194,11 @@ navbarPage(
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv")
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
       ),
       #actionButton("sampleInfo", "annotation", class = "btn-primary"),
-      tags$hr(style = "height:2px;border:none;border-top:2px ridge gray;"),
+      hr(),
       
       fileInput(
         "individual_info",
@@ -222,26 +206,25 @@ navbarPage(
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv")
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
       )
       #actionButton("individualInfo", "annotation", class = "btn-primary")
       
     ),
     mainPanel(
-      fluidRow(column(
-        3, wellPanel(
-          tags$h4("Annotate sample columns:"),
-          tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
-          
-          # This outputs the dynamic UI component
-          uiOutput("sampleUi")
-        )
-      ),
+      fluidRow(column(3, wellPanel(
+        tags$h4("Annotate sample columns:"),
+        hr(),
+        
+        # This outputs the dynamic UI component
+        uiOutput("sampleUi")
+      )),
       
       column(
         3, offset = 0.5, wellPanel(
           tags$h4("Annotate individual columns:"),
-          tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
+          hr(),
           
           # This outputs the dynamic UI component
           uiOutput("individualUi")
@@ -257,8 +240,10 @@ navbarPage(
         textOutput("individualRes")
         
       ))),
-      tags$hr(style = "algin:right;height:2px;border:none;border-top:2px ridge gray;"),
-      actionButton("DoAnnoTable", "MergeTwo", class = "btn-primary"),
+      hr(),
+      actionButton("DoAnnoTable", "Merge", class = "btn-primary"),
+      hr(),
+      h4("Result"),
       fluidRow(column(width = 8, wellPanel(
         # This outputs the dynamic UI component
         DT::dataTableOutput("annoTable")
@@ -267,19 +252,19 @@ navbarPage(
     )
   ),
   
-  ######################################QC#########################
+  ######################################QC
   tabPanel(
     "QC",
     "",
     sidebarPanel(
-      tags$h2("Select modules you want to process:"),
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      tags$h3("Select modules you want to process:"),
+      hr(),
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
       checkboxInput("reproducibility", "Reproducibility", TRUE),
       checkboxInput("qcPca", "PCA", TRUE),
       checkboxInput("qcUmap", "UMAP", FALSE),
       
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
+      hr(),
       
       tags$h5("Click to process:"),
       actionButton("QC", "Submit", class = "btn-primary")
@@ -327,7 +312,7 @@ navbarPage(
       )
     ))
   ),
-  ######################################################################ANNO###################
+  ######################################################################Annotation
   tabPanel(
     "Annotations",
     "",
@@ -347,73 +332,47 @@ navbarPage(
         choices = c("All", "Uniport", "String-db", "KEGG", "GO", "Reactome")
       ),
       HTML(
-        '<p>
-        <strong>Info:</strong>
-        </p>
+        '<p><strong>Info:</strong></p>
         <ul class=" list-paddingleft-2" style="list-style-type: disc;">
-        <li>
-        <p>
-        Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.<span style="color: rgb(255, 0, 0);">web:https://www.uniprot.org</span>
-        </p>
-        </li>
-        <li>
-        <p>
-        String-db:Protein-Protein Interaction Networks.<span style="color: rgb(255, 0, 0);">web:https://string-db.org/cgi/input.pl</span>
-        </p>
-        </li>
-        <li>
-        <p>
-        KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.<span style="color: rgb(255, 0, 0);">web:https://www.kegg.jp</span>
-        </p>
-        </li>
-        <li>
-        <p>
-        Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.<span style="color: rgb(255, 0, 0);">web:http://geneontology.org</span>
-        </p>
-        </li>
-        <li>
-        <p>
-        Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.<span style="color: rgb(255, 0, 0);">web:https://www.reactome.org</span>
-        </p>
-        </li>
-        </ul>
-        <p>
-        <br/>
-        </p>'
+        <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.<span style="color: rgb(255, 0, 0);">web:https://www.uniprot.org</span></p></li>
+        <li><p>String-db:Protein-Protein Interaction Networks.<span style="color: rgb(255, 0, 0);">web:https://string-db.org/cgi/input.pl</span></p></li>
+        <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.<span style="color: rgb(255, 0, 0);">web:https://www.kegg.jp</span></p></li>
+        <li><p>Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.<span style="color: rgb(255, 0, 0);">web:http://geneontology.org</span></p></li>
+        <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.<span style="color: rgb(255, 0, 0);"><a href="https://www.reactome.org">web:https://www.reactome.org</a></span></p></li></ul><p>
+        <br/></p>'
       ),
       actionButton("annosubmit", "Submit", class = "btn-primary")
       #verbatimTextOutput("Annoparameters")
       ),
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "Result",
-        h4("Summary"),
-        HTML("<p><strong>Input:</strong></p>"),
-        verbatimTextOutput("anno_parameters1")
-      ),
-      hr(),
-      h2('Display'),
-      fluidRow(column(
-        4, verbatimTextOutput("anno_parameters2")
-      ),
-      #column(6, DTOutput("anno_table")))
-      column(8, rHandsontableOutput("anno_table"))),
-      hr(),
-      downloadButton('downloadAnno_db')
-    ))
+    mainPanel(
+      tabsetPanel(
+        tabPanel(
+          "Result",
+          h4("Summary"),
+          HTML("<p><strong>Input:</strong></p>"),
+          verbatimTextOutput("anno_parameters1")
+        ),
+        hr(),
+        h2('Display'),
+        fluidRow(
+          column(4, verbatimTextOutput("anno_parameters2")),
+          #column(6, DTOutput("anno_table")))
+          column(8, rHandsontableOutput("anno_table"))
+        ),
+        hr(),
+        downloadButton('downloadAnno_db', "Download", class = "btn-primary")
+      )
+    )
     ),
   
-  ##############################################################################################################
-  #######################data mining
+  ##################################################data mining
   tabPanel(
     "Data Mining",
     "",
     sidebarPanel(
-      #selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
-      #selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE),
+      h3("Advanced data analysis."),
       uiOutput("DMprot_anno_Ui"),
-      tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
-      
+      hr(),
       tags$h5("Click to process:"),
       checkboxInput("dmheatmap", "HeatMap", TRUE),
       checkboxInput("test", "t-test", TRUE),
@@ -464,14 +423,33 @@ navbarPage(
         ),
         tabPanel(
           "FeatureSel",
-          h5("Please note that feature selection including two parts: filter rules and feature selection algorithm"),
-          checkboxGroupInput("featureSel_filter","Please select filter rules" , c("nearZeoVar"="nearZeoVar","high correlation"="high_correlation"), selected = NULL, inline = T,
-                             width = NULL),
-          checkboxGroupInput("featureSel_algorithm","Please select feature selection algorithm" , c("random forest"="random_forest","lasso"="lasso"), selected = NULL, inline = T,
-                             width = NULL),
-          sliderInput("feature_num", "Set maximum features to keep:",
-                      min = 0, max = 500,
-                      value = 20,width = 800),
+          h5(
+            "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+          ),
+          checkboxGroupInput(
+            "featureSel_filter",
+            "Please select filter rules" ,
+            c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
+            selected = NULL,
+            inline = T,
+            width = NULL
+          ),
+          checkboxGroupInput(
+            "featureSel_algorithm",
+            "Please select feature selection algorithm" ,
+            c("random forest" = "random_forest", "lasso" = "lasso"),
+            selected = NULL,
+            inline = T,
+            width = NULL
+          ),
+          sliderInput(
+            "feature_num",
+            "Set maximum features to keep:",
+            min = 0,
+            max = 500,
+            value = 20,
+            width = 800
+          ),
           tableOutput("DMfltable"),
           h4("Your input info."),
           verbatimTextOutput("DMfsparameters")
@@ -539,10 +517,25 @@ navbarPage(
           column(4,
                  h3("Result"),
                  verbatimTextOutput("DMmlparameters"))
-          ),
-        tabPanel("Help",
-                 h4("help info."))
+          )
           )
       )
-      )
-      )
+    ),
+  ##################################################More
+  navbarMenu(
+    "More",
+    tabPanel("Help"),
+    "----",
+    tabPanel("Docs"),
+    tabPanel("Tutorials"),
+    tabPanel("Resources"),
+    tabPanel("GitHub")
+  ),
+  ################################################footer
+  div(
+    br(),
+    hr(),
+    includeCSS("www/css/footer.css"),
+    includeHTML("www/footer.html")
+  )
+    )

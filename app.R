@@ -1,7 +1,7 @@
 options(shiny.reactlog = TRUE)
-# options(shiny.trace = TRUE)
-# options(shiny.fullstacktrace = TRUE)
-# options(shiny.error = browser)
+options(shiny.trace = TRUE)
+options(shiny.fullstacktrace = TRUE)
+options(shiny.error = browser)
 
 shiny::runApp(
   port = 80,

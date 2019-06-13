@@ -1,0 +1,26 @@
+.myfooter{
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.copyright{
+    width: 420px;
+    margin: 0 auto;
+    color: #535d67;
+}
+
+.copyright img{
+    height: 50px;
+}
+
+.copyright p{
+    font-size: 14px;
+}
+
+
+.fixed-footer{
+    position: fixed;
+    bottom: 0;
+}
+/* myfooter end */
