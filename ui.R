@@ -409,8 +409,9 @@ navbarPage(
     "Data Mining",
     "",
     sidebarPanel(
-      selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
-      selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE),
+      #selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
+      #selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE),
+      uiOutput("DMprot_anno_Ui"),
       tags$hr(style = "height:3px;border:none;border-top:3px ridge green;"),
       
       tags$h5("Click to process:"),
@@ -463,7 +464,14 @@ navbarPage(
         ),
         tabPanel(
           "FeatureSel",
-          h4("Summary"),
+          h5("Please note that feature selection including two parts: filter rules and feature selection algorithm"),
+          checkboxGroupInput("featureSel_filter","Please select filter rules" , c("nearZeoVar"="nearZeoVar","high correlation"="high_correlation"), selected = NULL, inline = T,
+                             width = NULL),
+          checkboxGroupInput("featureSel_algorithm","Please select feature selection algorithm" , c("random forest"="random_forest","lasso"="lasso"), selected = NULL, inline = T,
+                             width = NULL),
+          sliderInput("feature_num", "Set maximum features to keep:",
+                      min = 0, max = 500,
+                      value = 20,width = 800),
           tableOutput("DMfltable"),
           h4("Your input info."),
           verbatimTextOutput("DMfsparameters")
