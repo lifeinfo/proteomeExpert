@@ -1,16 +1,24 @@
 library(caret)
 
 ####feature filter
-featureFilter<-function(label_protM){
+featureFilter<-function(label_protM,variance,correlation){
   protM<-label_protM[,-c("label")]
   #filter near zero 
-  near_zero_vars <- nearZeroVar(protM)
+  if(variance){
+      near_zero_vars <- nearZeroVar(protM)
   protM <- protM[,-near_zero_vars]
   label_protM<-label_protM[,-near_zero_vars]
+  }
+
+  
   #filter high correlation
-  corr_vars <- cor(protM)
-  high_Corr_vars <- findCorrelation(corr_vars, 0.90)
-  protM <- protM[, -high_Corr_vars]
+  if(correlation){
+      corr_vars <- cor(protM)
+      high_Corr_vars <- findCorrelation(corr_vars, 0.90)
+      protM <- protM[, -high_Corr_vars]
+  }
+
+  
   label_protM2<-cbind(label_protM[,"label"],protM)
   return(label_protM2) 
 }

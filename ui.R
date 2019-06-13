@@ -450,9 +450,10 @@ navbarPage(
             value = 20,
             width = 800
           ),
-          tableOutput("DMfltable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMfsparameters")
+          hr(),
+          actionButton("feature_do", "Submit", class = "btn-primary"),
+          #h5("Results:"),
+          DTOutput("featureSelected")
         ),
         tabPanel(
           "ML",
