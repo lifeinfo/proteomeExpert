@@ -334,11 +334,16 @@ function(input, output) {
   getAnnoTable <- eventReactive(input$DoAnnoTable, {
     anno <-
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
+    rownames(anno)<-anno[,"sampleId"]
+    anno
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
     #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
+  ########################feature selection
+
+  ###############################feature selection
   # observeEvent(input$DoAnnoTable, {
   #   anno_name<<-colnames(getAnnoTable())
   # })
@@ -349,6 +354,34 @@ function(input, output) {
       selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE)
     )
     })
+  feature_sel_prot<-eventReactive(input$feature_do,{
+    print(head(readProteinM()[,1:3]))
+    if(!is.null(input$DMprotM)){
+      if(isolate(input$DMprotM)=="original"){
+      protM<-readProteinM()
+    }
+    #if(length(isolate(input$DManno))==1){
+      label=input$DManno
+    #}
+    
+    protM<-t(protM)
+    colnames(protM)<-protM[1,]
+    protM<-protM[-1,]
+    sample_names<-rownames(protM)
+    #print(sample_names)
+    #print(head(getAnnoTable()[sample_names,label]))
+    
+    labeled_protM<-cbind(label=getAnnoTable()[sample_names,label],protM)
+    #labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
+    }
+    
+  }, ignoreNULL = FALSE)
+  
+  
+  output$featureSelected <- DT::renderDataTable(DT::datatable({
+    feature_sel_prot()
+  }))
+  ##########feature selection
   ############################################################ ANNO #######################################
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
