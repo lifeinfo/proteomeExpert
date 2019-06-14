@@ -157,6 +157,18 @@ function(input, output) {
       dev.off()
     }
   )
+  
+  output$Qpcatable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$Qpcaplot <- renderPlotly({
+    
+    data <- t(iris[, 1:4])
+    label <-iris[, 5]
+    p <- drawPCA(data, label)
+    ggplotly(p) %>% config(displaylogo = F)
+  })
+  
   ############################data console
   
   ### for read protein matrix

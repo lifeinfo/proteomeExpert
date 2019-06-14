@@ -36,6 +36,7 @@ source("combat.R")
 source("test.R")
 source("preprocess.R")
 source("featureSelection.R")
+source("pca.R")
 #######################################global variable
 protM_name<-c("original","featureSelected")
 anno_name<-"Please annotation first"

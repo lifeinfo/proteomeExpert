@@ -301,9 +301,9 @@ navbarPage(
       tabPanel(
         "PCA",
         h4("Summary"),
-        tableOutput("Qpcatable"),
-        h4("Your input info."),
-        verbatimTextOutput("Qpcaparameters")
+        hr(),
+        column(6, plotlyOutput("Qpcaplot")),
+        column(6, rHandsontableOutput("Qpcatable"))
       ),
       tabPanel(
         "Umap",
