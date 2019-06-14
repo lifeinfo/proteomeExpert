@@ -1,4 +1,5 @@
 function(input, output) {
+  ###############################batch Design
   output$txtout <- renderText({
     paste(input$n, input$m, sep = ", ")
   })
@@ -6,14 +7,6 @@ function(input, output) {
     head(iris, 4)
   })
   ###############################Power Analysis
-  output$Pparameters <- renderText({
-    paste(input$Pm, input$Pmu, input$Palpha, sep = ", ")
-  })
-  
-  output$Ptable <- renderTable({
-    head(iris, 4)
-  })
-  
   observeEvent(input$powerb, {
     output$powerSize <- renderPrint({
       mean_null = as.numeric(input$Pmu)
@@ -33,7 +26,7 @@ function(input, output) {
       ))
     })
     
-    output$powerPlot <- renderPlot({
+    output$powerPlot <- renderPlotly({
       mean_null = as.numeric(input$Pmu)
       mean_alt = as.numeric(input$Pmu0)
       sd = as.numeric(input$Psd)
@@ -51,21 +44,12 @@ function(input, output) {
                   lower.tail = F)
       PWmat = matrix(PW, 1, length(PW))
       colnames(PWmat) = ceiling(nc)
-      #print(PWmat)
-      barplot(
-        PWmat,
-        beside = T,
-        col = "grey",
-        ylim = c(0, 1),
-        border = F,
-        ylab = "Statistical power",
-        xlab = "Sample size"
-      )
-      abline(
-        h = c(0.5, 1 - as.numeric(input$Pbeta)),
-        col = c("blue", "red"),
-        lty = 2
-      )
+      PWmat_data = data.frame(Power = as.numeric(t(PWmat)[, 1]), Sample_size = colnames(PWmat))
+      p <- ggplot() +
+        geom_bar(data = PWmat_data, aes(x = Sample_size, y = Power), stat = "identity", fill="#87CEFA", width = 0.6) +
+        geom_hline(yintercept = 0.5, colour = 'red', size = 0.1, linetype="dashed") +
+        geom_hline(yintercept = 1 - as.numeric(input$Pbeta), size = 0.1, linetype="dashed")
+      ggplotly(p) %>% config(displaylogo = F)
     })
   })
   ###############################     data preprocess        ##############################
@@ -173,6 +157,18 @@ function(input, output) {
       dev.off()
     }
   )
+  
+  output$Qpcatable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$Qpcaplot <- renderPlotly({
+    
+    data <- t(iris[, 1:4])
+    label <-iris[, 5]
+    p <- drawPCA(data, label)
+    ggplotly(p) %>% config(displaylogo = F)
+  })
+  
   ############################data console
   
   ### for read protein matrix
@@ -390,90 +386,49 @@ function(input, output) {
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
-      print(paste0("Organism: ", input$Organism))
-      print(paste0("Database: ", input$Database))
+      print(paste0("Database: ", 
+                   "Uniport, ",
+                   "StringDB, ",
+                   "KEGG, ",
+                   "GO, ",
+                   "Reactome, "))
     })
   })
   output$anno_parameters2 <- renderText({
-    if (input$Database == "Uniport") {
-      print("Uniport")
-    } else if (input$Database == "String-db") {
-      print("String-db")
-    } else if (input$Database == "KEGG") {
-      print("KEGG")
-    } else if (input$Database == "GO") {
-      print("GO")
-    } else if (input$Database == "Reactome") {
-      print("Reactome")
-    } else{
-      print("Null")
-      
-    }
   })
-  
-  #output$anno_table <- DT::renderDataTable(DT::datatable({
-  #  iris
-  #}))
   
   output$anno_table <- renderRHandsontable({
     DF = data.frame(
-      protein = c(
-        "<a href='https://www.uniprot.org/uniprot/P12345'>P12345</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12346'>P12346</a>",
-        "<a href='https://www.uniprot.org/uniprot/P12347'>P12347</a>"
+      Name = c(
+        "Uniport",
+        "StringDB",
+        "KEGG",
+        "GO",
+        "Reactome"
       ),
-      database = c(
-        "<a href='https://www.uniprot.org'>uniport</a>",
-        "<a href='https://www.uniprot.org'>KEGG</a>",
-        "<a href='https://www.uniprot.org'>String-db</a>"
+      Link = c(
+        "<a href='https://www.uniprot.org'>www.uniprot.org</a>",
+        "<a href='https://string-db.org/'>string-db.org</a>",
+        "<a href='https://www.kegg.jp'>www.kegg.jp</a>",
+        "<a href='http://geneontology.org'>geneontology.org</a>",
+        "<a href='https://reactome.org'>reactome.org</a>"
       ),
       desc = c(
-        "Defects in ABI3BP has been found in a patient with isolated coloboma, a defect of the eye characterized by the absence of ocular structures due to abnormal morphogenesis of the optic cup and stalk, and the fusion of the fetal fissure (optic fissure). Isolated colobomas may be associated with an abnormally small eye (microphthalmia) or small cornea.",
-        "Expressed in brain, heart, lung, liver, pancreas kidney and placenta.",
-        "Isolated colobomas may be associated with an abnormally small eye (microphthalmia) or small cornea."
-      ),
-      comments = c(
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial",
-        "Aspartate aminotransferase, mitochondrial"
-      ), 
-      Pathway = c(
-        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions",
-        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions",
-        "https://string-db.org/api/image/network?identifiers=TP53%0dEGFR&add_white_nodes=10&network_flavor=actions"
+        "Comprehensive protein sequence and functional information, including supporting data.",
+        "Protein-Protein Interaction Networks.",
+        "Kyoto Encyclopedia of Genes and Genomes; diagrams of signaling pathways.",
+        "An ontology is a formal representation of a body of knowledge within a given domain. ",
+        "Protein-specific information in the context of relevant cellular pathways."
       ),
       stringsAsFactors = FALSE
     )
     
     rhandsontable(DF, allowedTags = "<em><b><strong><a><big>", 
                   height = 500, rowHeaders = FALSE, readOnly = TRUE) %>%
-      hot_cols(colWidths = c(80, 80, 200, 200, 80)) %>%
+      hot_cols(colWidths = c(80, 200, 200)) %>%
       hot_col(1:2, renderer = "html") %>%
-      hot_col(1:4, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
-      hot_col(5, renderer = "
-    function(instance, td, row, col, prop, value, cellProperties) {
-      var escaped = Handsontable.helper.stringify(value),
-        img;
-  
-      if (escaped.indexOf('http') === 0) {
-        img = document.createElement('IMG');
-        img.src = value;
-        img.width = 80;
-  
-        Handsontable.dom.addEvent(img, 'mousedown', function (e){
-          e.preventDefault(); // prevent selection quirk
-        });
-  
-        Handsontable.dom.empty(td);
-        td.appendChild(img);
-      }
-      else {
-        // render as text
-        Handsontable.renderers.TextRenderer.apply(this, arguments);
-      }
-  
-      return td;
-    }") %>% hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
+      hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
+      hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
   })
   ############################################ ML #########################################
   
