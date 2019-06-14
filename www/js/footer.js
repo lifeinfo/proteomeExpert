@@ -1,7 +1,7 @@
 $(function(){
     function footerPosition(){
       $("footer").removeClass("fixed-footer");
-      var contentHeight = document.body.scrollHeight,
+      var contentHeight = document.body.clientHeight,
           winHeight = window.innerHeight;
       if((contentHeight < winHeight)){
           $("footer").addClass("fixed-footer");
