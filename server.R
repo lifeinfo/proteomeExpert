@@ -184,7 +184,8 @@ function(input, output) {
           header = T,
           sep = "\t",
           check.names = F,
-          encoding = "UTF-8"
+          encoding = "UTF-8",
+          stringsAsFactors = F
         )
   })
   ### for column annotation
@@ -356,30 +357,32 @@ function(input, output) {
     })
 #####################################feature selection
   feature_sel_prot<-eventReactive(input$feature_do,{
-    print(head(readProteinM()[,1:3]))
-    if(!is.null(input$DMprotM)){
+    print("I are doing")
+    if(!is.null(isolate(input$DMprotM))){
       if(isolate(input$DMprotM)=="original"){
-      protM<-readProteinM()
+      protM<-isolate(readProteinM())
     }
     #if(length(isolate(input$DManno))==1){
-      label=input$DManno
+      label=isolate(input$DManno)
     #}
-    
+    rownames(protM)<-protM[,1]
+    protM<-protM[,-1]
     protM<-t(protM)
-    colnames(protM)<-protM[1,]
-    protM<-protM[-1,]
+    # colnames(protM)<-protM[1,]
+    # protM<-protM[-1,]
     sample_names<-rownames(protM)
-    #print(sample_names)
+    print(sample_names)
     #print(head(getAnnoTable()[sample_names,label]))
     
-    labeled_protM<-cbind(label=getAnnoTable()[sample_names,label],protM)
-    #labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
+    labeled_protM<-cbind(label=isolate(getAnnoTable()[sample_names,label]),protM)
+    print(myhead(labeled_protM))
+    labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
     }
     
   }, ignoreNULL = FALSE)
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
-    feature_sel_prot()
+    myhead(feature_sel_prot())
   }))
   
   

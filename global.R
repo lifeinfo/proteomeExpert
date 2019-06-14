@@ -47,3 +47,11 @@ anno_name<-"Please annotation first"
 #1.install.packages("keras")
 #2.library(keras)
 #3.install_keras()
+myhead<-function(d){
+  
+  if(ncol(d)>10){
+    t=head(d[,1:10])
+  }
+  else t=head(d)
+  return(t)
+}

@@ -1,15 +1,22 @@
 library(caret)
 
 ####feature filter
-featureFilter<-function(label_protM,variance,correlation){
-  protM<-label_protM[,-c("label")]
+featureFilter<-function(label_protM,methods){
+  variance=methods[1]
+  correlation=methods[2]
+  print("----------------")
+  print(myhead(label_protM))
+  
+  protM<-label_protM[,-which(colnames(label_protM)=="label")]
+  protM<-as.data.frame(lapply(protM,as.numeric))
+  print(myhead(protM))
+  
   #filter near zero 
   if(variance){
       near_zero_vars <- nearZeroVar(protM)
   protM <- protM[,-near_zero_vars]
   label_protM<-label_protM[,-near_zero_vars]
   }
-
   
   #filter high correlation
   if(correlation){
@@ -28,7 +35,7 @@ featureFilter<-function(label_protM,variance,correlation){
 
 featureSel<-function(label_protM,rf,nfeatures){
   label<-label_protM[,"label"]
-  protM<-label_protM[,-c("label")]
+  protM<-label_protM[,-which(colnames(label_protM)=="label")]
   ############################## random froest ####################
   if(rf){
     Processed_protM <- preProcess(protM)
