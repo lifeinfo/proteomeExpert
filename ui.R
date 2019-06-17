@@ -435,6 +435,9 @@ navbarPage(
           h5(
             "Please note that feature selection including two parts: filter rules and feature selection algorithm"
           ),
+          textInput(inputId = "fs_missing_ratio",
+                    label = "Allowable missing ratio",
+                    value = 0.8),
           checkboxGroupInput(
             "featureSel_filter",
             "Please select filter rules" ,
