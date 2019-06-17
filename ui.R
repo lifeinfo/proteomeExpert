@@ -400,8 +400,6 @@ navbarPage(
           tableOutput("DMhmtable"),
           h4("Your input info."),
           verbatimTextOutput("DMhmparameters")
-          
-          
         ),
         
         tabPanel(

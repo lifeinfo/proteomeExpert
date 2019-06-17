@@ -338,12 +338,7 @@ function(input, output) {
     #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
-  ########################feature selection
 
-  ###############################feature selection
-  # observeEvent(input$DoAnnoTable, {
-  #   anno_name<<-colnames(getAnnoTable())
-  # })
   output$DMprot_anno_Ui <- renderUI({
     anno_name<<-colnames(getAnnoTable())
     tagList(
@@ -353,7 +348,6 @@ function(input, output) {
     })
 #####################################feature selection
   feature_sel_prot<-eventReactive(input$feature_do,{
-    print("I are doing")
     if(!is.null(isolate(input$DMprotM))){
       if(isolate(input$DMprotM)=="original"){
       protM<-isolate(readProteinM())
@@ -375,7 +369,7 @@ function(input, output) {
     labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
     }
     
-  }, ignoreNULL = FALSE)
+  }, ignoreNULL = T, ignoreInit = T)
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
     myhead(feature_sel_prot())
