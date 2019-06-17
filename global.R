@@ -40,12 +40,14 @@ library(plotly)
 library(rhandsontable)
 
 #model
-source("lr_2prot.R")
-source("combat.R")
-source("test.R")
-source("preprocess.R")
-source("featureSelection.R")
-source("pca.R")
+source("expert\\lr_2prot.R")
+source("expert\\combat.R")
+source("expert\\test.R")
+source("expert\\preprocess.R")
+source("expert\\featureSelection.R")
+source("expert\\pca.R")
+source("expert\\missingValueExplore_zts.R")
+source("function.R")
 #######################################global variable
 protM_name<-c("original","featureSelected")
 anno_name<-"Please annotation first"
@@ -57,11 +59,3 @@ anno_name<-"Please annotation first"
 #1.install.packages("keras")
 #2.library(keras)
 #3.install_keras()
-
-myhead<-function(d){
-  if(ncol(d)>10){
-    t=head(d[,1:10])
-  }
-  else t=head(d)
-  return(t)
-}

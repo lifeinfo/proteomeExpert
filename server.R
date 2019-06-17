@@ -153,7 +153,6 @@ function(input, output) {
     },
     content = function(file) {
       pdf(file)
-      source("missingValueExplore_zts.R", local = T)
       missing_plot(readProteinM())
       dev.off()
     }
