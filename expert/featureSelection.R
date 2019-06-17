@@ -53,13 +53,22 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
 ##########################################
 ################ feature selection #######################
 
-featureSel<-function(label_protM,rf,nfeatures){
+featureSel<-function(label_protM,rf,nfeatures,lasso){
   label<-label_protM[,"label"]
+  label<-as.factor(label)
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   ############################## random froest ####################
   if(rf){
+    stringsAsFactors=F
+    
+    protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
+    protM[is.na(protM)]<-0
+    protM<-as.data.frame(protM)
+    near_zero_vars <- nearZeroVar(protM)
+    if(length(near_zero_vars)>0)
+      protM <- protM[,-near_zero_vars]
     Processed_protM <- preProcess(protM)
-    Processed_protM <- predict(Process, Processed_protM)
+    Processed_protM <- predict(Processed_protM, protM)
     data.filter <- sbf(Processed_protM,label,
                        sbfControl = sbfControl(functions=rfSBF,
                                                verbose=F,

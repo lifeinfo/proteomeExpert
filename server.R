@@ -405,9 +405,18 @@ function(input, output) {
     labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
 
     labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
+    if('random_forest' %in% input$featureSel_algorithm)
+      use_rf=TRUE
+    if('lasso' %in% input$featureSel_algorithm)
+      use_lasso = TRUE
+    nfeatures<-input$feature_num
+    labeled_protM_filtered<-featureSel(labeled_protM_filtered,use_rf,nfeatures,use_lasso)
     }
   }, ignoreNULL = T, ignoreInit = T)
  
+   ####feature selection
+   
+  
    output$fs_summary<-renderText({
      paste("After feature selection your matrix contains",nrow(feature_sel_prot()),"samples,",ncol(feature_sel_prot()),"features.")
    })
