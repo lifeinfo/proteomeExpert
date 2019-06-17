@@ -308,9 +308,9 @@ navbarPage(
       tabPanel(
         "Umap",
         h4("Summary"),
-        tableOutput("QUtable"),
-        h4("Your input info."),
-        verbatimTextOutput("QUparameters")
+        hr(),
+        column(6, plotlyOutput("Qumapplot")),
+        column(6, rHandsontableOutput("Qumaptable"))
       )
     ))
   ),
@@ -529,6 +529,7 @@ navbarPage(
             ),
           column(4,
                  h3("Result"),
+                 plotlyOutput()
                  verbatimTextOutput("DMmlparameters"))
           )
           )

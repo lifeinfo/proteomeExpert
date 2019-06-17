@@ -1,12 +1,16 @@
 function(input, output) {
-  ###############################batch Design
+  #################################
+  # batch Design
+  #################################
   output$txtout <- renderText({
     paste(input$n, input$m, sep = ", ")
   })
   output$table <- renderTable({
     head(iris, 4)
   })
-  ###############################Power Analysis
+  #################################
+  # Power Analysis
+  #################################
   observeEvent(input$powerb, {
     output$powerSize <- renderPrint({
       mean_null = as.numeric(input$Pmu)
@@ -52,7 +56,9 @@ function(input, output) {
       ggplotly(p) %>% config(displaylogo = F)
     })
   })
-  ###############################     data preprocess        ##############################
+  #################################
+  # data preprocess
+  #################################
   # updated when the user clicks the button
   DdatasetInput <- eventReactive(input$process, {
     if (is.null(input$PeptideMatrix))
@@ -100,7 +106,9 @@ function(input, output) {
       )
     }
   )
-  ############################QC
+  #################################
+  # QC
+  #################################
   
   QCdatasetInput <- eventReactive(input$QC, {
     print("doing")
@@ -111,10 +119,9 @@ function(input, output) {
     
   }, ignoreNULL = FALSE)
   
-  # output$QMparameters <- renderText({
-  #   QCdatasetInput()
-  # })
-  ##############missing value explore
+  #################################
+  # missing value explore
+  #################################
   
   output$missingPlot <- renderPlot({
     if (input$MissingValueExplore_check) {
@@ -157,7 +164,9 @@ function(input, output) {
       dev.off()
     }
   )
-  
+  #################################
+  # PCA
+  #################################
   output$Qpcatable <- renderRHandsontable({
     rhandsontable(head(iris, n = 20L))
   })
@@ -169,9 +178,11 @@ function(input, output) {
     ggplotly(p) %>% config(displaylogo = F)
   })
   
-  ############################data console
+  #################################
+  # data console
+  #################################
   
-  ### for read protein matrix
+  #for read protein matrix
   readProteinM <- reactive({
     if (!is.null(input$protein_matrix))
       prot <-
@@ -346,7 +357,9 @@ function(input, output) {
       selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE)
     )
     })
-#####################################feature selection
+  #################################
+  # feature selection
+  #################################
   feature_sel_prot<-eventReactive(input$feature_do,{
     if(!is.null(isolate(input$DMprotM))){
       if(isolate(input$DMprotM)=="original"){
@@ -358,14 +371,7 @@ function(input, output) {
     rownames(protM)<-protM[,1]
     protM<-protM[,-1]
     protM<-t(protM)
-    # colnames(protM)<-protM[1,]
-    # protM<-protM[-1,]
     sample_names<-rownames(protM)
-    #print(head(getAnnoTable()[sample_names,label]))
-    #protM$Label<-as.vector(unlist(isolate(getAnnoTable()[sample_names,label])))
-    #protM$Label<-getAnnoTable()[sample_names,label]
-    #labeled_protM<-protM[,c("Label",sample_names)]
-    #labeled_protM<-cbind(label=isolate(getAnnoTable()[sample_names,label]),protM)
     label_temp<-as.vector(getAnnoTable()[sample_names,label])
 
     labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
@@ -379,7 +385,9 @@ function(input, output) {
   }))
   
   
-  ############################################################ ANNO #######################################
+  #################################
+  # ANNO
+  #################################
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
@@ -427,6 +435,8 @@ function(input, output) {
       hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
       hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
   })
-  ############################################ ML #########################################
-  
+  #################################
+  # ML
+  #################################
+
 }
