@@ -103,6 +103,7 @@ function(input, output) {
   ############################QC
   
   QCdatasetInput <- eventReactive(input$QC, {
+    print("doing")
     if (class(readProteinM()) != "data.frame")
       return(NULL)
     else
@@ -361,14 +362,17 @@ function(input, output) {
     # colnames(protM)<-protM[1,]
     # protM<-protM[-1,]
     sample_names<-rownames(protM)
-    print(sample_names)
     #print(head(getAnnoTable()[sample_names,label]))
-    
-    labeled_protM<-cbind(label=isolate(getAnnoTable()[sample_names,label]),protM)
-    print(myhead(labeled_protM))
+    #protM$Label<-as.vector(unlist(isolate(getAnnoTable()[sample_names,label])))
+    #protM$Label<-getAnnoTable()[sample_names,label]
+    #labeled_protM<-protM[,c("Label",sample_names)]
+    #labeled_protM<-cbind(label=isolate(getAnnoTable()[sample_names,label]),protM)
+    label_temp<-as.vector(getAnnoTable()[sample_names,label])
+
+    labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
+
     labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
     }
-    
   }, ignoreNULL = T, ignoreInit = T)
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
