@@ -41,6 +41,7 @@ library(bsplus)
 #plotly provides high-level bindings for working directly with plotly.js.
 library(ggplot2)
 library(plotly)
+library(corrplot)
 
 #table
 library(rhandsontable)
@@ -57,6 +58,7 @@ source("expert\\pca.R")
 source("expert\\umap.R")
 source("expert\\tsne.R")
 source("expert\\volcano.R")
+source("expert\\corrplot.R")
 source("expert\\missingValueExplore_zts.R")
 source("function.R")
 #################################

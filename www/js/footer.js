@@ -7,8 +7,7 @@ $(function(){
           $("footer").addClass("fixed-footer");
           $(".content").height(winHeight);
       } else {
-          $("footer").addClass("fixed-footer");
-          $(".content").height(contentHeight);
+          $("footer").removeClass("fixed-footer");
           }
       }
       footerPosition();

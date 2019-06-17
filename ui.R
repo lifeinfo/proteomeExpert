@@ -286,17 +286,21 @@ navbarPage(
         
         plotOutput("missingPlot"),
         
-        width = 8,
-        height = 15
+        column(4, plotOutput("densityPlot")),
+        hr(),br()
         
       ),
-      
       tabPanel(
-        "Reproducibility",
+        "Pearson Correlation",
         h4("Summary"),
-        tableOutput("QPtable"),
-        h4("Your input info."),
-        verbatimTextOutput("QPparameters")
+        hr(),
+        column(6, plotOutput("Qpccplot")),
+        column(6, plotOutput("Qsmoothplot")),
+        hr(),
+        h4("Data:"),
+        column(12, rHandsontableOutput("Qpcctable")),
+        br(),
+        h4("Note:")
       ),
       tabPanel(
         "PCA",

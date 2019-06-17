@@ -164,6 +164,29 @@ function(input, output) {
       dev.off()
     }
   )
+  output$densityPlot <- renderPlot({
+    data <- iris[, 1]
+    drawdensity(as.data.frame(data))
+  })
+  
+  #################################
+  # Pearson Correlation
+  #################################
+  output$Qpcctable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$Qpccplot <- renderPlot({
+    
+    data <- t(iris[1:10, 1:4])
+    drawcorrplot(data)
+  })
+  output$Qsmoothplot <- renderPlot({
+    
+    data1 <- iris[, 1]
+    data2 <- iris[, 1]
+    drawsmooth(data1, data2)
+  })
+
   #################################
   # PCA
   #################################
