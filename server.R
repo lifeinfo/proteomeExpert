@@ -409,6 +409,16 @@ function(input, output) {
     )
     })
   #################################
+  # VocanoPlot
+  #################################
+  output$DMvocanotable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$DMvocanoparameters <- renderPlot({
+    drawVolcano((iris[,1:4]), c("a","a","b","b"), "a", "b")
+  })
+  
+  #################################
   # feature selection
   #################################
   feature_sel_prot<-eventReactive(input$feature_do,{

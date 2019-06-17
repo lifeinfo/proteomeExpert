@@ -423,9 +423,9 @@ navbarPage(
         tabPanel(
           "VocanoPlot",
           h4("Summary"),
-          tableOutput("DMvocanotable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMvocanoparameters")
+          hr(),
+          column(6, plotOutput("DMvocanoparameters")),
+          column(6, rHandsontableOutput("DMvocanotable"))
         ),
         tabPanel(
           "ViolinPlot",
