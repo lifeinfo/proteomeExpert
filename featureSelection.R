@@ -5,12 +5,12 @@ featureFilter<-function(label_protM,methods){
   variance=methods[1]
   correlation=methods[2]
   print("----------------")
-  print(myhead(label_protM))
-  
+
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
-  protM<-as.data.frame(lapply(protM,as.numeric))
-  print(myhead(protM))
+  print(dim(protM))
   
+  protM<-apply(protM,2,as.numeric,na.rm=T)
+
   #filter near zero 
   if(variance){
       near_zero_vars <- nearZeroVar(protM)
@@ -25,8 +25,8 @@ featureFilter<-function(label_protM,methods){
       protM <- protM[, -high_Corr_vars]
   }
 
-  
-  label_protM2<-cbind(label_protM[,"label"],protM)
+  print(dim(protM))
+  label_protM2<-cbind(label=label_protM[,"label"],protM,stringsAsFactors = FALSE)
   return(label_protM2) 
 }
 
