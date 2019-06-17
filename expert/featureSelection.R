@@ -2,6 +2,7 @@ library(caret)
 
 ####feature filter
 featureFilter<-function(label_protM,methods){
+  print(methods)
   variance=methods[1]
   correlation=methods[2]
   print("----------------")
@@ -17,10 +18,14 @@ featureFilter<-function(label_protM,methods){
   protM <- protM[,-near_zero_vars]
   label_protM<-label_protM[,-near_zero_vars]
   }
-  
+  print(dim(protM))
+  print(correlation)
   #filter high correlation
+  #pay attentaion to sd equal 0, if will turn out errors
   if(correlation){
-      corr_vars <- cor(protM)
+      protM_t<-protM
+      protM_t[is.na(protM_t)]<-0
+      corr_vars <- cor(protM_t,use ='pairwise.complete.obs' )
       high_Corr_vars <- findCorrelation(corr_vars, 0.90)
       protM <- protM[, -high_Corr_vars]
   }

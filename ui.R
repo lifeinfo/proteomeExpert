@@ -461,7 +461,7 @@ navbarPage(
           ),
           hr(),
           actionButton("feature_do", "Submit", class = "btn-primary"),
-          #h5("Results:"),
+          h5("Summary:"),
           DTOutput("featureSelected")
         ),
         tabPanel(

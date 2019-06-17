@@ -370,7 +370,7 @@ function(input, output) {
 
     labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
 
-    labeled_protM_filtered<-featureFilter(labeled_protM,is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
+    labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)))
     }
   }, ignoreNULL = T, ignoreInit = T)
   
