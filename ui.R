@@ -306,6 +306,13 @@ navbarPage(
         column(6, rHandsontableOutput("Qpcatable"))
       ),
       tabPanel(
+        "T-SNE",
+        h4("Summary"),
+        hr(),
+        column(6, plotlyOutput("Qtsneplot")),
+        column(6, rHandsontableOutput("Qtsnetable"))
+      ),
+      tabPanel(
         "Umap",
         h4("Summary"),
         hr(),
@@ -461,7 +468,7 @@ navbarPage(
           ),
           hr(),
           actionButton("feature_do", "Submit", class = "btn-primary"),
-          h5("Summary:"),
+          #h5("Results:"),
           DTOutput("featureSelected")
         ),
         tabPanel(
@@ -526,7 +533,7 @@ navbarPage(
             ),
           column(4,
                  h3("Result"),
-                 plotlyOutput()
+                 #plotlyOutput(),
                  verbatimTextOutput("DMmlparameters"))
           )
           )

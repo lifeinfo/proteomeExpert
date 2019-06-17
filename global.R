@@ -68,6 +68,8 @@ anno_name<-"Please annotation first"
 #################################
 # ML
 #################################
+library(tsne)
+library(umap)
 
 #library(keras)
 # ML

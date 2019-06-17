@@ -177,6 +177,34 @@ function(input, output) {
     p <- drawPCA(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
+  #################################
+  # T-sne
+  #################################
+  output$Qtsnetable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$Qtsneplot <- renderPlotly({
+    
+    data <- t(iris[, 1:4])
+    label <-iris[, 5]
+    p <- drawTSNE(data, label)
+    ggplotly(p) %>% config(displaylogo = F)
+  })
+  
+  #################################
+  # umap
+  #################################
+  output$Qumaptable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$Qumapplot <- renderPlotly({
+    
+    data <- t(iris[, 1:4])
+    label <-iris[, 5]
+    p <- drawUMAP(data, label)
+    ggplotly(p) %>% config(displaylogo = F)
+  })
+  
   
   #################################
   # data console

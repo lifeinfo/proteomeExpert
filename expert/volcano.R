@@ -1,4 +1,4 @@
-drawVolcano <- function(data,Label,labelA,labelB,Foldchange=1.5,pvalue=0.05,adjust=FALSE, pdfPath,strTitle="volcano plot",outFile=NULL){ 
+drawVolcano <- function(data,Label,labelA,labelB,Foldchange=1.5,pvalue=0.05,adjust=FALSE,strTitle="volcano plot",outFile=NULL){ 
 df8 <- data.frame()
 df8 <- 2^data
 df8[is.na(df8)] <- 0
@@ -17,11 +17,11 @@ if(adjust==FALSE){
 }
 
 
-pdf(pdfPath)
+#pdf(pdfPath)
 plot(df8$fd, -log10(VALUE), col="#00000033", pch=19,
      xlab=paste("log2 (fold change)"),
      ylab="-log10 (P_value)",
-     main=paste0(strTitle,"£º",labelA,"&",labelB))
+     main=paste0(strTitle))
 
 up <- subset(df8, df8$P_value < pvalue & df8$fd > Foldchange)
 down <- subset(df8, df8$P_value< pvalue & df8$fd< -Foldchange)
@@ -31,5 +31,5 @@ points(up$fd, -log10(up$P_value), col=1, bg = brewer.pal(9, "YlOrRd")[6], pch=21
 points(down$fd, -log10(down$P_value), col = 1, bg = brewer.pal(11,"RdBu")[9], pch = 21,cex=1.5)
 abline(h=-log10(VALUE),v=c(-Foldchange,Foldchange),lty=2,lwd=1)
 
-dev.off()
+#dev.off()
 }
