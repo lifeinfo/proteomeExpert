@@ -407,6 +407,10 @@ function(input, output) {
     labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
     }
   }, ignoreNULL = T, ignoreInit = T)
+ 
+   output$fs_summary<-renderText({
+     paste("After feature selection your matrix contains",nrow(feature_sel_prot()),"samples,",ncol(feature_sel_prot()),"features.")
+   })
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
     myhead(feature_sel_prot())
