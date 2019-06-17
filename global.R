@@ -2,7 +2,9 @@ options(encoding = "UTF-8")
 options(shiny.maxRequestSize=300*1024^2)
 options(stringsAsFactors = F)
 
+#################################
 # loading model
+#################################
 # eg: source("model.R")
 library(shiny)
 library(shinythemes)
@@ -17,8 +19,9 @@ library(preprocessCore)
 library(httr)
 library(jsonlite)
 library(xml2)
-
+#################################
 #template
+#################################
 library(shinyBS)
 library(bsplus)
 #library(colourpicker)
@@ -32,6 +35,9 @@ library(bsplus)
 #library(igraph)
 #library(ggvis)
 
+#################################
+# plot
+#################################
 #plotly provides high-level bindings for working directly with plotly.js.
 library(ggplot2)
 library(plotly)
@@ -39,18 +45,29 @@ library(plotly)
 #table
 library(rhandsontable)
 
-#model
+#################################
+# source file
+#################################
 source("expert\\lr_2prot.R")
 source("expert\\combat.R")
 source("expert\\test.R")
 source("expert\\preprocess.R")
 source("expert\\featureSelection.R")
 source("expert\\pca.R")
+source("expert\\umap.R")
+source("expert\\tsne.R")
+source("expert\\volcano.R")
 source("expert\\missingValueExplore_zts.R")
 source("function.R")
-#######################################global variable
+#################################
+# global variable
+#################################
 protM_name<-c("original","featureSelected")
 anno_name<-"Please annotation first"
+
+#################################
+# ML
+#################################
 
 #library(keras)
 # ML
