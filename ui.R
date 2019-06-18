@@ -453,26 +453,33 @@ navbarPage(
             "featureSel_filter",
             "Please select filter rules" ,
             c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
-            selected = NULL,
+            selected = c("nearZeoVar","high_correlation"),
             inline = T,
             width = NULL
           ),
-          checkboxGroupInput(
+          radioButtons(
             "featureSel_algorithm",
-            "Please select feature selection algorithm" ,
-            c("random forest" = "random_forest", "lasso" = "lasso"),
-            selected = NULL,
-            inline = T,
-            width = NULL
+            "Please select feature selection algorithm",
+            choices = c( "random forest"= 'random_forest', 'LASSO' = "lasso"),
+            inline = TRUE,
+            selected = NULL
           ),
-          sliderInput(
-            "feature_num",
-            "Set maximum features to keep:",
-            min = 0,
-            max = 500,
-            value = 20,
-            width = 800
-          ),
+          # checkboxGroupInput(
+          #   "featureSel_algorithm",
+          #   "Please select feature selection algorithm" ,
+          #   c("random forest" = "random_forest", "lasso" = "lasso"),
+          #   selected = NULL,
+          #   inline = T,
+          #   width = NULL
+          # ),
+          # sliderInput(
+          #   "feature_num",
+          #   "Set maximum features to keep:",
+          #   min = 0,
+          #   max = 500,
+          #   value = 20,
+          #   width = 800
+          # ),
           hr(),
           actionButton("feature_do", "Submit", class = "btn-primary"),
           h5("Summary:"),

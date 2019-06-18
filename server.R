@@ -438,12 +438,13 @@ function(input, output) {
     labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
 
     labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
-    if('random_forest' %in% input$featureSel_algorithm)
-      use_rf=TRUE
-    if('lasso' %in% input$featureSel_algorithm)
-      use_lasso = TRUE
-    nfeatures<-input$feature_num
-    labeled_protM_filtered<-featureSel(labeled_protM_filtered,use_rf,nfeatures,use_lasso)
+    # if('random_forest' %in% input$featureSel_algorithm)
+    #   use_rf=TRUE
+    # if('lasso' %in% input$featureSel_algorithm)
+    #   use_lasso = TRUE
+    #nfeatures<-input$feature_num
+    print(input$featureSel_algorithm)
+    labeled_protM_filtered<-featureSel(labeled_protM_filtered,input$featureSel_algorithm)
     }
   }, ignoreNULL = T, ignoreInit = T)
  
