@@ -452,7 +452,7 @@ navbarPage(
           radioButtons(
             "featureSel_algorithm",
             "Please select feature selection algorithm",
-            choices = c( "random forest"= 'random_forest', 'LASSO' = "lasso"),
+            choices = c( "Random Forest"= 'random_forest', 'LASSO' = "lasso",'Genetic Algorithm' ="GA"),
             inline = TRUE,
             selected = NULL
           ),
