@@ -408,17 +408,9 @@ navbarPage(
         tabPanel(
           "HeatMap",
           h4("Summary"),
-          tableOutput("DMhmtable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMhmparameters")
-        ),
-        
-        tabPanel(
-          "t-test",
-          h4("Summary"),
-          tableOutput("DMttable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMtparameters")
+          hr(),
+          column(6, plotOutput("DMheatmapparameters")),
+          column(6, rHandsontableOutput("DMheatmaptable"))
         ),
         tabPanel(
           "VocanoPlot",
@@ -430,9 +422,9 @@ navbarPage(
         tabPanel(
           "ViolinPlot",
           h4("Summary"),
-          tableOutput("DMviolintable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMviolinparameters")
+          hr(),
+          column(6, plotOutput("DMviolinparameters")),
+          column(6, rHandsontableOutput("DMviolintable"))
         ),
         tabPanel(
           "RadarMap",
