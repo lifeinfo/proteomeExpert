@@ -50,9 +50,24 @@ function(input, output) {
       colnames(PWmat) = ceiling(nc)
       PWmat_data = data.frame(Power = as.numeric(t(PWmat)[, 1]), Sample_size = colnames(PWmat))
       p <- ggplot() +
-        geom_bar(data = PWmat_data, aes(x = Sample_size, y = Power), stat = "identity", fill="#87CEFA", width = 0.6) +
-        geom_hline(yintercept = 0.5, colour = 'red', size = 0.1, linetype="dashed") +
-        geom_hline(yintercept = 1 - as.numeric(input$Pbeta), size = 0.1, linetype="dashed")
+        geom_bar(
+          data = PWmat_data,
+          aes(x = Sample_size, y = Power),
+          stat = "identity",
+          fill = "#87CEFA",
+          width = 0.6
+        ) +
+        geom_hline(
+          yintercept = 0.5,
+          colour = 'red',
+          size = 0.1,
+          linetype = "dashed"
+        ) +
+        geom_hline(
+          yintercept = 1 - as.numeric(input$Pbeta),
+          size = 0.1,
+          linetype = "dashed"
+        )
       ggplotly(p) %>% config(displaylogo = F)
     })
   })
@@ -176,17 +191,15 @@ function(input, output) {
     rhandsontable(head(iris, n = 20L))
   })
   output$Qpccplot <- renderPlot({
-    
     data <- t(iris[1:10, 1:4])
     drawcorrplot(data)
   })
   output$Qsmoothplot <- renderPlot({
-    
     data1 <- iris[, 1]
     data2 <- iris[, 1]
     drawsmooth(data1, data2)
   })
-
+  
   #################################
   # PCA
   #################################
@@ -194,9 +207,8 @@ function(input, output) {
     rhandsontable(head(iris, n = 20L))
   })
   output$Qpcaplot <- renderPlotly({
-    
     data <- t(iris[, 1:4])
-    label <-iris[, 5]
+    label <- iris[, 5]
     p <- drawPCA(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
@@ -207,9 +219,8 @@ function(input, output) {
     rhandsontable(head(iris, n = 20L))
   })
   output$Qtsneplot <- renderPlotly({
-    
     data <- t(iris[, 1:4])
-    label <-iris[, 5]
+    label <- iris[, 5]
     p <- drawTSNE(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
@@ -221,9 +232,8 @@ function(input, output) {
     rhandsontable(head(iris, n = 20L))
   })
   output$Qumapplot <- renderPlotly({
-    
     data <- t(iris[, 1:4])
-    label <-iris[, 5]
+    label <- iris[, 5]
     p <- drawUMAP(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
@@ -393,21 +403,39 @@ function(input, output) {
   getAnnoTable <- eventReactive(input$DoAnnoTable, {
     anno <-
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
-    rownames(anno)<-anno[,"sampleId"]
+    rownames(anno) <- anno[, "sampleId"]
     anno
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
     #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
-
+  
   output$DMprot_anno_Ui <- renderUI({
-    anno_name<<-colnames(getAnnoTable())
+    anno_name <<- colnames(getAnnoTable())
     tagList(
-      selectInput('DMprotM', 'select matrix', protM_name, selectize=FALSE),
-      selectInput('DManno', 'select types', anno_name, multiple=TRUE, selectize=TRUE)
+      selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
+      selectInput(
+        'DManno',
+        'select types',
+        anno_name,
+        multiple = TRUE,
+        selectize = TRUE
+      )
     )
-    })
+  })
+  #################################
+  # Heatmap
+  #################################
+  output$DMheatmaptable <- renderRHandsontable({
+    rhandsontable(head(iris, n = 20L))
+  })
+  output$DMheatmapparameters <- renderPlot({
+    data <- t(iris[, 1:4])
+    label <- iris[, 5]
+    drawheatmap(data, label)
+  })
+  
   #################################
   # VocanoPlot
   #################################
@@ -415,12 +443,25 @@ function(input, output) {
     rhandsontable(head(iris, n = 20L))
   })
   output$DMvocanoparameters <- renderPlot({
-    drawVolcano((iris[,1:4]), c("a","a","b","b"), "a", "b")
+    drawVolcano((iris[, 1:4]), c("a", "a", "b", "b"), "a", "b")
+  })
+  
+  #################################
+  # ViolinPlot
+  #################################
+  output$DMviolintable <- renderRHandsontable({
+    rhandsontable(head(iris[, c(1, 5)], n = 20L))
+  })
+  output$DMviolinparameters <- renderPlot({
+    data <- iris[, 4]
+    sample <- iris[, 5]
+    drawviolin(data, sample)
   })
   
   #################################
   # feature selection
   #################################
+<<<<<<< HEAD
   feature_sel_prot<-eventReactive(input$feature_do,{
     if(!is.null(isolate(input$DMprotM))){
       if(isolate(input$DMprotM)=="original"){
@@ -450,10 +491,58 @@ function(input, output) {
  
    ####feature selection
    
+=======
+  feature_sel_prot <- eventReactive(input$feature_do,
+                                    {
+                                      if (!is.null(isolate(input$DMprotM))) {
+                                        if (isolate(input$DMprotM) == "original") {
+                                          protM <- isolate(readProteinM())
+                                        }
+                                        #if(length(isolate(input$DManno))==1){
+                                        label = isolate(input$DManno)
+                                        #}
+                                        rownames(protM) <-
+                                          protM[, 1]
+                                        protM <- protM[,-1]
+                                        protM <- t(protM)
+                                        sample_names <-
+                                          rownames(protM)
+                                        label_temp <-
+                                          as.vector(getAnnoTable()[sample_names, label])
+                                        
+                                        labeled_protM <-
+                                          cbind(label = label_temp, protM, stringsAsFactors = FALSE)
+                                        
+                                        labeled_protM_filtered <-
+                                          featureFilter(labeled_protM,!is.na(match(
+                                            c("nearZeoVar", "high_correlation"),
+                                            input$featureSel_filter
+                                          )), input$fs_missing_ratio)
+                                        if ('random_forest' %in% input$featureSel_algorithm)
+                                          use_rf = TRUE
+                                        if ('lasso' %in% input$featureSel_algorithm)
+                                          use_lasso = TRUE
+                                        nfeatures <-
+                                          input$feature_num
+                                        labeled_protM_filtered <-
+                                          featureSel(labeled_protM_filtered, use_rf, nfeatures, use_lasso)
+                                      }
+                                    },
+                                    ignoreNULL = T,
+                                    ignoreInit = T)
+>>>>>>> 88b7b84f07a5e327632821200c468b8bd6a2445b
   
-   output$fs_summary<-renderText({
-     paste("After feature selection your matrix contains",nrow(feature_sel_prot()),"samples,",ncol(feature_sel_prot())-1,"features:",colnames(feature_sel_prot()[-1]))
-   })
+  ####feature selection
+  output$fs_summary <- renderText({
+    paste(
+      "After feature selection your matrix contains",
+      nrow(feature_sel_prot()),
+      "samples,",
+      ncol(feature_sel_prot()) - 1,
+      "features:",
+      colnames(feature_sel_prot()[-1])
+    )
+  })
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
     myhead(feature_sel_prot())
@@ -466,26 +555,27 @@ function(input, output) {
   observeEvent(input$proteinlist, {
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
-      print(paste0("Database: ", 
-                   "Uniport, ",
-                   "StringDB, ",
-                   "KEGG, ",
-                   "GO, ",
-                   "Reactome, "))
+      print(paste0(
+        "Database: ",
+        "Uniport, ",
+        "StringDB, ",
+        "KEGG, ",
+        "GO, ",
+        "Reactome, "
+      ))
     })
   })
   output$anno_parameters2 <- renderText({
+    
   })
   
   output$anno_table <- renderRHandsontable({
     DF = data.frame(
-      Name = c(
-        "Uniport",
-        "StringDB",
-        "KEGG",
-        "GO",
-        "Reactome"
-      ),
+      Name = c("Uniport",
+               "StringDB",
+               "KEGG",
+               "GO",
+               "Reactome"),
       Link = c(
         "<a href='https://www.uniprot.org'>www.uniprot.org</a>",
         "<a href='https://string-db.org/'>string-db.org</a>",
@@ -503,8 +593,13 @@ function(input, output) {
       stringsAsFactors = FALSE
     )
     
-    rhandsontable(DF, allowedTags = "<em><b><strong><a><big>", 
-                  height = 500, rowHeaders = FALSE, readOnly = TRUE) %>%
+    rhandsontable(
+      DF,
+      allowedTags = "<em><b><strong><a><big>",
+      height = 500,
+      rowHeaders = FALSE,
+      readOnly = TRUE
+    ) %>%
       hot_cols(colWidths = c(80, 200, 200)) %>%
       hot_col(1:2, renderer = "html") %>%
       hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
@@ -513,5 +608,5 @@ function(input, output) {
   #################################
   # ML
   #################################
-
+  
 }
