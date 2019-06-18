@@ -450,7 +450,7 @@ function(input, output) {
   # ViolinPlot
   #################################
   output$DMviolintable <- renderRHandsontable({
-    rhandsontable(head(iris[,c(1,5)], n = 20L))
+    rhandsontable(head(iris[, c(1, 5)], n = 20L))
   })
   output$DMviolinparameters <- renderPlot({
     data <- iris[, 4]
@@ -470,17 +470,20 @@ function(input, output) {
                                         #if(length(isolate(input$DManno))==1){
                                         label = isolate(input$DManno)
                                         #}
-                                        rownames(protM) <- protM[, 1]
-                                        protM <- protM[, -1]
+                                        rownames(protM) <-
+                                          protM[, 1]
+                                        protM <- protM[,-1]
                                         protM <- t(protM)
-                                        sample_names <- rownames(protM)
-                                        label_temp <- as.vector(getAnnoTable()[sample_names, label])
+                                        sample_names <-
+                                          rownames(protM)
+                                        label_temp <-
+                                          as.vector(getAnnoTable()[sample_names, label])
                                         
                                         labeled_protM <-
                                           cbind(label = label_temp, protM, stringsAsFactors = FALSE)
                                         
                                         labeled_protM_filtered <-
-                                          featureFilter(labeled_protM, !is.na(match(
+                                          featureFilter(labeled_protM,!is.na(match(
                                             c("nearZeoVar", "high_correlation"),
                                             input$featureSel_filter
                                           )), input$fs_missing_ratio)
@@ -488,7 +491,8 @@ function(input, output) {
                                           use_rf = TRUE
                                         if ('lasso' %in% input$featureSel_algorithm)
                                           use_lasso = TRUE
-                                        nfeatures <- input$feature_num
+                                        nfeatures <-
+                                          input$feature_num
                                         labeled_protM_filtered <-
                                           featureSel(labeled_protM_filtered, use_rf, nfeatures, use_lasso)
                                       }
@@ -497,15 +501,14 @@ function(input, output) {
                                     ignoreInit = T)
   
   ####feature selection
-  
-  
   output$fs_summary <- renderText({
     paste(
       "After feature selection your matrix contains",
       nrow(feature_sel_prot()),
       "samples,",
       ncol(feature_sel_prot()) - 1,
-      "features."
+      "features:",
+      colnames(feature_sel_prot()[-1])
     )
   })
   
