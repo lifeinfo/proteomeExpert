@@ -433,7 +433,7 @@ function(input, output) {
   output$DMheatmapparameters <- renderPlot({
     data <- t(iris[, 1:4])
     label <- iris[, 5]
-    drawheatmap(data, label)
+    print(drawheatmap(data, label))
   })
   
   #################################

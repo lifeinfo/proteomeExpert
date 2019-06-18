@@ -13,7 +13,7 @@ drawheatmap <-
     # names(strain_color) <- c("C","R")
     # ann_colors <- list(stain = strain_color)
     
-    pheatmap(
+    p <- pheatmap(
       df11,
       color = brewer.pal(11, "RdYlBu")[11:1],
       fontsize_col = 8,
@@ -25,4 +25,5 @@ drawheatmap <-
       show_colnames = T,
       main = strTitle
     )
+    return(p)
   }
