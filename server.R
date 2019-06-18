@@ -451,7 +451,7 @@ function(input, output) {
    
   
    output$fs_summary<-renderText({
-     paste("After feature selection your matrix contains",nrow(feature_sel_prot()),"samples,",ncol(feature_sel_prot())-1,"features.")
+     paste("After feature selection your matrix contains",nrow(feature_sel_prot()),"samples,",ncol(feature_sel_prot())-1,"features:",colnames(feature_sel_prot()[-1]))
    })
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
