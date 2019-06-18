@@ -53,13 +53,19 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
 ##########################################
 ################ feature selection #######################
 
-featureSel<-function(label_protM,rf,nfeatures,lasso){
+featureSel<-function(label_protM,featureSel_algorithm,nfeatures=50){
   #print(myhead(label_protM))
-  label<-label_protM[,"label"]
-  label<-as.factor(label)
-  protM<-label_protM[,-which(colnames(label_protM)=="label")]
-  ############################## random froest ####################
-  if(rf){
+
+  switch (featureSel_algorithm,
+          random_forest = fsRf(label_protM,nfeatures),
+          lasso = fsLasso(label_protM)
+  )
+}
+############################## random froest ####################
+fsRf<-function(label_protM,nfeatures){
+    label<-label_protM[,"label"]
+    label<-as.factor(label)
+    protM<-label_protM[,-which(colnames(label_protM)=="label")]
     #stringsAsFactors=F
     protM[is.na(protM)]<-0
     protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
@@ -87,5 +93,7 @@ featureSel<-function(label_protM,rf,nfeatures,lasso){
     #print(features)
     return(label_protM[,c("label",features)])
   }
-  #################################end
+################################# lasso
+fsLasso<-function(d){
+  
 }

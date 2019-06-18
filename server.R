@@ -472,45 +472,35 @@ function(input, output) {
   #################################
   # feature selection
   #################################
-  feature_sel_prot <- eventReactive(input$feature_do,
-                                    {
-                                      if (!is.null(isolate(input$DMprotM))) {
-                                        if (isolate(input$DMprotM) == "original") {
-                                          protM <- isolate(readProteinM())
-                                        }
-                                        #if(length(isolate(input$DManno))==1){
-                                        label = isolate(input$DManno)
-                                        #}
-                                        rownames(protM) <-
-                                          protM[, 1]
-                                        protM <- protM[,-1]
-                                        protM <- t(protM)
-                                        sample_names <-
-                                          rownames(protM)
-                                        label_temp <-
-                                          as.vector(getAnnoTable()[sample_names, label])
-                                        
-                                        labeled_protM <-
-                                          cbind(label = label_temp, protM, stringsAsFactors = FALSE)
-                                        
-                                        labeled_protM_filtered <-
-                                          featureFilter(labeled_protM,!is.na(match(
-                                            c("nearZeoVar", "high_correlation"),
-                                            input$featureSel_filter
-                                          )), input$fs_missing_ratio)
-                                        if ('random_forest' %in% input$featureSel_algorithm)
-                                          use_rf = TRUE
-                                        if ('lasso' %in% input$featureSel_algorithm)
-                                          use_lasso = TRUE
-                                        nfeatures <-
-                                          input$feature_num
-                                        labeled_protM_filtered <-
-                                          featureSel(labeled_protM_filtered, use_rf, nfeatures, use_lasso)
-                                      }
-                                    },
-                                    ignoreNULL = T,
-                                    ignoreInit = T)
-  
+  feature_sel_prot<-eventReactive(input$feature_do,{
+    if(!is.null(isolate(input$DMprotM))){
+      if(isolate(input$DMprotM)=="original"){
+      protM<-isolate(readProteinM())
+    }
+    #if(length(isolate(input$DManno))==1){
+      label=isolate(input$DManno)
+    #}
+    rownames(protM)<-protM[,1]
+    protM<-protM[,-1]
+    protM<-t(protM)
+    sample_names<-rownames(protM)
+    label_temp<-as.vector(getAnnoTable()[sample_names,label])
+
+    labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
+
+    labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
+    # if('random_forest' %in% input$featureSel_algorithm)
+    #   use_rf=TRUE
+    # if('lasso' %in% input$featureSel_algorithm)
+    #   use_lasso = TRUE
+    #nfeatures<-input$feature_num
+    print(input$featureSel_algorithm)
+    labeled_protM_filtered<-featureSel(labeled_protM_filtered,input$featureSel_algorithm)
+    }
+  }, ignoreNULL = T, ignoreInit = T)
+ 
+   ####feature selection
+   
   ####feature selection
   output$fs_summary <- renderText({
     paste(
