@@ -1,6 +1,8 @@
-# proteomeExpert
+# proteomeExpert - A user friendly Web for protein analysis using R and Shiny.
 
-proteomeExpert: A user friendly Web for protein analysis using R and Shiny
+
+proteomeExpert is an open-source platform-independent browser-based interface for protein analytics in R. 
+The application is based on the Shiny package and can be run locally or on a server. 
 
 # Guomics Team
 
