@@ -46,7 +46,7 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
   }
 
   print(dim(protM))
-  label_protM2<-cbind(label=label_protM[,"label"],protM,stringsAsFactors = FALSE)
+  label_protM2<-cbind(label=label_protM[,"label"],protM)
   return(label_protM2) 
 }
 
@@ -54,19 +54,20 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
 ################ feature selection #######################
 
 featureSel<-function(label_protM,rf,nfeatures,lasso){
+  #print(myhead(label_protM))
   label<-label_protM[,"label"]
   label<-as.factor(label)
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   ############################## random froest ####################
   if(rf){
-    stringsAsFactors=F
-    
-    protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
+    #stringsAsFactors=F
     protM[is.na(protM)]<-0
-    protM<-as.data.frame(protM)
-    near_zero_vars <- nearZeroVar(protM)
-    if(length(near_zero_vars)>0)
-      protM <- protM[,-near_zero_vars]
+    protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
+    
+    #protM<-as.data.frame(protM)
+    # near_zero_vars <- nearZeroVar(protM)
+    # if(length(near_zero_vars)>0)
+    #   protM <- protM[,-near_zero_vars]
     Processed_protM <- preProcess(protM)
     Processed_protM <- predict(Processed_protM, protM)
     data.filter <- sbf(Processed_protM,label,
@@ -79,7 +80,11 @@ featureSel<-function(label_protM,rf,nfeatures,lasso){
                    rfeControl = rfeControl(functions=rfFuncs
                                            ,method='cv'))
     #plot(profile,type=c('o','g'))
+    if(length(profile$fit$forest$xlevel)<nfeatures)
+      nfeatures<-length(profile$fit$forest$xlevel)
     features<-names(profile$fit$forest$xlevel[1:nfeatures])
+    #print(colnames(label_protM))
+    #print(features)
     return(label_protM[,c("label",features)])
   }
   #################################end
