@@ -1,7 +1,12 @@
+# proteomeExpert
+
+proteomeExpert: A user friendly Web for protein analysis using R and Shiny
+
 # Guomics Team
 
-proteomeExpert: A user friendly Web for protein analysis.
+Team:http://www.guomics.com/col.jsp?id=108
 
+web: http://www.guomics.com
 
 # How to Use
 
@@ -14,8 +19,6 @@ proteomeExpert: A user friendly Web for protein analysis.
 # Development Guide
 
 ## Note:
-
-This file will be deleted after publishing
 
 All across sessions object should be put in the global.R, such as global functions
 other session level object should not be in the global.R
