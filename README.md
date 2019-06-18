@@ -46,6 +46,9 @@ web: http://www.guomics.com
 
 Although proteomeExpert web-interface can handle quite a few data and analysis tasks, you may prefer to write your own R-code. proteomeExpert provides a bridge to programming in R(studio) by exporting the functions used for analysis (i.e., you can conduct your analysis using the proteomeExpert web-interface or by calling proteomeExpert's functions directly from R-code). For more information about programming with proteomeExpert see the [programming](https://github.com/lifeinfo/proteomeExpert) page on the documentation site.
 
+## Reporting issues
+
+Please use the GitHub issue tracker at https://github.com/lifeinfo/proteomeExpert/issues/new if you have any problems.
 
 ## Note:
 
@@ -63,3 +66,4 @@ other session level object should not be in the global.R
 ### readProteinM()
 
 * reactive function return a dataframe which store protein matrix
+

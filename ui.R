@@ -429,9 +429,9 @@ navbarPage(
         tabPanel(
           "RadarMap",
           h4("Summary"),
-          tableOutput("DMrmtable"),
-          h4("Your input info."),
-          verbatimTextOutput("DMrmparameters")
+          hr(),
+          column(6, canvasXpressOutput("DMradarparameters")),
+          column(6, rHandsontableOutput("DMradartable"))
         ),
         tabPanel(
           "FeatureSel",
@@ -542,12 +542,11 @@ navbarPage(
     ),
   ##################################################More
   navbarMenu(
-    "More",
-    tabPanel("Help"),
+    "Resources",
+    tabPanel("Tutorials"),
     "----",
     tabPanel("Docs"),
-    tabPanel("Tutorials"),
-    tabPanel("Resources"),
+    tabPanel("Q&A"),
     tabPanel("GitHub")
   ),
   ################################################footer

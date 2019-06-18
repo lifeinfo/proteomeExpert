@@ -4,7 +4,6 @@ drawradar <- function(data,strTitle="radar plot"){
   library(canvasXpress)
   c <- canvasXpress(
     data=data,
-    
     circularArc=360,
     circularRotate=0,
     circularType="radar",
@@ -12,7 +11,7 @@ drawradar <- function(data,strTitle="radar plot"){
     graphType="Circular",
     legendPosition="top",
     ringGraphType=list("area"),
-    showTransition=TRUE,
+    showTransition=F,
     smpLabelScaleFontFactor =1.5,
     title=strTitle,
     transitionStep=50,

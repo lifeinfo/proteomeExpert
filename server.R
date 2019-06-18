@@ -459,6 +459,17 @@ function(input, output) {
   })
   
   #################################
+  # Radar
+  #################################
+  output$DMradartable <- renderRHandsontable({
+    rhandsontable(head(iris[, c(1, 2)], n = 20L))
+  })
+  output$DMradarparameters <- renderCanvasXpress({
+    data <- t(iris[, 3:4])
+    drawradar(data)
+  })
+  
+  #################################
   # feature selection
   #################################
   feature_sel_prot <- eventReactive(input$feature_do,
