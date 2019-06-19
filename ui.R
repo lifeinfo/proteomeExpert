@@ -503,7 +503,7 @@ navbarPage(
             selectInput(
               "mlptype",
               "Select the column name that you want to classify:",
-              choices = c("1", "2", "3")
+              choices = c("PType", "Age", "Loc")
             ),
             HTML(
               '<p>

@@ -1,7 +1,6 @@
 options(encoding = "UTF-8")
 options(shiny.maxRequestSize=300*1024^2)
 options(stringsAsFactors = F)
-registerDoParallel(cores = 5)
 set.seed(1)
 #################################
 # loading model
@@ -23,6 +22,7 @@ library(xml2)
 ###start featrue selection
 library(glmnet)
 library(doParallel)
+registerDoParallel(cores = 5)
 library(foreach)
 library(pROC)
 ###end featrue selection
@@ -49,6 +49,7 @@ library(bsplus)
 library(ggplot2)
 library(plotly)
 library(corrplot)
+library(canvasXpress)
 
 #table
 library(rhandsontable)
