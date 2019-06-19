@@ -2,6 +2,8 @@ options(encoding = "UTF-8")
 options(shiny.maxRequestSize=300*1024^2)
 options(stringsAsFactors = F)
 set.seed(1)
+#defalut value for na
+NA_VALUE<-0
 #################################
 # loading model
 #################################

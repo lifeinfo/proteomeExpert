@@ -46,8 +46,9 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
   }
 
   print(dim(protM))
-  label_protM2<-cbind(label=label_protM[,"label"],protM)
-  return(label_protM2) 
+  # label_protM2<-cbind(label=label_protM[,"label"],protM)
+  # return(label_protM2) 
+  return(colnames(protM))
 }
 
 ##########################################
@@ -95,13 +96,15 @@ fsRf<-function(label_protM,nfeatures){
       nfeatures<-length(profile$fit$forest$xlevel)
     features<-names(profile$fit$forest$xlevel[1:nfeatures])
     #print(colnames(label_protM))
-    #print(features)
-    return(label_protM[,c("label",features)])
+    return(print(features))
+    #return(label_protM[,c("label",features)])
   }
 ################################# lasso
 fsLasso<-function(label_protM){
   label<-label_protM[,"label"]
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
+  protM[is.na(protM)]<-0
+  protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
   cvglm <- cv.glmnet(as.matrix(protM),label, family = "multinomial", nfold = 10, type.measure = "class", paralle = TRUE, standardize=T,alpha = 1)
   glm_multi <- glmnet(as.matrix(protM),label, family = "multinomial", lambda = cvglm$lambda.1se, alpha = 1)
   glm_multi_coef<-coef(glm_multi)[[1]][-1,]

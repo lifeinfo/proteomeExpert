@@ -487,15 +487,19 @@ function(input, output) {
     label_temp<-as.vector(getAnnoTable()[sample_names,label])
 
     labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
-
-    labeled_protM_filtered<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
+    fs_features<-colnames(protM)
+    if(!is.null(input$featureSel_filter))
+       fs_features<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
     # if('random_forest' %in% input$featureSel_algorithm)
     #   use_rf=TRUE
     # if('lasso' %in% input$featureSel_algorithm)
     #   use_lasso = TRUE
     #nfeatures<-input$feature_num
     print(input$featureSel_algorithm)
-    labeled_protM_filtered<-featureSel(labeled_protM_filtered,input$featureSel_algorithm)
+    if(!is.null(input$featureSel_algorithm))
+       fs_features<-featureSel(labeled_protM[,c("label",fs_features)],input$featureSel_algorithm)
+    
+    return(fs_features)
     }
   }, ignoreNULL = T, ignoreInit = T)
  
@@ -505,16 +509,15 @@ function(input, output) {
   output$fs_summary <- renderText({
     paste(
       "After feature selection your matrix contains",
-      nrow(feature_sel_prot()),
-      "samples,",
-      ncol(feature_sel_prot()) - 1,
+      
+      length(feature_sel_prot()),
       "features:",
-      colnames(feature_sel_prot()[-1])
+      paste(feature_sel_prot(),collapse=",")
     )
   })
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
-    myhead(feature_sel_prot())
+    myhead(data.frame(feature_sel_prot()))
   }))
   
   
