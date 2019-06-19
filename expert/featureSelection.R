@@ -54,7 +54,7 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
 ################ feature selection #######################
 splitLabelMatrix<-function(label_protM){
   label<-label_protM[,"label"]
-  label<-as.factor(label)
+  #label<-as.factor(label)
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   return(list(label=lable,protM=protM))
 }
@@ -100,10 +100,11 @@ fsRf<-function(label_protM,nfeatures){
   }
 ################################# lasso
 fsLasso<-function(label_protM){
-  splitLabelMatrix
-  cvglm <- cv.glmnet(as.matrix(x),mdrrClass, family = "multinomial", nfold = 10, type.measure = "class", paralle = TRUE, standardize=T,alpha = 1)
-  glm_multi <- glmnet(as.matrix(x),mdrrClass, family = "multinomial", lambda = cvglm$lambda.1se, alpha = 1)
+  label<-label_protM[,"label"]
+  protM<-label_protM[,-which(colnames(label_protM)=="label")]
+  cvglm <- cv.glmnet(as.matrix(protM),label, family = "multinomial", nfold = 10, type.measure = "class", paralle = TRUE, standardize=T,alpha = 1)
+  glm_multi <- glmnet(as.matrix(protM),label, family = "multinomial", lambda = cvglm$lambda.1se, alpha = 1)
   glm_multi_coef<-coef(glm_multi)[[1]][-1,]
-  names(glm_multi_coef)[glm_multi_coef!=0]
-  
+  #names(glm_multi_coef)[glm_multi_coef!=0]
+  return(names(glm_multi_coef)[glm_multi_coef!=0])
 }
