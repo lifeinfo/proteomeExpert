@@ -1,7 +1,8 @@
 options(encoding = "UTF-8")
 options(shiny.maxRequestSize=300*1024^2)
 options(stringsAsFactors = F)
-
+registerDoParallel(cores = 5)
+set.seed(1)
 #################################
 # loading model
 #################################
@@ -19,6 +20,12 @@ library(preprocessCore)
 library(httr)
 library(jsonlite)
 library(xml2)
+###start featrue selection
+library(glmnet)
+library(doParallel)
+library(foreach)
+library(pROC)
+###end featrue selection
 #################################
 #template
 #################################
@@ -49,20 +56,20 @@ library(rhandsontable)
 #################################
 # source file
 #################################
-source("expert\\lr_2prot.R")
-source("expert\\combat.R")
-source("expert\\test.R")
-source("expert\\preprocess.R")
-source("expert\\featureSelection.R")
-source("expert\\pca.R")
-source("expert\\umap.R")
-source("expert\\tsne.R")
-source("expert\\volcano.R")
-source("expert\\corrplot.R")
-source("expert\\radar.R")
-source("expert\\heatmap.R")
-source("expert\\violin.R")
-source("expert\\missingValueExplore_zts.R")
+source("expert/lr_2prot.R")
+source("expert/combat.R")
+source("expert/test.R")
+source("expert/preprocess.R")
+source("expert/featureSelection.R")
+source("expert/pca.R")
+source("expert/umap.R")
+source("expert/tsne.R")
+source("expert/volcano.R")
+source("expert/corrplot.R")
+source("expert/radar.R")
+source("expert/heatmap.R")
+source("expert/violin.R")
+source("expert/missingValueExplore_zts.R")
 source("function.R")
 #################################
 # global variable
