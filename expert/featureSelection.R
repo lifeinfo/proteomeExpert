@@ -96,7 +96,7 @@ fsRf<-function(label_protM,nfeatures){
       nfeatures<-length(profile$fit$forest$xlevel)
     features<-names(profile$fit$forest$xlevel[1:nfeatures])
     #print(colnames(label_protM))
-    return(print(features))
+    return(list(features=features,mod=profile))
     #return(label_protM[,c("label",features)])
   }
 ################################# lasso
@@ -112,5 +112,5 @@ fsLasso<-function(label_protM){
     glm_multi_coef<-coef(glm_multi)[[i]][-1,]
     features<-c(features,names(glm_multi_coef)[glm_multi_coef!=0])
   }
-  return(unique(features))
+  return(list(features=unique(features),mod=cvglm))
 }

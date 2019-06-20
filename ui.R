@@ -474,7 +474,7 @@ navbarPage(
           actionButton("feature_do", "Submit", class = "btn-primary"),
           h5("Summary:"),
           verbatimTextOutput("fs_summary"),
-        
+          plotOutput("fs_parameter"),
           DTOutput("featureSelected")
         ),
   #################################
