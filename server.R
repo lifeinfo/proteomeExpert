@@ -517,7 +517,7 @@ function(input, output) {
   })
   
   output$featureSelected <- DT::renderDataTable(DT::datatable({
-    myhead(data.frame(feature_sel_prot()))
+    data.frame(feature_sel_prot())
   }))
   
   
