@@ -472,39 +472,52 @@ function(input, output) {
   #################################
   # feature selection
   #################################
-  feature_sel_prot<-eventReactive(input$feature_do,{
-    if(!is.null(isolate(input$DMprotM))){
-      if(isolate(input$DMprotM)=="original"){
-      protM<-isolate(readProteinM())
-    }
-    #if(length(isolate(input$DManno))==1){
-      label=isolate(input$DManno)
-    #}
-    rownames(protM)<-protM[,1]
-    protM<-protM[,-1]
-    protM<-t(protM)
-    sample_names<-rownames(protM)
-    label_temp<-as.vector(getAnnoTable()[sample_names,label])
-
-    labeled_protM<-cbind(label=label_temp,protM,stringsAsFactors = FALSE)
-    fs_features<-colnames(protM)
-    if(!is.null(input$featureSel_filter))
-       fs_features<-featureFilter(labeled_protM,!is.na(match(c("nearZeoVar","high_correlation"),input$featureSel_filter)),input$fs_missing_ratio)
-    # if('random_forest' %in% input$featureSel_algorithm)
-    #   use_rf=TRUE
-    # if('lasso' %in% input$featureSel_algorithm)
-    #   use_lasso = TRUE
-    #nfeatures<-input$feature_num
-    print(input$featureSel_algorithm)
-    if(!is.null(input$featureSel_algorithm))
-       fs_features<-featureSel(labeled_protM[,c("label",fs_features)],input$featureSel_algorithm)
-    
-    return(fs_features)
-    }
-  }, ignoreNULL = T, ignoreInit = T)
- 
-   ####feature selection
-   
+  feature_sel_prot <- eventReactive(input$feature_do,
+                                    {
+                                      if (!is.null(isolate(input$DMprotM))) {
+                                        if (isolate(input$DMprotM) == "original") {
+                                          protM <- isolate(readProteinM())
+                                        }
+                                        #if(length(isolate(input$DManno))==1){
+                                        label = isolate(input$DManno)
+                                        #}
+                                        rownames(protM) <-
+                                          protM[, 1]
+                                        protM <- protM[, -1]
+                                        protM <- t(protM)
+                                        sample_names <-
+                                          rownames(protM)
+                                        label_temp <-
+                                          as.vector(getAnnoTable()[sample_names, label])
+                                        
+                                        labeled_protM <-
+                                          cbind(label = label_temp, protM, stringsAsFactors = FALSE)
+                                        fs_features <-
+                                          colnames(protM)
+                                        if (!is.null(input$featureSel_filter))
+                                          fs_features <-
+                                          featureFilter(labeled_protM, !is.na(match(
+                                            c("nearZeoVar", "high_correlation"),
+                                            input$featureSel_filter
+                                          )), input$fs_missing_ratio)
+                                        # if('random_forest' %in% input$featureSel_algorithm)
+                                        #   use_rf=TRUE
+                                        # if('lasso' %in% input$featureSel_algorithm)
+                                        #   use_lasso = TRUE
+                                        #nfeatures<-input$feature_num
+                                        print(input$featureSel_algorithm)
+                                        if (!is.null(input$featureSel_algorithm))
+                                          fs_features <-
+                                          featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
+                                        
+                                        return(fs_features)
+                                      }
+                                    },
+                                    ignoreNULL = T,
+                                    ignoreInit = T)
+  
+  ####feature selection
+  
   ####feature selection
   output$fs_summary <- renderText({
     paste(
@@ -512,7 +525,7 @@ function(input, output) {
       
       length(feature_sel_prot()),
       "features:",
-      paste(feature_sel_prot(),collapse=",")
+      paste(feature_sel_prot(), collapse = ",")
     )
   })
   
@@ -587,15 +600,55 @@ function(input, output) {
                    print(input$mlmethod)
                    print(input$mlptype)
                  })
-                 output$DMmlPlot <- renderPlot({
-                   dtree <- rpart(Species~., data=iris, method="class")
-                   tree<-prune(dtree,cp=dtree$cptable[which.min(dtree$cptable[,"xerror"]),"CP"])
-                   rpart.plot(tree,branch=0, type=0,fallen.leaves=T,cex=1, sub="Demo")
-                 })
-                 output$DMmltables <- renderRHandsontable({
-                   rhandsontable(head(iris[1:10,], n = 20L))
-                 })
+                 #################################
+                 # R Packages
+                 #################################
+                 if (input$mlframework == "R Packages")
+                 {
+                   if (input$mlmethod == "Decision Tree") {
+                     output$DMmlPlot <- renderPlot({
+                       dtree <- rpart(Species ~ ., data = iris, method = "class")
+                       tree <-
+                         prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
+                       rpart.plot(
+                         tree,
+                         branch = 0,
+                         type = 0,
+                         fallen.leaves = T,
+                         cex = 1,
+                         sub = "Demo"
+                       )
+                     })
+                     output$DMmltables <- renderRHandsontable({
+                       rhandsontable(head(iris[1:10, ], n = 20L))
+                     })
+                   }else if(input$mlmethod == "Random Forest")
+                   {
+                     
+                   }else if(input$mlmethod == "k-NearestNeighbor")
+                   {
+                     
+                   }else if(input$mlmethod == "Support Vector Machine")
+                   {
+                     
+                   }else if(input$mlmethod == "Artificial Neural Network")
+                   {
+                     
+                   }
+                   
+                 } else if (input$mlframework == "Tensorflow")
+                 {
+                   #################################
+                   # Tensorflow
+                   #################################
+                   cat("comming soon!")
+                 } else if (input$mlframework == "MxNet")
+                 {
+                   #################################
+                   # MxNet
+                   #################################
+                   cat("comming soon!")
+                 }
+                 
                })
-  
-  
 }
