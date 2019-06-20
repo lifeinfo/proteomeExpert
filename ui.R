@@ -79,94 +79,6 @@ navbarPage(
       ))
     )
   ),
-  
-  #################################
-  # data preprocessing
-  #################################
-  tabPanel(
-    "Data Preprocessing",
-    "",
-    sidebarPanel(
-      fileInput(
-        "PeptideMatrix",
-        "Select your peptide matrix (required):",
-        multiple = TRUE,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dpheader", "Header", TRUE),
-      radioButtons(
-        "Dpsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      hr(),
-      
-      fileInput(
-        "TechnicalReplicate",
-        "Select your technical replicate file (required):",
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dtheader", "Header", FALSE),
-      radioButtons(
-        "Dtsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      hr(),
-      
-      fileInput(
-        "BatchFile",
-        "Select your batch effect file (optional):",
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dbheader", "Header", TRUE),
-      radioButtons(
-        "Dbsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      hr(),
-      
-      tags$h5("Click to process:"),
-      actionButton("process", "Submit", class = "btn-primary")
-      
-    ),
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "Result",
-        h4("Summary"),
-        tableOutput("Dtable"),
-        h4("Download all protein matrix"),
-        downloadButton("downloadData", "Download", class = "btn-primary")
-        
-      )
-      
-    ))
-  ),
-  
   #################################
   # Data console
   #################################
@@ -260,6 +172,144 @@ navbarPage(
         
       )))
     )
+  ),
+  
+  #################################
+  # data preprocessing
+  #################################
+  navbarMenu(
+    "Data Processing",
+    tabPanel(
+      "Data Preprocessing",
+      sidebarPanel(
+        selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
+        selectInput(
+          'DManno',
+          'select types',
+          anno_name,
+          multiple = TRUE,
+          selectize = TRUE
+        )
+      ),
+      mainPanel(
+
+        tabPanel("Methods",
+          tags$h5("Missing Value Substitution:"),
+          radioButtons(
+            "DPmissingV",
+            "",
+            choices = c("None"="none", "1"= '1', '0' = "0","Percent of minimum"= 'DPPM'),
+            inline = TRUE,
+            selected = NULL
+          ),
+          hr(),
+          tags$h5("Log Transform:"),
+          radioButtons(
+            "DPLog",
+            "",
+            choices = c("None"="none", "Log2"= 'log2', 'Log10' = "log10"),
+            inline = TRUE,
+            selected = NULL
+          ),
+          hr(),
+          tags$h5("Normaliztion:"),
+          hr(),
+          tags$h5("Remove Batch Effect :"),
+          hr(),
+          tags$h5("Technial Replicas:"),
+          hr(),
+          tags$h5("Biological Replicas :"),
+          hr(),
+          actionButton("DPDo", "Submit", class = "btn-primary")
+          
+        )
+        )
+    ),
+    
+  tabPanel(
+    "peptide-to-protein",
+    "",
+    sidebarPanel(
+      fileInput(
+        "PeptideMatrix",
+        "Select your peptide matrix (required):",
+        multiple = TRUE,
+        accept = c("text/csv",
+                   "text/comma-separated-values,text/plain",
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dpheader", "Header", TRUE),
+      radioButtons(
+        "Dpsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      hr(),
+      
+      fileInput(
+        "TechnicalReplicate",
+        "Select your technical replicate file (required):",
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dtheader", "Header", FALSE),
+      radioButtons(
+        "Dtsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      hr(),
+      
+      fileInput(
+        "BatchFile",
+        "Select your batch effect file (optional):",
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dbheader", "Header", TRUE),
+      radioButtons(
+        "Dbsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      hr(),
+      
+      tags$h5("Click to process:"),
+      actionButton("process", "Submit", class = "btn-primary")
+      
+    ),
+    mainPanel(tabsetPanel(
+      tabPanel(
+        "Result",
+        h4("Summary"),
+        tableOutput("Dtable"),
+        h4("Download all protein matrix"),
+        downloadButton("downloadData", "Download", class = "btn-primary")
+        
+      )
+      
+    ))
+  )
+
   ),
   
   #################################

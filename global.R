@@ -4,6 +4,7 @@ options(stringsAsFactors = F)
 set.seed(1)
 #defalut value for na
 NA_VALUE<-0
+
 #################################
 # loading model
 #################################
