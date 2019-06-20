@@ -49,10 +49,12 @@ navbarPage(
           "Summary",
           tags$h4("Result:"),
           hr(),
-          HTML("<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis ofQuantitative Traits. Sunderland, Mass.: Sinauer Assoc</p>"),
+          HTML(
+            "<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis ofQuantitative Traits. Sunderland, Mass.: Sinauer Assoc</p>"
+          ),
           h4("Sample size"),
-          column(8,verbatimTextOutput("powerSize")),
-          column(8,plotlyOutput("powerPlot"))
+          column(8, verbatimTextOutput("powerSize")),
+          column(8, plotlyOutput("powerPlot"))
         )
       ))
     ),
@@ -192,13 +194,18 @@ navbarPage(
         )
       ),
       mainPanel(
-
-        tabPanel("Methods",
+        tabPanel(
+          "Methods",
           tags$h5("Missing Value Substitution:"),
           radioButtons(
             "DPmissingV",
             "",
-            choices = c("None"="none", "1"= '1', '0' = "0","Percent of minimum"= 'DPPM'),
+            choices = c(
+              "None" = "none",
+              "1" = '1',
+              '0' = "0",
+              "Percent of minimum" = 'DPPM'
+            ),
             inline = TRUE,
             selected = NULL
           ),
@@ -207,7 +214,11 @@ navbarPage(
           radioButtons(
             "DPLog",
             "",
-            choices = c("None"="none", "Log2"= 'log2', 'Log10' = "log10"),
+            choices = c(
+              "None" = "none",
+              "Log2" = 'log2',
+              'Log10' = "log10"
+            ),
             inline = TRUE,
             selected = NULL
           ),
@@ -223,93 +234,93 @@ navbarPage(
           actionButton("DPDo", "Submit", class = "btn-primary")
           
         )
-        )
+      )
     ),
     
-  tabPanel(
-    "peptide-to-protein",
-    "",
-    sidebarPanel(
-      fileInput(
-        "PeptideMatrix",
-        "Select your peptide matrix (required):",
-        multiple = TRUE,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dpheader", "Header", TRUE),
-      radioButtons(
-        "Dpsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
+    tabPanel(
+      "Peptide2Protein",
+      "",
+      sidebarPanel(
+        fileInput(
+          "PeptideMatrix",
+          "Select your peptide matrix (required):",
+          multiple = TRUE,
+          accept = c("text/csv",
+                     "text/comma-separated-values,text/plain",
+                     ".csv"),
+          placeholder = "*.csv or *.TXT required!"
         ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      hr(),
-      
-      fileInput(
-        "TechnicalReplicate",
-        "Select your technical replicate file (required):",
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dtheader", "Header", FALSE),
-      radioButtons(
-        "Dtsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
+        checkboxInput("Dpheader", "Header", TRUE),
+        radioButtons(
+          "Dpsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
         ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      hr(),
-      
-      fileInput(
-        "BatchFile",
-        "Select your batch effect file (optional):",
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      checkboxInput("Dbheader", "Header", TRUE),
-      radioButtons(
-        "Dbsep",
-        "Separator for your matrix",
-        choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
-        ),
-        inline = TRUE,
-        selected = "\t"
-      ),
-      
-      hr(),
-      
-      tags$h5("Click to process:"),
-      actionButton("process", "Submit", class = "btn-primary")
-      
-    ),
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "Result",
-        h4("Summary"),
-        tableOutput("Dtable"),
-        h4("Download all protein matrix"),
-        downloadButton("downloadData", "Download", class = "btn-primary")
+        hr(),
         
-      )
-      
-    ))
-  )
-
+        fileInput(
+          "TechnicalReplicate",
+          "Select your technical replicate file (required):",
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        checkboxInput("Dtheader", "Header", FALSE),
+        radioButtons(
+          "Dtsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        
+        hr(),
+        
+        fileInput(
+          "BatchFile",
+          "Select your batch effect file (optional):",
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        checkboxInput("Dbheader", "Header", TRUE),
+        radioButtons(
+          "Dbsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        
+        hr(),
+        
+        tags$h5("Click to process:"),
+        actionButton("process", "Submit", class = "btn-primary")
+        
+      ),
+      mainPanel(tabsetPanel(
+        tabPanel(
+          "Result",
+          h4("Summary"),
+          tableOutput("Dtable"),
+          h4("Download all protein matrix"),
+          downloadButton("downloadData", "Download", class = "btn-primary")
+          
+        )
+        
+      ))
+    )
+    
   ),
   
   #################################
@@ -333,57 +344,60 @@ navbarPage(
       
     ),
     
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "Missing value",
-        tags$hr(),
-        #h3(textOutput("caption")),
-        verbatimTextOutput("QMparameters"),
-        conditionalPanel(
-          "output.QMparameters == 'Results are showed below:'",
-          downloadButton('downloadMissingPlot')
+    mainPanel(
+      tabsetPanel(
+        tabPanel(
+          "Missing value",
+          tags$hr(),
+          #h3(textOutput("caption")),
+          verbatimTextOutput("QMparameters"),
+          conditionalPanel(
+            "output.QMparameters == 'Results are showed below:'",
+            downloadButton('downloadMissingPlot')
+          ),
+          
+          plotOutput("missingPlot"),
+          
+          column(4, plotOutput("densityPlot")),
+          hr(),
+          br()
+          
         ),
-        
-        plotOutput("missingPlot"),
-        
-        column(4, plotOutput("densityPlot")),
-        hr(),br()
-        
-      ),
-      tabPanel(
-        "Pearson Correlation",
-        h4("Summary"),
-        hr(),
-        column(6, plotOutput("Qpccplot")),
-        column(6, plotOutput("Qsmoothplot")),
-        hr(),
-        h4("Data:"),
-        column(12, rHandsontableOutput("Qpcctable")),
-        br(),
-        h4("Note:")
-      ),
-      tabPanel(
-        "PCA",
-        h4("Summary"),
-        hr(),
-        column(6, plotlyOutput("Qpcaplot")),
-        column(6, rHandsontableOutput("Qpcatable"))
-      ),
-      tabPanel(
-        "T-SNE",
-        h4("Summary"),
-        hr(),
-        column(6, plotlyOutput("Qtsneplot")),
-        column(6, rHandsontableOutput("Qtsnetable"))
-      ),
-      tabPanel(
-        "Umap",
-        h4("Summary"),
-        hr(),
-        column(6, plotlyOutput("Qumapplot")),
-        column(6, rHandsontableOutput("Qumaptable"))
+        tabPanel(
+          "Pearson Correlation",
+          h4("Summary"),
+          hr(),
+          column(6, plotOutput("Qpccplot")),
+          column(6, plotOutput("Qsmoothplot")),
+          hr(),
+          h4("Data:"),
+          column(12, rHandsontableOutput("Qpcctable")),
+          br(),
+          h4("Note:")
+        ),
+        tabPanel(
+          "PCA",
+          h4("Summary"),
+          hr(),
+          column(6, plotlyOutput("Qpcaplot")),
+          column(6, rHandsontableOutput("Qpcatable"))
+        ),
+        tabPanel(
+          "T-SNE",
+          h4("Summary"),
+          hr(),
+          column(6, plotlyOutput("Qtsneplot")),
+          column(6, rHandsontableOutput("Qtsnetable"))
+        ),
+        tabPanel(
+          "Umap",
+          h4("Summary"),
+          hr(),
+          column(6, plotlyOutput("Qumapplot")),
+          column(6, rHandsontableOutput("Qumaptable"))
+        )
       )
-    ))
+    )
   ),
   #################################
   # Annotation
@@ -400,7 +414,7 @@ navbarPage(
       ),
       actionButton("annosubmit", "Search", class = "btn-primary")
       #verbatimTextOutput("Annoparameters")
-      ),
+    ),
     mainPanel(
       tabsetPanel(
         tabPanel(
@@ -409,45 +423,39 @@ navbarPage(
           HTML("<p><strong>Input:</strong></p>"),
           verbatimTextOutput("anno_parameters1")
         ),
-        fluidRow(
-          column(12, "Uniport"),
-          hr(),
-          column(8, "")
-        ),
-        fluidRow(
-          column(12, "String-db"),
-          hr(),
-          column(8, img(src="https://string-db.org/api/image/network?identifiers=Q9Y6B6&add_white_nodes=10&network_flavor=actions"))
-        ),
-        fluidRow(
-          column(12, "KEGG"),
-          hr(),
-          column(8, "")
-        ),
-        fluidRow(
-          column(12, "GO"),
-          hr()
-        ),
-        fluidRow(
-          column(12, "Reactome"),
-          hr()
-        ),
+        fluidRow(column(12, "Uniport"),
+                 hr(),
+                 column(8, "")),
+        fluidRow(column(12, "String-db"),
+                 hr(),
+                 column(
+                   8,
+                   img(src = "https://string-db.org/api/image/network?identifiers=Q9Y6B6&add_white_nodes=10&network_flavor=actions")
+                 )),
+        fluidRow(column(12, "KEGG"),
+                 hr(),
+                 column(8, "")),
+        fluidRow(column(12, "GO"),
+                 hr()),
+        fluidRow(column(12, "Reactome"),
+                 hr()),
         h4('Database'),
-        fluidRow(
-          column(4, HTML(
+        fluidRow(column(
+          4,
+          HTML(
             '<ul class=" list-paddingleft-2" style="list-style-type: disc;">
-        <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
-        <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
-        <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
-        <li><p>Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.</p></li>
-        <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
-        <br/></p>'
-          )),
-          column(8, rHandsontableOutput("anno_table"))
+            <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
+            <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
+            <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
+            <li><p>Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.</p></li>
+            <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
+            <br/></p>'
+          )
+          ),
+          column(8, rHandsontableOutput("anno_table")))
         )
-      )
-    )
-    ),
+        )
+        ),
   
   #################################
   # data mining
@@ -502,21 +510,27 @@ navbarPage(
           h5(
             "Please note that feature selection including two parts: filter rules and feature selection algorithm"
           ),
-          textInput(inputId = "fs_missing_ratio",
-                    label = "Allowable missing ratio",
-                    value = 0.8),
+          textInput(
+            inputId = "fs_missing_ratio",
+            label = "Allowable missing ratio",
+            value = 0.8
+          ),
           checkboxGroupInput(
             "featureSel_filter",
             "Please select filter rules" ,
             c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
-            selected = c("nearZeoVar","high_correlation"),
+            selected = c("nearZeoVar", "high_correlation"),
             inline = T,
             width = NULL
           ),
           radioButtons(
             "featureSel_algorithm",
             "Please select feature selection algorithm",
-            choices = c( "Random Forest"= 'random_forest', 'LASSO' = "lasso",'Genetic Algorithm' ="GA"),
+            choices = c(
+              "Random Forest" = 'random_forest',
+              'LASSO' = "lasso",
+              'Genetic Algorithm' = "GA"
+            ),
             inline = TRUE,
             selected = NULL
           ),
@@ -527,9 +541,9 @@ navbarPage(
           plotOutput("fs_parameter"),
           DTOutput("featureSelected")
         ),
-  #################################
-  # Machine Learning
-  #################################
+        #################################
+        # Machine Learning
+        #################################
         tabPanel(
           "ML",
           column(
@@ -590,13 +604,15 @@ navbarPage(
             ),
             actionButton("mlsubmit", "Submit", class = "btn-primary")
             ),
-          column(6,
-                 h3("Result"),
-                 #plotlyOutput(),
-                 verbatimTextOutput("DMmlText"),
-                 plotOutput("DMmlPlot"),
-                 verbatimTextOutput("DMmloutputText"),
-                 rHandsontableOutput("DMmltables"))
+          column(
+            6,
+            h3("Result"),
+            #plotlyOutput(),
+            verbatimTextOutput("DMmlText"),
+            plotOutput("DMmlPlot"),
+            verbatimTextOutput("DMmloutputText"),
+            rHandsontableOutput("DMmltables")
+          )
           )
           )
       )
@@ -621,4 +637,4 @@ navbarPage(
     includeCSS("www/css/footer.css"),
     includeHTML("www/footer.html")
   )
-    )
+  )

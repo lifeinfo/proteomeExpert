@@ -484,7 +484,7 @@ function(input, output) {
                                         #}
                                         rownames(protM) <-
                                           protM[, 1]
-                                        protM <- protM[, -1]
+                                        protM <- protM[,-1]
                                         protM <- t(protM)
                                         sample_names <-
                                           rownames(protM)
@@ -497,7 +497,7 @@ function(input, output) {
                                           colnames(protM)
                                         if (!is.null(input$featureSel_filter))
                                           fs_features <-
-                                          featureFilter(labeled_protM, !is.na(match(
+                                          featureFilter(labeled_protM,!is.na(match(
                                             c("nearZeoVar", "high_correlation"),
                                             input$featureSel_filter
                                           )), input$fs_missing_ratio)
@@ -529,7 +529,7 @@ function(input, output) {
       paste(feature_sel_prot()$features, collapse = ",")
     )
   })
-  output$fs_parameter<-renderPlot({
+  output$fs_parameter <- renderPlot({
     plot(feature_sel_prot()$mod)
   })
   output$featureSelected <- DT::renderDataTable(DT::datatable({
@@ -629,7 +629,7 @@ function(input, output) {
                        printcp(tree)
                      })
                      output$DMmltables <- renderRHandsontable({
-                       rhandsontable(head(iris[1:10, ], n = 20L))
+                       rhandsontable(head(iris[1:10,], n = 20L))
                      })
                    } else if (input$mlmethod == "Random Forest")
                    {
@@ -641,7 +641,8 @@ function(input, output) {
                      pre.forest <- predict(model.forest, iris)
                      
                      #obs_p_ran = data.frame(prob=pre.forest, obs=iris$Species)
-                     ran_roc <- roc(iris$Species, as.numeric(pre.forest))
+                     ran_roc <-
+                       roc(iris$Species, as.numeric(pre.forest))
                      
                      output$DMmlPlot <- renderPlot({
                        varImpPlot(model.forest, main = "variable importance")
@@ -667,7 +668,7 @@ function(input, output) {
                      })
                      
                      output$DMmltables <- renderRHandsontable({
-                       rhandsontable(head(iris[1:10, ], n = 20L))
+                       rhandsontable(head(iris[1:10,], n = 20L))
                      })
                      
                    } else if (input$mlmethod == "k-NearestNeighbor")
