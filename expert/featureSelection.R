@@ -107,7 +107,10 @@ fsLasso<-function(label_protM){
   protM<-as.data.frame(apply(protM,2,as.numeric,na.rm=T))
   cvglm <- cv.glmnet(as.matrix(protM),label, family = "multinomial", nfold = 10, type.measure = "class", paralle = TRUE, standardize=T,alpha = 1)
   glm_multi <- glmnet(as.matrix(protM),label, family = "multinomial", lambda = cvglm$lambda.1se, alpha = 1)
-  glm_multi_coef<-coef(glm_multi)[[1]][-1,]
-  #names(glm_multi_coef)[glm_multi_coef!=0]
-  return(names(glm_multi_coef)[glm_multi_coef!=0])
+  features<-c()
+  for(i in 1:length(coef(glm_multi))){
+    glm_multi_coef<-coef(glm_multi)[[i]][-1,]
+    features<-c(features,names(glm_multi_coef)[glm_multi_coef!=0])
+  }
+  return(unique(features))
 }
