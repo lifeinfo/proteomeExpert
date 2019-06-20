@@ -543,8 +543,9 @@ navbarPage(
           column(6,
                  h3("Result"),
                  #plotlyOutput(),
-                 textOutput("DMmlText"),
+                 verbatimTextOutput("DMmlText"),
                  plotOutput("DMmlPlot"),
+                 verbatimTextOutput("DMmloutputText"),
                  rHandsontableOutput("DMmltables"))
           )
           )

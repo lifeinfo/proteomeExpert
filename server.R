@@ -433,7 +433,8 @@ function(input, output) {
   output$DMheatmapparameters <- renderPlot({
     data <- t(iris[, 1:4])
     label <- iris[, 5]
-    print(drawheatmap(data, label))
+    p <- drawheatmap(data, label)
+    print(p)
   })
   
   #################################
@@ -605,11 +606,14 @@ function(input, output) {
                  #################################
                  if (input$mlframework == "R Packages")
                  {
+                   #################################
+                   # Decision Tree
+                   #################################
                    if (input$mlmethod == "Decision Tree") {
+                     dtree <- rpart(Species ~ ., data = iris, method = "class")
+                     tree <-
+                       prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
                      output$DMmlPlot <- renderPlot({
-                       dtree <- rpart(Species ~ ., data = iris, method = "class")
-                       tree <-
-                         prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
                        rpart.plot(
                          tree,
                          branch = 0,
@@ -619,21 +623,60 @@ function(input, output) {
                          sub = "Demo"
                        )
                      })
+                     output$DMmloutputText <- renderPrint({
+                       printcp(tree)
+                     })
                      output$DMmltables <- renderRHandsontable({
                        rhandsontable(head(iris[1:10, ], n = 20L))
                      })
-                   }else if(input$mlmethod == "Random Forest")
+                   } else if (input$mlmethod == "Random Forest")
                    {
+                     #################################
+                     # Random Forest
+                     #################################
+                     model.forest <-
+                       randomForest(Species ~ ., data = iris)
+                     pre.forest <- predict(model.forest, iris)
                      
-                   }else if(input$mlmethod == "k-NearestNeighbor")
+                     #obs_p_ran = data.frame(prob=pre.forest, obs=iris$Species)
+                     ran_roc <- roc(iris$Species, as.numeric(pre.forest))
+                     
+                     output$DMmlPlot <- renderPlot({
+                       varImpPlot(model.forest, main = "variable importance")
+                       plot(model.forest)
+                       plot(
+                         ran_roc,
+                         print.auc = TRUE,
+                         auc.polygon = TRUE,
+                         grid = c(0.1, 0.2),
+                         grid.col = c("green", "red"),
+                         max.auc.polygon = TRUE,
+                         auc.polygon.col = "skyblue",
+                         print.thres = TRUE,
+                         main = 'RF ROC,mtry=3,ntree=500'
+                       )
+                     })
+                     
+                     output$DMmloutputText <- renderPrint({
+                       model.forest$importance
+                       #
+                       table(iris$Species, pre.forest, dnn = c("Obs", "Pre"))
+                       
+                     })
+                     
+                     output$DMmltables <- renderRHandsontable({
+                       rhandsontable(head(iris[1:10, ], n = 20L))
+                     })
+                     
+                   } else if (input$mlmethod == "k-NearestNeighbor")
                    {
-                     
-                   }else if(input$mlmethod == "Support Vector Machine")
+                     cat("k-NearestNeighbor comming soon!")
+                   } else if (input$mlmethod == "Support Vector Machine")
                    {
-                     
-                   }else if(input$mlmethod == "Artificial Neural Network")
+                     cat("Support Vector Machine comming soon!")
+                   } else if (input$mlmethod == "Artificial Neural Network")
                    {
-                     
+                     cat("Artificial Neural Network comming soon!")
                    }
                    
                  } else if (input$mlframework == "Tensorflow")
@@ -641,13 +684,13 @@ function(input, output) {
                    #################################
                    # Tensorflow
                    #################################
-                   cat("comming soon!")
+                   cat("Tensorflow comming soon!")
                  } else if (input$mlframework == "MxNet")
                  {
                    #################################
                    # MxNet
                    #################################
-                   cat("comming soon!")
+                   cat("MxNet comming soon!")
                  }
                  
                })

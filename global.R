@@ -87,6 +87,9 @@ library(tsne)
 library(umap)
 library(rpart)
 library(rpart.plot)
+library(pROC)
+library(randomForest)
+
 
 #library(keras)
 # ML
