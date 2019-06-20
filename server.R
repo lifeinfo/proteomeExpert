@@ -524,14 +524,16 @@ function(input, output) {
     paste(
       "After feature selection your matrix contains",
       
-      length(feature_sel_prot()),
+      length(feature_sel_prot()$features),
       "features:",
-      paste(feature_sel_prot(), collapse = ",")
+      paste(feature_sel_prot()$features, collapse = ",")
     )
   })
-  
+  output$fs_parameter<-renderPlot({
+    plot(feature_sel_prot()$mod)
+  })
   output$featureSelected <- DT::renderDataTable(DT::datatable({
-    data.frame(feature_sel_prot())
+    data.frame(feature_sel_prot()$features)
   }))
   
   
