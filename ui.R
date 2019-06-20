@@ -2,7 +2,9 @@
 navbarPage(
   theme = shinytheme("cerulean"),
   "ProteomeExpert |",
-  ####################################################Home
+  #################################
+  # Home
+  #################################
   tabPanel(
     "Home",
     sidebarPanel(
@@ -22,7 +24,9 @@ navbarPage(
       
     )))
   ),
-  ################################ Experimental Design
+  #################################
+  # Experimental Design
+  #################################
   navbarMenu(
     "Experimental Design",
     tabPanel(
@@ -76,7 +80,9 @@ navbarPage(
     )
   ),
   
-  ###################################################data preprocessing
+  #################################
+  # data preprocessing
+  #################################
   tabPanel(
     "Data Preprocessing",
     "",
@@ -161,7 +167,9 @@ navbarPage(
     ))
   ),
   
-  ####################################################Data console
+  #################################
+  # Data console
+  #################################
   tabPanel(
     "Data Console",
     "",
@@ -254,7 +262,9 @@ navbarPage(
     )
   ),
   
-  ######################################QC
+  #################################
+  # QC
+  #################################
   tabPanel(
     "QC",
     "",
@@ -325,7 +335,9 @@ navbarPage(
       )
     ))
   ),
-  ######################################################################Annotation
+  #################################
+  # Annotation
+  #################################
   tabPanel(
     "Annotations",
     "",
@@ -387,7 +399,9 @@ navbarPage(
     )
     ),
   
-  ##################################################data mining
+  #################################
+  # data mining
+  #################################
   tabPanel(
     "Data Mining",
     "",
@@ -456,22 +470,6 @@ navbarPage(
             inline = TRUE,
             selected = NULL
           ),
-          # checkboxGroupInput(
-          #   "featureSel_algorithm",
-          #   "Please select feature selection algorithm" ,
-          #   c("random forest" = "random_forest", "lasso" = "lasso"),
-          #   selected = NULL,
-          #   inline = T,
-          #   width = NULL
-          # ),
-          # sliderInput(
-          #   "feature_num",
-          #   "Set maximum features to keep:",
-          #   min = 0,
-          #   max = 500,
-          #   value = 20,
-          #   width = 800
-          # ),
           hr(),
           actionButton("feature_do", "Submit", class = "btn-primary"),
           h5("Summary:"),
@@ -479,6 +477,9 @@ navbarPage(
         
           DTOutput("featureSelected")
         ),
+  #################################
+  # Machine Learning
+  #################################
         tabPanel(
           "ML",
           column(
@@ -503,7 +504,7 @@ navbarPage(
             selectInput(
               "mlptype",
               "Select the column name that you want to classify:",
-              choices = c("PType", "Age", "Loc")
+              choices = c("Species", "PType", "Age", "Loc")
             ),
             HTML(
               '<p>
@@ -539,15 +540,19 @@ navbarPage(
             ),
             actionButton("mlsubmit", "Submit", class = "btn-primary")
             ),
-          column(4,
+          column(6,
                  h3("Result"),
                  #plotlyOutput(),
-                 verbatimTextOutput("DMmlparameters"))
+                 textOutput("DMmlText"),
+                 plotOutput("DMmlPlot"),
+                 rHandsontableOutput("DMmltables"))
           )
           )
       )
     ),
-  ##################################################More
+  #################################
+  # Resources
+  #################################
   navbarMenu(
     "Resources",
     tabPanel("Tutorials"),
@@ -556,7 +561,9 @@ navbarPage(
     tabPanel("Q&A"),
     tabPanel("GitHub")
   ),
-  ################################################footer
+  #################################
+  # footer
+  #################################
   div(
     br(),
     hr(),

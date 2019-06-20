@@ -181,7 +181,7 @@ function(input, output) {
   )
   output$densityPlot <- renderPlot({
     data <- iris[, 1]
-    drawdensity(as.data.frame(data))
+    #drawdensity(as.data.frame(data))
   })
   
   #################################
@@ -580,5 +580,22 @@ function(input, output) {
   #################################
   # ML
   #################################
+  observeEvent(input$mlsubmit,
+               {
+                 output$DMmlText <- renderPrint({
+                   print(input$mlframework)
+                   print(input$mlmethod)
+                   print(input$mlptype)
+                 })
+                 output$DMmlPlot <- renderPlot({
+                   dtree <- rpart(Species~., data=iris, method="class")
+                   tree<-prune(dtree,cp=dtree$cptable[which.min(dtree$cptable[,"xerror"]),"CP"])
+                   rpart.plot(tree,branch=0, type=0,fallen.leaves=T,cex=1, sub="Demo")
+                 })
+                 output$DMmltables <- renderRHandsontable({
+                   rhandsontable(head(iris[1:10,], n = 20L))
+                 })
+               })
+  
   
 }
