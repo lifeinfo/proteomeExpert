@@ -645,6 +645,7 @@ function(input, output) {
                        roc(iris$Species, as.numeric(pre.forest))
                      
                      output$DMmlPlot <- renderPlot({
+                       layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
                        varImpPlot(model.forest, main = "variable importance")
                        plot(model.forest)
                        plot(
