@@ -15,6 +15,7 @@ myhead <- function(d) {
   return(t)
 }
 
+# smoothScatter plot
 
 drawsmooth <- function(data1, data2, strTitle = "smoothScatter plot") {
   r <- cor(data1, data2, use = "pairwise.complete.obs")
@@ -40,6 +41,7 @@ drawsmooth <- function(data1, data2, strTitle = "smoothScatter plot") {
   )
 }
 
+# density plot
 drawdensity <- function(data) {
   plot(density(na.omit(unlist(data))), main = "density default")
 }
