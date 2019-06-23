@@ -49,6 +49,11 @@ navbarPage(
           "Summary",
           tags$h4("Result:"),
           hr(),
+          h5("Description:"),
+          HTML(
+            "<p>Power analysis is a statistical device that allows us to determine the sample size required to detect a preset effect under a given test statistics, such as Chi-square test or t-test. In particular, here we need pay attention to the calculated sample size and the realized sample size in an experiment. As observed empirically, when the expression of a protein is not that high, say less than 17 after log2 scale transformation, the required sample size will be compromised due to missing data—the statistical power is compromised too.</p>"
+          ),
+          h5("Reference:"),
           HTML(
             "<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis ofQuantitative Traits. Sunderland, Mass.: Sinauer Assoc</p>"
           ),
@@ -87,8 +92,10 @@ navbarPage(
   tabPanel(
     "Data Console",
     "",
+    h4("Description:"),
+    HTML("<p></p>"),
     sidebarPanel(
-      tags$h3("Upload Data:"),
+      tags$h4("Upload Data:"),
       hr(),
       fileInput(
         "peptide_matrix",
@@ -183,6 +190,10 @@ navbarPage(
     "Data Processing",
     tabPanel(
       "Data Preprocessing",
+      h5("Description:"),
+      HTML(
+        "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
+      ),
       sidebarPanel(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
@@ -348,6 +359,10 @@ navbarPage(
       tabsetPanel(
         tabPanel(
           "Missing value",
+          h5("Description:"),
+          HTML(
+            "<p>This module will explore missing data in Stata, focusing on numeric missing data.</p>"
+          ),
           tags$hr(),
           #h3(textOutput("caption")),
           verbatimTextOutput("QMparameters"),
@@ -366,6 +381,10 @@ navbarPage(
         tabPanel(
           "Pearson Correlation",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>None</p>"
+          ),
           hr(),
           column(6, plotOutput("Qpccplot")),
           column(6, plotOutput("Qsmoothplot")),
@@ -378,6 +397,12 @@ navbarPage(
         tabPanel(
           "PCA",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
+            <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
+            <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
+          ),
           hr(),
           column(6, plotlyOutput("Qpcaplot")),
           column(6, rHandsontableOutput("Qpcatable"))
@@ -385,6 +410,14 @@ navbarPage(
         tabPanel(
           "T-SNE",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
+          ),
+          h5("Reference:"),
+          HTML(
+            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research, 2579–2605 (2008).</p>"
+          ),
           hr(),
           column(6, plotlyOutput("Qtsneplot")),
           column(6, rHandsontableOutput("Qtsnetable"))
@@ -392,6 +425,14 @@ navbarPage(
         tabPanel(
           "Umap",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
+          ),
+          h5("Reference:"),
+          HTML(
+            "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426, 2018</p>"
+          ),
           hr(),
           column(6, plotlyOutput("Qumapplot")),
           column(6, rHandsontableOutput("Qumaptable"))
@@ -423,6 +464,10 @@ navbarPage(
         tabPanel(
           "HeatMap",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
+          ),
           hr(),
           column(6, plotOutput("DMheatmapparameters")),
           column(6, rHandsontableOutput("DMheatmaptable"))
@@ -430,6 +475,10 @@ navbarPage(
         tabPanel(
           "VocanoPlot",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y-and x-axes, respectively.</p>"
+          ),
           hr(),
           column(6, plotOutput("DMvocanoparameters")),
           column(6, rHandsontableOutput("DMvocanotable"))
@@ -437,6 +486,10 @@ navbarPage(
         tabPanel(
           "ViolinPlot",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel density plot on each side. The violin plot is similar to box plots, except that they also show the probability density of the data at different values (in the simplest case this could be a histogram).</p>"
+          ),
           hr(),
           column(6, plotOutput("DMviolinparameters")),
           column(6, rHandsontableOutput("DMviolintable"))
@@ -444,6 +497,10 @@ navbarPage(
         tabPanel(
           "RadarMap",
           h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
+          ),
           hr(),
           column(6, canvasXpressOutput("DMradarparameters")),
           column(6, rHandsontableOutput("DMradartable"))
