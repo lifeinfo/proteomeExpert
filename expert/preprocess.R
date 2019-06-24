@@ -16,7 +16,7 @@ pepstat <- function(d) {
 auto_preprocess <-
   function(filename = "peptides.txt",
            tech_rep_f = "technical_rep.txt",
-           batchf = 'F',
+           batchf = NULL,
            psep = "\t",
            tsep = "\t",
            pheader = TRUE,
@@ -149,8 +149,9 @@ auto_preprocess <-
     }
     
     ##protetypic proteins are saved
-    pep_order2.top3 <-
-      pep_order2.top3[grep("^1/", pep_order2.top3$prot), ]
+    # pep_order2.top3 <-
+    #   pep_order2.top3[grep("^1/", pep_order2.top3$prot), ]
+
     pep_order2.top3 <-
       pep_order2.top3[c("prot", "tg", colnames(pep_order2.top3)[3:ncol(pep_order2.top3)])]
     pep_order2.top3[pep_order2.top3 == 0] <- NA
@@ -165,3 +166,4 @@ auto_preprocess <-
   }
 
 #t<-auto_preprocess("\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\data.tech.rep.txt","\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\tech.txt")
+tt<-auto_preprocess("E:/temp/F20190522caix_pep_helaReport.txt","E:/temp/tech_rep_file.txt",theader = TRUE)
