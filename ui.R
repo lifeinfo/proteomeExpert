@@ -461,6 +461,9 @@ navbarPage(
     
     mainPanel(
       tabsetPanel(
+        #################################
+        # HeatMap
+        #################################
         tabPanel(
           "HeatMap",
           h4("Summary"),
@@ -469,9 +472,12 @@ navbarPage(
             "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
           ),
           hr(),
-          column(6, plotOutput("DMheatmapparameters")),
+          column(6, plotlyOutput("DMheatmapparameters")),
           column(6, rHandsontableOutput("DMheatmaptable"))
         ),
+        #################################
+        # Vocano Plot
+        #################################
         tabPanel(
           "VocanoPlot",
           h4("Summary"),

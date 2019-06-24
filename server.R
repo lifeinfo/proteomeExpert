@@ -430,11 +430,10 @@ function(input, output) {
   output$DMheatmaptable <- renderRHandsontable({
     rhandsontable(head(iris, n = 20L))
   })
-  output$DMheatmapparameters <- renderPlot({
-    data <- t(iris[, 1:4])
+  output$DMheatmapparameters <- renderPlotly({
+    data <- iris[, 1:4]
     label <- iris[, 5]
-    p <- drawheatmap(data, label)
-    print(p)
+    drawheatmap(data, label)
   })
   
   #################################
