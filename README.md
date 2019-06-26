@@ -1,4 +1,4 @@
-# proteomeExpert - A user friendly Tools for protein analysis.
+# proteomeExpert - A user friendly Tools for proteome analysis.
 ![guomics](http://19241930.s21i.faiusr.com/4/ABUIABAEGAAgsdzx5QUomeWW4QMwbjhu.png)
 
 proteomeExpert is an open-source platform-independent browser-based interface for protein analytics in R. 
