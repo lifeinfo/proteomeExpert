@@ -1,7 +1,7 @@
-# proteomeExpert - A user friendly Tools for proteome analysis.
+# ProteomeExpert - A user friendly Tools for proteome analysis.
 ![guomics](http://19241930.s21i.faiusr.com/4/ABUIABAEGAAgsdzx5QUomeWW4QMwbjhu.png)
 
-proteomeExpert is an open-source platform-independent browser-based interface for protein analytics in R. 
+ProteomeExpert is an open-source platform-independent browser-based interface for proteome analytics in R. 
 The application is based on the Shiny package and can be run locally or on a server. 
 
 # Guomics Team
@@ -44,7 +44,7 @@ web: http://www.guomics.com
 
 # Development Guide
 
-Although proteomeExpert web-interface can handle quite a few data and analysis tasks, you may prefer to write your own R-code. proteomeExpert provides a bridge to programming in R(studio) by exporting the functions used for analysis (i.e., you can conduct your analysis using the proteomeExpert web-interface or by calling proteomeExpert's functions directly from R-code). For more information about programming with proteomeExpert see the [programming](https://github.com/lifeinfo/proteomeExpert) page on the documentation site.
+Although ProteomeExpert web-interface can handle quite a few data and analysis tasks, you may prefer to write your own R-code. ProteomeExpert provides a bridge to programming in R(studio) by exporting the functions used for analysis (i.e., you can conduct your analysis using the ProteomeExpert web-interface or by calling ProteomeExpert's functions directly from R-code). For more information about programming with ProteomeExpert see the [programming](https://github.com/lifeinfo/proteomeExpert) page on the documentation site.
 
 ## Reporting issues
 
