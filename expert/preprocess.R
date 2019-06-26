@@ -166,4 +166,4 @@ auto_preprocess <-
   }
 
 #t<-auto_preprocess("\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\data.tech.rep.txt","\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\tech.txt")
-tt<-auto_preprocess("E:/temp/F20190522caix_pep_helaReport.txt","E:/temp/tech_rep_file.txt",theader = TRUE)
+#tt<-auto_preprocess("E:/temp/F20190522caix_pep_helaReport.txt","E:/temp/tech_rep_file.txt",theader = TRUE)
