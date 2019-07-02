@@ -416,7 +416,7 @@ navbarPage(
           ),
           h5("Reference:"),
           HTML(
-            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research, 2579–2605 (2008).</p>"
+            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research, 2579–2605(2008).</p>"
           ),
           hr(),
           column(6, plotlyOutput("Qtsneplot")),

@@ -144,7 +144,7 @@ function(input, output) {
         output$QMparameters <- renderText({
           "Results are showed below:"
         })
-        source("missingValueExplore_zts.R", local = T)
+        #source("missingValueExplore_zts.R", local = T)
         missing_plot(readProteinM())
       }
       else if (is.null(readProteinM()))
