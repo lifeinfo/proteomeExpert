@@ -431,7 +431,7 @@ navbarPage(
           ),
           h5("Reference:"),
           HTML(
-            "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426, 2018</p>"
+            "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
           ),
           hr(),
           column(6, plotlyOutput("Qumapplot")),
