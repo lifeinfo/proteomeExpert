@@ -4,7 +4,6 @@ drawheatmap <-
            strTitle = "Heatmap",
            cluster_row = T,
            cluster_col = F) {
-    library(heatmaply)
     df11 <- as.data.frame(data)
     df11[is.na(df11)] <- 0
     ann_col <- data.frame(type = Label, group = Label, row.names = row.names(df11))
@@ -12,10 +11,10 @@ drawheatmap <-
     # strain_color <- brewer.pal(10,"Set3")[5:6]
     # names(strain_color) <- c("C","R")
     # ann_colors <- list(stain = strain_color)
-    
+
     p <- heatmaply(
       df11,
-      colors = brewer.pal(11, "RdYlBu")[11:1],
+      #colors = brewer.pal(11, "RdYlBu")[11:1],
       column_text_angle = 45,
       fontsize_col = 8,
       #annotation_col = ann_col,

@@ -28,6 +28,7 @@ library(doParallel)
 registerDoParallel(cores = 5)
 library(foreach)
 library(pROC)
+library(heatmaply)
 ###end featrue selection
 #################################
 # template
