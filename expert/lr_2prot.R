@@ -30,7 +30,7 @@ pep2prot <- function(top3) {
         
         xy.index <- which((!is.na(x)) & (!is.na(y)))
         xy0.index <- which((!is.na(x)) & (is.na(y)))
-        if (length(xy.index) < 4) {
+        if (length(xy.index) < 4 | all(unlist(x[xy.index]) == unlist(y[xy.index]))) {
           next
         }
         lr.results <- mylm(unlist(x[xy.index]), unlist(y[xy.index]))
