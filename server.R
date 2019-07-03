@@ -1,4 +1,11 @@
-function(input, output) {
+function(input, output,session) {
+  observe({
+    anno_name<-colnames(getAnnoTable())
+    updateSelectInput(session, "DManno2",
+                      choices = anno_name,
+                      selected = NULL
+    )
+  })
   #################################
   # batch Design
   #################################
