@@ -197,7 +197,7 @@ navbarPage(
       sidebarPanel(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
-          'DManno',
+          'DManno2',
           'select types',
           anno_name,
           multiple = TRUE,
