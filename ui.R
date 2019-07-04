@@ -15,13 +15,13 @@ navbarPage(
       "Introduction",
       h4("Summary"),
       HTML("<p>proteomeExpert was published in * 2019 </p>")
-      
+
     )),
     tabsetPanel(tabPanel(
       "Citation",
       h4(""),
       HTML("<p>proteomeExpert was published in * 2019 </p>")
-      
+
     )))
   ),
   #################################
@@ -43,7 +43,7 @@ navbarPage(
         hr(),
         actionButton("powerb", "Submit", class = "btn-primary")
       ),
-      
+
       mainPanel(tabsetPanel(
         tabPanel(
           "Summary",
@@ -71,7 +71,7 @@ navbarPage(
         fileInput("file", "File input:"),
         sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
         sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-        
+
         tags$h5("Click to design:"),
         actionButton("design", "Submit", class = "btn-primary")
       ),
@@ -107,7 +107,7 @@ navbarPage(
         placeholder = "*.csv or *.TXT required!"
       ),
       hr(),
-      
+
       fileInput(
         "protein_matrix",
         "Select your protein file (optional):",
@@ -118,7 +118,7 @@ navbarPage(
         placeholder = "*.csv or *.TXT required!"
       ),
       hr(),
-      
+
       fileInput(
         "sample_info",
         "Select your sample file (optional):",
@@ -130,7 +130,7 @@ navbarPage(
       ),
       #actionButton("sampleInfo", "annotation", class = "btn-primary"),
       hr(),
-      
+
       fileInput(
         "individual_info",
         "Select your individual file (optional):",
@@ -141,22 +141,22 @@ navbarPage(
         placeholder = "*.csv or *.TXT required!"
       )
       #actionButton("individualInfo", "annotation", class = "btn-primary")
-      
+
     ),
     mainPanel(
       fluidRow(column(3, wellPanel(
         tags$h4("Annotate sample columns:"),
         hr(),
-        
+
         # This outputs the dynamic UI component
         uiOutput("sampleUi")
       )),
-      
+
       column(
         3, offset = 0.5, wellPanel(
           tags$h4("Annotate individual columns:"),
           hr(),
-          
+
           # This outputs the dynamic UI component
           uiOutput("individualUi")
         )
@@ -164,12 +164,12 @@ navbarPage(
       fluidRow(column(width = 6, wellPanel(
         # This outputs the dynamic UI component
         textOutput("sampleRes")
-        
+
       ))),
       fluidRow(column(width = 6, wellPanel(
         # This outputs the dynamic UI component
         textOutput("individualRes")
-        
+
       ))),
       hr(),
       actionButton("DoAnnoTable", "Merge", class = "btn-primary"),
@@ -178,11 +178,11 @@ navbarPage(
       fluidRow(column(width = 8, wellPanel(
         # This outputs the dynamic UI component
         DT::dataTableOutput("annoTable")
-        
+
       )))
     )
   ),
-  
+
   #################################
   # data preprocessing
   #################################
@@ -243,11 +243,11 @@ navbarPage(
           tags$h5("Biological Replicas :"),
           hr(),
           actionButton("DPDo", "Submit", class = "btn-primary")
-          
+
         )
       )
     ),
-    
+
     tabPanel(
       "Peptide2Protein",
       "",
@@ -274,7 +274,7 @@ navbarPage(
           selected = "\t"
         ),
         hr(),
-        
+
         fileInput(
           "TechnicalReplicate",
           "Select your technical replicate file (required):",
@@ -292,9 +292,9 @@ navbarPage(
           inline = TRUE,
           selected = "\t"
         ),
-        
+
         hr(),
-        
+
         fileInput(
           "BatchFile",
           "Select your batch effect file (optional):",
@@ -312,12 +312,12 @@ navbarPage(
           inline = TRUE,
           selected = "\t"
         ),
-        
+
         hr(),
-        
+
         tags$h5("Click to process:"),
         actionButton("process", "Submit", class = "btn-primary")
-        
+
       ),
       mainPanel(tabsetPanel(
         tabPanel(
@@ -326,14 +326,14 @@ navbarPage(
           tableOutput("Dtable"),
           h4("Download all protein matrix"),
           downloadButton("downloadData", "Download", class = "btn-primary")
-          
+
         )
-        
+
       ))
     )
-    
+
   ),
-  
+
   #################################
   # QC
   #################################
@@ -347,14 +347,14 @@ navbarPage(
       checkboxInput("reproducibility", "Reproducibility", TRUE),
       checkboxInput("qcPca", "PCA", TRUE),
       checkboxInput("qcUmap", "UMAP", FALSE),
-      
+
       hr(),
-      
+
       tags$h5("Click to process:"),
       actionButton("QC", "Submit", class = "btn-primary")
-      
+
     ),
-    
+
     mainPanel(
       tabsetPanel(
         tabPanel(
@@ -370,13 +370,13 @@ navbarPage(
             "output.QMparameters == 'Results are showed below:'",
             downloadButton('downloadMissingPlot')
           ),
-          
+
           plotOutput("missingPlot"),
-          
+
           column(4, plotOutput("densityPlot")),
           hr(),
           br()
-          
+
         ),
         tabPanel(
           "Pearson Correlation",
@@ -440,7 +440,7 @@ navbarPage(
       )
     )
   ),
-  
+
   #################################
   # data mining
   #################################
@@ -458,7 +458,7 @@ navbarPage(
       checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
       actionButton("dm", "Submit", class = "btn-primary")
     ),
-    
+
     mainPanel(
       tabsetPanel(
         #################################
@@ -634,7 +634,7 @@ navbarPage(
         "proteinlist",
         "Protein list:",
         height = 150,
-        placeholder = "Example:Q9Y6B6,P35659,O43759&,A0A0B4J1V6,E9PAV3"
+        placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
       ),
       actionButton("annosubmit", "Search", class = "btn-primary")
       #verbatimTextOutput("Annoparameters")
@@ -649,12 +649,14 @@ navbarPage(
         ),
         fluidRow(column(12, "Uniport"),
                  hr(),
-                 column(8, "")),
+                 column(8,
+                        uiOutput("annouiuniport")
+                        )),
         fluidRow(column(12, "String-db"),
                  hr(),
                  column(
                    8,
-                   img(src = "https://string-db.org/api/image/network?identifiers=Q9Y6B6&add_white_nodes=10&network_flavor=actions")
+                   uiOutput("annouistring")
                  )),
         fluidRow(column(12, "KEGG"),
                  hr(),
