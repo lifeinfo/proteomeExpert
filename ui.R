@@ -202,7 +202,8 @@ navbarPage(
           anno_name,
           multiple = TRUE,
           selectize = TRUE
-        )
+        ),
+        DTOutput("preprocessedprotM")
       ),
       mainPanel(
         tabPanel(
@@ -215,7 +216,8 @@ navbarPage(
               "None" = "none",
               "1" = '1',
               '0' = "0",
-              "Percent of minimum" = 'DPPM'
+              "10% of minimum" = '0.1',
+              "minimum" = "minimum"
             ),
             inline = TRUE,
             selected = NULL
@@ -235,6 +237,18 @@ navbarPage(
           ),
           hr(),
           tags$h5("Normaliztion:"),
+          radioButtons(
+            "DPnormaliztion",
+            "",
+            choices = c(
+              "None" = "none",
+              "Quantile" = 'quantile',
+              "Z-score" = "zscore",
+              "Max-Min" = "maxmin"
+            ),
+            inline = TRUE,
+            selected = NULL
+          ),
           hr(),
           tags$h5("Remove Batch Effect :"),
           hr(),

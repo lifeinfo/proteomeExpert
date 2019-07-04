@@ -82,6 +82,16 @@ function(input, output,session) {
   # data preprocess
   #################################
   # updated when the user clicks the button
+  ###data preprocessing
+  DPdataprecessInput<-eventReactive(input$DPDo,{
+    print(myhead(readProteinM()))
+    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion)
+  })
+  output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
+    myhead(data.frame(DPdataprecessInput()))
+  }))
+
+  ###pep2prot
   DdatasetInput <- eventReactive(input$process, {
     if (is.null(input$PeptideMatrix))
       "Please upload your files!"
