@@ -197,7 +197,7 @@ navbarPage(
       sidebarPanel(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
-          'DManno',
+          'DManno2',
           'select types',
           anno_name,
           multiple = TRUE,
@@ -416,7 +416,7 @@ navbarPage(
           ),
           h5("Reference:"),
           HTML(
-            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research, 2579–2605(2008).</p>"
+            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
           ),
           hr(),
           column(6, plotlyOutput("Qtsneplot")),

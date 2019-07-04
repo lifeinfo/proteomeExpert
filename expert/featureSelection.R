@@ -6,11 +6,9 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
   print(methods)
   variance=methods[1]
   correlation=methods[2]
-  print("----------------")
 
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
-  print(dim(protM))
-  
+
   protM<-apply(protM,2,as.numeric,na.rm=T)
   #filter by missing ratio
   fs_missing_ratio<-as.numeric(fs_missing_ratio)
@@ -23,7 +21,6 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
      protM<-protM[,fna_ratio_vars]
      #label_protM<-label_protM[,fna_ratio_vars]
   }
-  print(dim(protM))
 
   #filter near zero 
   if(variance){
@@ -45,7 +42,6 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
       protM <- protM[, -high_Corr_vars]
   }
 
-  print(dim(protM))
   # label_protM2<-cbind(label=label_protM[,"label"],protM)
   # return(label_protM2) 
   return(colnames(protM))
