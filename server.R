@@ -27,7 +27,7 @@ function(input, output,session) {
       z1 = qnorm(1 - ap / 2)
       zb = qnorm(1 - as.numeric(input$Pbeta))
       proN = 2 * (sd * (z1 + zb) / (mean_null - mean_alt)) ^ 2
-      
+
       print(paste0("Number of proteins: ", input$Pm))
       print(paste0("Alpha: ", input$Palpha))
       print(paste0("Power: ", 1 - as.numeric(input$Pbeta)))
@@ -36,7 +36,7 @@ function(input, output,session) {
         ceiling(proN)
       ))
     })
-    
+
     output$powerPlot <- renderPlotly({
       mean_null = as.numeric(input$Pmu)
       mean_alt = as.numeric(input$Pmu0)
@@ -107,9 +107,9 @@ function(input, output,session) {
         bsep = isolate(input$Dbsep),
         bheader = isolate(input$Dbheader)
       )
-    
+
   }, ignoreNULL = FALSE)
-  
+
   output$Dtable <- renderTable({
     #peptide<-read.table(input$PeptideMatrix$datapath,header=TRUE)
     #protM<<-head(peptide,5)
@@ -141,20 +141,20 @@ function(input, output,session) {
   #################################
   # QC
   #################################
-  
+
   QCdatasetInput <- eventReactive(input$QC, {
     print("doing")
     if (class(readProteinM()) != "data.frame")
       return(NULL)
     else
       readProteinM()
-    
+
   }, ignoreNULL = FALSE)
-  
+
   #################################
   # missing value explore
   #################################
-  
+
   output$missingPlot <- renderPlot({
     if (input$MissingValueExplore_check) {
       if (class(QCdatasetInput()) == "data.frame") {
@@ -177,15 +177,15 @@ function(input, output,session) {
             "Please click the submit button!"
           })
     }
-    
+
     else
       output$QMparameters <-
         renderText({
           "Please select MissingValueExplore checkbox and sumbit!"
         })
-    
+
   }, height = 800, units = "px")
-  
+
   output$downloadMissingPlot <- downloadHandler(
     filename = function() {
       paste("missingValueExplore", Sys.time(), ".pdf", sep = "")
@@ -200,7 +200,7 @@ function(input, output,session) {
     data <- iris[, 1]
     #drawdensity(as.data.frame(data))
   })
-  
+
   #################################
   # Pearson Correlation
   #################################
@@ -216,7 +216,7 @@ function(input, output,session) {
     data2 <- iris[, 1]
     drawsmooth(data1, data2)
   })
-  
+
   #################################
   # PCA
   #################################
@@ -241,7 +241,7 @@ function(input, output,session) {
     p <- drawTSNE(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
-  
+
   #################################
   # umap
   #################################
@@ -254,12 +254,12 @@ function(input, output,session) {
     p <- drawUMAP(data, label)
     ggplotly(p) %>% config(displaylogo = F)
   })
-  
-  
+
+
   #################################
   # data console
   #################################
-  
+
   #for read protein matrix
   readProteinM <- reactive({
     if (!is.null(input$protein_matrix))
@@ -324,8 +324,8 @@ function(input, output,session) {
       )
     }
   })
-  
-  
+
+
   output$individualUi <- renderUI({
     if (is.null(input$individual_info))
       "Please upload your files!"
@@ -354,7 +354,7 @@ function(input, output,session) {
           choices = individual_header,
           selected = individual_header[2]
         ),
-        
+
         actionButton("individual_info_annotation", "Submit", class = "btn-primary")
       )
     }
@@ -369,7 +369,7 @@ function(input, output,session) {
       "sampleId"
     colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
       "sampleType"
-    
+
     if (input$sample_info_batch_id != 'select...')
       colnames(sampleInfo)[which(sample_header == input$sample_info_batch_id)] <-
       "batchId"
@@ -382,7 +382,7 @@ function(input, output,session) {
     #print(head(sampleInfoInput()))
     sampleInfo
   }, ignoreNULL = T)
-  
+
   sampleResInput <- eventReactive(input$sample_info_annotation, {
     sampleInfoInput()
   })
@@ -403,10 +403,10 @@ function(input, output,session) {
         "individualId"
       colnames(individualInfo)[which(individual_header == input$individual_info_type)] <-
         "individualType"
-      
+
       individualInfo
     }, ignoreNULL = T)
-  
+
   individualResInput <-
     eventReactive(input$individual_info_annotation, {
       individualInfoInput()
@@ -427,7 +427,7 @@ function(input, output,session) {
     #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
-  
+
   output$DMprot_anno_Ui <- renderUI({
     anno_name <<- colnames(getAnnoTable())
     tagList(
@@ -452,7 +452,7 @@ function(input, output,session) {
     label <- iris[, 5]
     drawheatmap(data, label)
   })
-  
+
   #################################
   # VocanoPlot
   #################################
@@ -462,7 +462,7 @@ function(input, output,session) {
   output$DMvocanoparameters <- renderPlot({
     drawVolcano((iris[, 1:4]), c("a", "a", "b", "b"), "a", "b")
   })
-  
+
   #################################
   # ViolinPlot
   #################################
@@ -474,7 +474,7 @@ function(input, output,session) {
     sample <- iris[, 5]
     drawviolin(data, sample)
   })
-  
+
   #################################
   # Radar
   #################################
@@ -485,7 +485,7 @@ function(input, output,session) {
     data <- t(iris[, 3:4])
     drawradar(data)
   })
-  
+
   #################################
   # feature selection
   #################################
@@ -506,7 +506,7 @@ function(input, output,session) {
                                           rownames(protM)
                                         label_temp <-
                                           as.vector(getAnnoTable()[sample_names, label])
-                                        
+
                                         labeled_protM <-
                                           cbind(label = label_temp, protM, stringsAsFactors = FALSE)
                                         fs_features <-
@@ -526,20 +526,20 @@ function(input, output,session) {
                                         if (!is.null(input$featureSel_algorithm))
                                           fs_features <-
                                           featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
-                                        
+
                                         return(fs_features)
                                       }
                                     },
                                     ignoreNULL = T,
                                     ignoreInit = T)
-  
+
   ####feature selection
-  
+
   ####feature selection
   output$fs_summary <- renderText({
     paste(
       "After feature selection your matrix contains",
-      
+
       length(feature_sel_prot()$features),
       "features:",
       paste(feature_sel_prot()$features, collapse = ",")
@@ -551,8 +551,8 @@ function(input, output,session) {
   output$featureSelected <- DT::renderDataTable(DT::datatable({
     data.frame(feature_sel_prot()$features)
   }))
-  
-  
+
+
   #################################
   # ANNO
   #################################
@@ -568,11 +568,21 @@ function(input, output,session) {
         "Reactome, "
       ))
     })
+
+    output$annouistring <- renderUI({
+      if (is.null(input$proteinlist))
+        return()
+
+      img(src = paste0("https://string-db.org/api/image/network?identifiers=", gsub(",", "%0d", input$proteinlist)))
+    })
   })
-  output$anno_parameters2 <- renderText({
-    
+  output$annouiuniport <- renderUI({
+    if (is.null(input$proteinlist))
+      return()
   })
-  
+
+
+
   output$anno_table <- renderRHandsontable({
     DF = data.frame(
       Name = c("Uniport",
@@ -596,7 +606,7 @@ function(input, output,session) {
       ),
       stringsAsFactors = FALSE
     )
-    
+
     rhandsontable(
       DF,
       allowedTags = "<em><b><strong><a><big>",
@@ -655,11 +665,11 @@ function(input, output,session) {
                      model.forest <-
                        randomForest(Species ~ ., data = iris)
                      pre.forest <- predict(model.forest, iris)
-                     
+
                      #obs_p_ran = data.frame(prob=pre.forest, obs=iris$Species)
                      ran_roc <-
                        roc(iris$Species, as.numeric(pre.forest))
-                     
+
                      output$DMmlPlot <- renderPlot({
                        layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
                        varImpPlot(model.forest, main = "variable importance")
@@ -676,18 +686,18 @@ function(input, output,session) {
                          main = 'RF ROC,mtry=3,ntree=500'
                        )
                      })
-                     
+
                      output$DMmloutputText <- renderPrint({
                        model.forest$importance
                        #
                        table(iris$Species, pre.forest, dnn = c("Obs", "Pre"))
-                       
+
                      })
-                     
+
                      output$DMmltables <- renderRHandsontable({
                        rhandsontable(head(iris[1:10,], n = 20L))
                      })
-                     
+
                    } else if (input$mlmethod == "k-NearestNeighbor")
                    {
                      cat("k-NearestNeighbor comming soon!")
@@ -698,7 +708,7 @@ function(input, output,session) {
                    {
                      cat("Artificial Neural Network comming soon!")
                    }
-                   
+
                  } else if (input$mlframework == "Tensorflow")
                  {
                    #################################
@@ -712,6 +722,6 @@ function(input, output,session) {
                    #################################
                    cat("MxNet comming soon!")
                  }
-                 
+
                })
 }
