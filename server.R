@@ -84,12 +84,13 @@ function(input, output,session) {
   # updated when the user clicks the button
   ###data preprocessing
   DPdataprecessInput<-eventReactive(input$DPDo,{
-    dataPreprocess(protM(),input$DPmissingV,input$DPLog,input$DPnormaliztion)
-  }
+    print(myhead(readProteinM()))
+    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion)
+  })
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
-    data.frame(DPdataprecessInput)
+    myhead(data.frame(DPdataprecessInput()))
   }))
-  )
+
   ###pep2prot
   DdatasetInput <- eventReactive(input$process, {
     if (is.null(input$PeptideMatrix))

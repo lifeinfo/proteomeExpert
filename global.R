@@ -62,7 +62,7 @@ library(rhandsontable)
 # source file
 #################################
 source("expert/lr_2prot.R")
-#source("expert/data_preprocess.R")
+source("expert/data_preprocess.R")
 source("expert/combat.R")
 source("expert/test.R")
 source("expert/preprocess.R")
