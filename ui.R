@@ -652,7 +652,7 @@ navbarPage(
                  column(8,
                         uiOutput("annouiuniport")
                         )),
-        fluidRow(column(12, "String-db"),
+        fluidRow(column(12, "String"),
                  hr(),
                  column(
                    8,
@@ -664,7 +664,11 @@ navbarPage(
         fluidRow(column(12, "GO"),
                  hr()),
         fluidRow(column(12, "Reactome"),
-                 hr()),
+                 hr(),
+                 column(8,
+                        HTML("<iframe src=\"https://reactome.org/PathwayBrowser/\" width=\"1200\" height=\"700\"></iframe>")
+                        )
+                 ),
         h4('Database'),
         fluidRow(column(
           4,

@@ -559,13 +559,22 @@ function(input, output,session) {
       ))
     })
 
-    output$annouistring <- renderUI({
-      if (is.null(input$proteinlist))
-        return()
-
-      img(src = paste0("https://string-db.org/api/image/network?identifiers=", gsub(",", "%0d", input$proteinlist)))
+    observeEvent(input$proteinlist, {
+      output$annouistring <- renderUI({
+        if (is.null(input$proteinlist))
+        {
+          return()
+        }else{
+          if (length(input$proteinlist) < 1)
+            return()
+          img(src = paste0("https://string-db.org/api/image/network?identifiers=", gsub(",", "%0d", input$proteinlist)))
+        }
+      })
     })
   })
+
+
+
   output$annouiuniport <- renderUI({
     if (is.null(input$proteinlist))
       return()
@@ -576,7 +585,7 @@ function(input, output,session) {
   output$anno_table <- renderRHandsontable({
     DF = data.frame(
       Name = c("Uniport",
-               "StringDB",
+               "String",
                "KEGG",
                "GO",
                "Reactome"),
