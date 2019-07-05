@@ -28,5 +28,10 @@ dataPreprocess<-function(d,replace_value,log_base,normaliztion){
 }
 
 maxmin<-function(d){
+  d <- data.matrix(d)
+  center <- sweep(d, 2, apply(d, 2, min),'-')
+  R <- apply(d, 2, max) - apply(d,2,min)
+  d<- sweep(center, 2, R, "/")
+  d <- data.frame(d)
   return(d)
 }
