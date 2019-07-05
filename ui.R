@@ -1,7 +1,8 @@
 #shinythemes::themeSelector(),
 navbarPage(
   theme = shinytheme("cerulean"),
-  "ProteomeExpert |",
+  windowTitle = "ProteomeExpert | A user friendly Web for proteome analysis.",
+  "ProteomeExpert",
   #################################
   # Home
   #################################
@@ -714,6 +715,7 @@ navbarPage(
   #################################
   # footer
   #################################
+  footer = "",
   div(
     br(),
     hr(),
