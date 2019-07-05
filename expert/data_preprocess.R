@@ -19,14 +19,20 @@ dataPreprocess<-function(d,replace_value,log_base,normaliztion){
   
   if(normaliztion!="none"){
     switch(normaliztion,
-           quantile = d<-normalize.quantiles(q),
+           quantile = d<-myqn(d),
            zscore = d<-scale(d),
-           maxmin = maxmin(d)
+           maxmin = d<-maxmin(d)
     )
   }
   return(d)
 }
-
+myqn<-function(d){
+  
+  d2<-normalize.quantiles(d)
+  colnames(d2)<-colnames(d)
+  rownames(d2)<-rownames(d)
+  return(d2)
+}
 maxmin<-function(d){
   d <- data.matrix(d)
   center <- sweep(d, 2, apply(d, 2, min),'-')
