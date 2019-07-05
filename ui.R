@@ -208,6 +208,20 @@ navbarPage(
       mainPanel(
         tabPanel(
           "Methods",
+          tags$h5("Log Transform:"),
+          radioButtons(
+            "DPLog",
+            "",
+            choices = c(
+              "None" = "none",
+              "Log2" = '2',
+              'Log10' = "10"
+            ),
+            inline = TRUE,
+            selected = NULL
+          ),
+         
+          hr(),
           tags$h5("Missing Value Substitution:"),
           radioButtons(
             "DPmissingV",
@@ -218,19 +232,6 @@ navbarPage(
               '0' = "0",
               "10% of minimum" = '0.1',
               "minimum" = "minimum"
-            ),
-            inline = TRUE,
-            selected = NULL
-          ),
-          hr(),
-          tags$h5("Log Transform:"),
-          radioButtons(
-            "DPLog",
-            "",
-            choices = c(
-              "None" = "none",
-              "Log2" = 'log2',
-              'Log10' = "log10"
             ),
             inline = TRUE,
             selected = NULL

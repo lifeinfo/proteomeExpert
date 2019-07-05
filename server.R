@@ -84,7 +84,6 @@ function(input, output,session) {
   # updated when the user clicks the button
   ###data preprocessing
   DPdataprecessInput<-eventReactive(input$DPDo,{
-    print(myhead(readProteinM()))
     dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion)
   })
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
