@@ -197,68 +197,69 @@ navbarPage(
       ),
       sidebarPanel(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
+        tags$h5("Log Transform:"),
+        radioButtons(
+          "DPLog",
+          "",
+          choices = c(
+            "None" = "none",
+            "Log2" = '2',
+            'Log10' = "10"
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
+        
+        hr(),
+        tags$h5("Missing Value Substitution:"),
+        radioButtons(
+          "DPmissingV",
+          "",
+          choices = c(
+            "None" = "none",
+            "1" = '1',
+            '0' = "0",
+            "10% of minimum" = '0.1',
+            "minimum" = "minimum"
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
+        hr(),
+        tags$h5("Normaliztion:"),
+        radioButtons(
+          "DPnormaliztion",
+          "",
+          choices = c(
+            "None" = "none",
+            "Quantile" = 'quantile',
+            "Z-score" = "zscore",
+            "Max-Min" = "maxmin"
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
+        hr(),
+        tags$h5("Remove Batch Effect :"),
         selectInput(
           'DManno2',
-          'select types',
+          'Select batch effect name',
           anno_name,
           multiple = TRUE,
           selectize = TRUE
         ),
-        DTOutput("preprocessedprotM")
+        hr(),
+        tags$h5("Technial Replicas:"),
+        hr(),
+        tags$h5("Biological Replicas :"),
+        hr(),
+        actionButton("DPDo", "Submit", class = "btn-primary")
       ),
       mainPanel(
         tabPanel(
           "Methods",
-          tags$h5("Log Transform:"),
-          radioButtons(
-            "DPLog",
-            "",
-            choices = c(
-              "None" = "none",
-              "Log2" = '2',
-              'Log10' = "10"
-            ),
-            inline = TRUE,
-            selected = NULL
-          ),
-         
-          hr(),
-          tags$h5("Missing Value Substitution:"),
-          radioButtons(
-            "DPmissingV",
-            "",
-            choices = c(
-              "None" = "none",
-              "1" = '1',
-              '0' = "0",
-              "10% of minimum" = '0.1',
-              "minimum" = "minimum"
-            ),
-            inline = TRUE,
-            selected = NULL
-          ),
-          hr(),
-          tags$h5("Normaliztion:"),
-          radioButtons(
-            "DPnormaliztion",
-            "",
-            choices = c(
-              "None" = "none",
-              "Quantile" = 'quantile',
-              "Z-score" = "zscore",
-              "Max-Min" = "maxmin"
-            ),
-            inline = TRUE,
-            selected = NULL
-          ),
-          hr(),
-          tags$h5("Remove Batch Effect :"),
-          hr(),
-          tags$h5("Technial Replicas:"),
-          hr(),
-          tags$h5("Biological Replicas :"),
-          hr(),
-          actionButton("DPDo", "Submit", class = "btn-primary")
+          DTOutput("preprocessedprotM")
+          
 
         )
       )

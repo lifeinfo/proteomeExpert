@@ -7,8 +7,8 @@
 #myhead function
 
 myhead <- function(d) {
-  if (ncol(d) > 10) {
-    t = head(d[, 1:10])
+  if (ncol(d) > 6) {
+    t = head(d[, 1:6])
   }
   else
     t = head(d)
