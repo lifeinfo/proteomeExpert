@@ -203,12 +203,20 @@ function(input, output,session) {
   #################################
   # Pearson Correlation
   #################################
+
   output$Qpcctable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
+    if(!is.null(readProteinM()))
+    {
+      rhandsontable(head(readProteinM(), n = 20L))
+    }
   })
   output$Qpccplot <- renderPlot({
-    data <- t(iris[1:10, 1:4])
-    drawcorrplot(data)
+    if(!is.null(readProteinM()))
+    {
+      data <- t(readProteinM())
+      drawcorrplot(data)
+    }
+
   })
   output$Qsmoothplot <- renderPlot({
     data1 <- iris[, 1]
