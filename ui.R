@@ -245,13 +245,42 @@ navbarPage(
           'DManno2',
           'Select batch effect name',
           anno_name,
-          multiple = TRUE,
+          multiple = FALSE,
           selectize = TRUE
         ),
         hr(),
-        tags$h5("Technial Replicas:"),
+        tags$h5("Technical Replicas:"),
+        selectInput(
+          'DPTR',
+          'Select technical replica name',
+          anno_name,
+          multiple = FALSE,
+          selectize = TRUE
+        ),
+        radioButtons(
+          "DPTechnicalRepMethod",
+          "",
+          choices = c(
+            "None" = "none",
+            "Mean" = 'mean',
+            "Median" = "median",
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
         hr(),
         tags$h5("Biological Replicas :"),
+        radioButtons(
+          "DPBiologicalRep",
+          "",
+          choices = c(
+            "None" = "none",
+            "Mean" = 'mean',
+            "Median" = "median",
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
         hr(),
         actionButton("DPDo", "Submit", class = "btn-primary")
       ),

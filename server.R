@@ -5,6 +5,10 @@ function(input, output,session) {
                       choices = anno_name,
                       selected = NULL
     )
+    updateSelectInput(session, "DPTR",
+                      choices = anno_name,
+                      selected = NULL
+    )
   })
   #################################
   # batch Design
@@ -84,7 +88,17 @@ function(input, output,session) {
   # updated when the user clicks the button
   ###data preprocessing
   DPdataprecessInput<-eventReactive(input$DPDo,{
-    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion)
+    batch_factor<-input$DManno2
+    if(!is.null(batch_factor)){
+      sample_names<-colnames(readProteinM())[-1]
+      batch_factor<-as.vector(getAnnoTable()[sample_names, batch_factor])
+    }
+    technical_col<-input$DPTR
+    if(!is.null(technical_col)){
+      sample_names<-colnames(readProteinM())[-1]
+      technical_col<-as.vector(getAnnoTable()[sample_names, technical_col])
+    }
+    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion,batch_factor,technical_col,input$DPTechnicalRepMethod)
   })
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
     myhead(data.frame(DPdataprecessInput()))

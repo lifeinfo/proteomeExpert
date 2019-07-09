@@ -1,4 +1,4 @@
-dataPreprocess<-function(d,replace_value,log_base,normaliztion){
+dataPreprocess<-function(d,replace_value,log_base,normaliztion,batch,DPTR,DPTechnicalRepMethod){
   rownames(d)<-d[,1]
   d<-d[,-1]
   d<-data.matrix(d)
@@ -24,6 +24,29 @@ dataPreprocess<-function(d,replace_value,log_base,normaliztion){
            maxmin = d<-maxmin(d)
     )
   }
+  ##combat
+  if(!is.null(batch)){
+    t<-d
+    t[is.na(t)]<-0
+    combat.t<-ComBat(data.matrix(t),batch=as.factor(batch),mod = NULL)
+    print(myhead(combat.t))
+    combat.t<-data.frame(combat.t)
+    combat.t[is.na(d)]<-NA
+    d<-combat.t
+    rm(t)
+    rm(combat.t)
+    
+  }
+  ###technical replica
+  if(!is.null(DPTR) & DPTechnicalRepMethod!="none"){
+    d.tech<-data.frame()
+    technical.group<-split(d,DPTR)
+    for (tg in technical.group) {
+      d.tech<-cbind(d.tech,colname(tg)[1]=get(DPTechnicalRepMethod)(tg))
+    }
+    d<-d.tech
+  }
+  
   return(d)
 }
 myqn<-function(d){

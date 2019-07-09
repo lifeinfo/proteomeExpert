@@ -1,4 +1,3 @@
-library(sva)
 #mycombat<-function(peptide,batchf,psep="\t",pheader=T,bheader=T,bsep="\t"){
 mycombat<-function(peptide,batch){
   

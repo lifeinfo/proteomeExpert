@@ -97,7 +97,7 @@ auto_preprocess <-
       #print(batchf)
       
       batch <- read.table(batchf, header = bheader, sep = bsep)
-      head(batch)
+      #head(batch)
       data.tech.rep <- mycombat(data.tech.rep, batch)
     }
     

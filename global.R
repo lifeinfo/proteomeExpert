@@ -22,6 +22,8 @@ library(preprocessCore)
 library(httr)
 library(jsonlite)
 library(xml2)
+##COMBAT
+library(sva)
 ###start featrue selection
 library(glmnet)
 library(doParallel)
