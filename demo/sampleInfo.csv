@@ -1,25 +1,25 @@
-SampleName,Sample_Id,SampleType,Source,TissueType,Gradient,Strategy
-A20181102sunr_PCZA_DIA_1_23,PCZA6,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA
-A20181102sunr_PCZA_DIA_1_23_repA,PCZA6,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA
-A20181102sunr_PCZA_DIA_2_11,PCZA158,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA
-A20181102sunr_PCZA_DIA_2_13,PCZA136,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_2_21,PCZA65,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_2_6,PCZA130,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_3_12,PCZA195,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_3_15,PCZA64,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_3_2,PCZA143,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_3_22,PCZA51,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_4_11,PCZA202,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_5_13,PCZA187,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_5_13_repA,PCZA187,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_5_9,PCZA154,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_6_16,PCZA62,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_6_22,PCZA197,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_6_22_repA,PCZA197,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_6_23,PCZA38,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_6_5,PCZA196,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_6_5_repA,PCZA196,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_7_21,PCZA185,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_7_28,PCZA7,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
-A20181102sunr_PCZA_DIA_7_3,PCZA199,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA
-A20181102sunr_PCZA_DIA_7_6,PCZA123,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA
+SampleName,Sample_Id,SampleType,Source,TissueType,Gradient,Strategy,Technical_Rep,Biological_Rep
+A20181102sunr_PCZA_DIA_1_23,PCZA6,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA,a,1
+A20181102sunr_PCZA_DIA_1_23_repA,PCZA6,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA,b,2
+A20181102sunr_PCZA_DIA_2_11,PCZA158,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate cancer,60min,DIA,a,3
+A20181102sunr_PCZA_DIA_2_13,PCZA136,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,b,2
+A20181102sunr_PCZA_DIA_2_21,PCZA65,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,a,5
+A20181102sunr_PCZA_DIA_2_6,PCZA130,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,e,6
+A20181102sunr_PCZA_DIA_3_12,PCZA195,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,e,7
+A20181102sunr_PCZA_DIA_3_15,PCZA64,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,c,8
+A20181102sunr_PCZA_DIA_3_2,PCZA143,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,c,3
+A20181102sunr_PCZA_DIA_3_22,PCZA51,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,c,10
+A20181102sunr_PCZA_DIA_4_11,PCZA202,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,a,11
+A20181102sunr_PCZA_DIA_5_13,PCZA187,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,b,12
+A20181102sunr_PCZA_DIA_5_13_repA,PCZA187,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,a,13
+A20181102sunr_PCZA_DIA_5_9,PCZA154,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,b,10
+A20181102sunr_PCZA_DIA_6_16,PCZA62,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,a,15
+A20181102sunr_PCZA_DIA_6_22,PCZA197,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,b,16
+A20181102sunr_PCZA_DIA_6_22_repA,PCZA197,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,e,17
+A20181102sunr_PCZA_DIA_6_23,PCZA38,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,f,18
+A20181102sunr_PCZA_DIA_6_5,PCZA196,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,f,10
+A20181102sunr_PCZA_DIA_6_5_repA,PCZA196,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,f,20
+A20181102sunr_PCZA_DIA_7_21,PCZA185,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,a,21
+A20181102sunr_PCZA_DIA_7_28,PCZA7,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,d,22
+A20181102sunr_PCZA_DIA_7_3,PCZA199,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Benign prostatic hyperplasia tissue,60min,DIA,d,23
+A20181102sunr_PCZA_DIA_7_6,PCZA123,Prostate tissue FFPE,The Second Affiliated Hospital of Zhejiang University School of Medicine (SAHZU),Prostate caner,60min,DIA,d,24

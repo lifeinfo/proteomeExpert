@@ -252,7 +252,7 @@ navbarPage(
         tags$h5("Technical Replicas:"),
         selectInput(
           'DPTR',
-          'Select technical replica name',
+          'Select technical replica column name',
           anno_name,
           multiple = FALSE,
           selectize = TRUE
@@ -263,20 +263,27 @@ navbarPage(
           choices = c(
             "None" = "none",
             "Mean" = 'mean',
-            "Median" = "median",
+            "Median" = "median"
           ),
           inline = TRUE,
           selected = NULL
         ),
         hr(),
         tags$h5("Biological Replicas :"),
+        selectInput(
+          'DPBR',
+          'Select biological replica column name',
+          anno_name,
+          multiple = FALSE,
+          selectize = TRUE
+        ),
         radioButtons(
           "DPBiologicalRep",
           "",
           choices = c(
             "None" = "none",
             "Mean" = 'mean',
-            "Median" = "median",
+            "Median" = "median"
           ),
           inline = TRUE,
           selected = NULL
@@ -742,15 +749,15 @@ navbarPage(
     tabPanel("Docs"),
     tabPanel("Q&A"),
     tabPanel("GitHub")
-  ),
-  #################################
-  # footer
-  #################################
-  footer = "",
-  div(
-    br(),
-    hr(),
-    includeCSS("www/css/footer.css"),
-    includeHTML("www/footer.html")
-  )
+   )
+  # #################################
+  # # footer
+  # #################################
+  # ,footer = "",
+  # div(
+  #   br(),
+  #   hr(),
+  #   includeCSS("www/css/footer.css"),
+  #   includeHTML("www/footer.html")
+  # )
         )

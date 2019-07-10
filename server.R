@@ -2,11 +2,15 @@ function(input, output,session) {
   observe({
     anno_name<-colnames(getAnnoTable())
     updateSelectInput(session, "DManno2",
-                      choices = anno_name,
+                      choices = c("None",anno_name),
                       selected = NULL
     )
     updateSelectInput(session, "DPTR",
-                      choices = anno_name,
+                      choices = c("None",anno_name),
+                      selected = NULL
+    )
+    updateSelectInput(session, "DPBR",
+                      choices = c("None",anno_name),
                       selected = NULL
     )
   })
@@ -89,16 +93,25 @@ function(input, output,session) {
   ###data preprocessing
   DPdataprecessInput<-eventReactive(input$DPDo,{
     batch_factor<-input$DManno2
-    if(!is.null(batch_factor)){
+    if(!is.null(batch_factor) & batch_factor!="None"){
       sample_names<-colnames(readProteinM())[-1]
       batch_factor<-as.vector(getAnnoTable()[sample_names, batch_factor])
     }
+    else batch_factor=NULL
     technical_col<-input$DPTR
-    if(!is.null(technical_col)){
+    if(!is.null(technical_col) & technical_col!="None"){
       sample_names<-colnames(readProteinM())[-1]
       technical_col<-as.vector(getAnnoTable()[sample_names, technical_col])
     }
-    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion,batch_factor,technical_col,input$DPTechnicalRepMethod)
+    else technical_col=NULL
+    biological_col<-input$DPBR
+    if(!is.null(biological_col) & biological_col!="None"){
+      sample_names<-colnames(readProteinM())[-1]
+      biological_col<-as.vector(getAnnoTable()[sample_names, biological_col])
+    }
+    else biological_col=NULL
+    
+    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion,batch_factor,technical_col,input$DPTechnicalRepMethod,biological_col,input$DPBiologicalRep)
   })
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
     myhead(data.frame(DPdataprecessInput()))
