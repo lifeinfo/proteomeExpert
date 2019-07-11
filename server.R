@@ -492,50 +492,64 @@ function(input, output,session) {
       )
     )
   })
-  #################################
-  # Heatmap
-  #################################
-  output$DMheatmaptable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
-  })
-  output$DMheatmapparameters <- renderPlotly({
-    data <- iris[, 1:4]
-    label <- iris[, 5]
-    drawheatmap(data, label)
+  
+  ####################################################
+  #data mining
+  observeEvent(input$dm, {
+    print("data mining")
+    print(dim(readProteinM()))
+    qc_label<-input$DManno
+    if(!is.null(qc_label) & qc_label!="None"){
+      sample_names<-colnames(readProteinM())[-1]
+      qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
+    }
+    print(qc_label)
+    #################################
+    # Heatmap
+    #################################
+    output$DMheatmaptable <- renderRHandsontable({
+      rhandsontable(head(iris, n = 20L))
+    })
+    output$DMheatmapparameters <- renderPlotly({
+      data <- iris[, 1:4]
+      label <- iris[, 5]
+      drawheatmap(data, label)
+    })
+    
+    #################################
+    # VocanoPlot
+    #################################
+    output$DMvocanotable <- renderRHandsontable({
+      rhandsontable(head(iris, n = 20L))
+    })
+    output$DMvocanoparameters <- renderPlot({
+      drawVolcano((iris[, 1:4]), c("a", "a", "b", "b"), "a", "b")
+    })
+    
+    #################################
+    # ViolinPlot
+    #################################
+    output$DMviolintable <- renderRHandsontable({
+      rhandsontable(head(iris[, c(1, 5)], n = 20L))
+    })
+    output$DMviolinparameters <- renderPlot({
+      data <- iris[, 4]
+      sample <- iris[, 5]
+      drawviolin(data, sample)
+    })
+    
+    #################################
+    # Radar
+    #################################
+    output$DMradartable <- renderRHandsontable({
+      rhandsontable(head(iris[, c(1, 2)], n = 20L))
+    })
+    output$DMradarparameters <- renderCanvasXpress({
+      data <- t(iris[, 3:4])
+      drawradar(data)
+    })
   })
 
-  #################################
-  # VocanoPlot
-  #################################
-  output$DMvocanotable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
-  })
-  output$DMvocanoparameters <- renderPlot({
-    drawVolcano((iris[, 1:4]), c("a", "a", "b", "b"), "a", "b")
-  })
-
-  #################################
-  # ViolinPlot
-  #################################
-  output$DMviolintable <- renderRHandsontable({
-    rhandsontable(head(iris[, c(1, 5)], n = 20L))
-  })
-  output$DMviolinparameters <- renderPlot({
-    data <- iris[, 4]
-    sample <- iris[, 5]
-    drawviolin(data, sample)
-  })
-
-  #################################
-  # Radar
-  #################################
-  output$DMradartable <- renderRHandsontable({
-    rhandsontable(head(iris[, c(1, 2)], n = 20L))
-  })
-  output$DMradarparameters <- renderCanvasXpress({
-    data <- t(iris[, 3:4])
-    drawradar(data)
-  })
 
   #################################
   # feature selection
