@@ -2,12 +2,16 @@ options(stringsAsFactors = F)
 mylm <- function(x, y) {
   mylr <- lm(y ~ x + 1)
   mylr.summary <- summary(mylr)
+  p=10
+  if(nrow(mylr.summary$coefficients)>1)
+    p = mylr.summary$coefficients[2, "Pr(>|t|)"]
+  
   return(
     list(
       mylr = mylr,
       rSqured = mylr.summary$r.squared,
       fstatistic = mylr.summary$fstatistic[1],
-      p = mylr.summary$coefficients[2, "Pr(>|t|)"]
+      p=p
     )
   )
 }

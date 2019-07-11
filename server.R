@@ -1,3 +1,4 @@
+###label update
 function(input, output,session) {
   observe({
     anno_name<-colnames(getAnnoTable())
@@ -13,6 +14,11 @@ function(input, output,session) {
                       choices = c("None",anno_name),
                       selected = NULL
     )
+    updateSelectInput(session, "QCLabel",
+                      choices = c("None",anno_name),
+                      selected = NULL
+    )
+    
   })
   #################################
   # batch Design
@@ -169,14 +175,25 @@ function(input, output,session) {
   #################################
 
   QCdatasetInput <- eventReactive(input$QC, {
-    print("doing")
+    print("missing value explore")
     if (class(readProteinM()) != "data.frame")
       return(NULL)
     else
       readProteinM()
-
+    
   }, ignoreNULL = FALSE)
 
+  observeEvent(input$QC, {
+  print("QC other")
+    print(dim(readProteinM()))
+    qc_label<-input$QCLabel
+    if(!is.null(qc_label) & qc_label!="None"){
+      sample_names<-colnames(readProteinM())[-1]
+      qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
+    }
+    print(qc_label)
+  })
+  
   #################################
   # missing value explore
   #################################

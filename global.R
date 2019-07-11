@@ -82,8 +82,10 @@ source("function.R")
 #################################
 # global variable
 #################################
-protM_name<-c("original","featureSelected")
-anno_name<-"Please annotation first"
+protM_name<-c("uploadedProtMatrix","featureSelected")
+#protM_name<-c("uploadedProtMatrix","featureSelected","preprocessedOriginal","preprocessedFeatureSeleceted")
+
+anno_name<-"Please upload your annotation file in data console first"
 
 #################################
 # ML

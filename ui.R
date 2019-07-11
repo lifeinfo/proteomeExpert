@@ -394,7 +394,21 @@ navbarPage(
     "QC",
     "",
     sidebarPanel(
+      tags$h3("Select matrix and label you want to process:"),
+      
+      selectInput('QCprotM', 'select matrix', protM_name, selectize = FALSE),
+      
+      selectInput(
+        'QCLabel',
+        "Select your intresting column name, is't usally tissue/disease type.",
+          anno_name,
+          multiple = FALSE,
+          selectize = TRUE
+        ),
+      
+      hr(),
       tags$h3("Select modules you want to process:"),
+      
       hr(),
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
       checkboxInput("reproducibility", "Reproducibility", TRUE),
@@ -501,10 +515,11 @@ navbarPage(
     "Data Mining",
     "",
     sidebarPanel(
-      h3("Advanced data analysis."),
+      h3("Data section:"),
+      h5("Please note: protein matrix and annotation file shoule be upload in data console first."),
       uiOutput("DMprot_anno_Ui"),
       hr(),
-      tags$h5("Click to process:"),
+      tags$h5("Module section:"),
       checkboxInput("dmheatmap", "HeatMap", TRUE),
       checkboxInput("test", "t-test", TRUE),
       checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
