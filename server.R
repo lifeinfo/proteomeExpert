@@ -119,10 +119,24 @@ function(input, output,session) {
     
     dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion,batch_factor,technical_col,input$DPTechnicalRepMethod,biological_col,input$DPBiologicalRep)
   })
+  ####download data
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
     myhead(data.frame(DPdataprecessInput()))
   }))
-
+  output$downloadpreprocessedData <- downloadHandler(
+    filename = function() {
+      paste("PreProcessed", Sys.Date(), ".txt", sep = "")
+    },
+    content = function(file) {
+      write.table(
+        DPdataprecessInput(),
+        file,
+        row.names = T,
+        quote = F,
+        sep = "\t"
+      )
+    }
+  )
   ###pep2prot
   DdatasetInput <- eventReactive(input$process, {
     if (is.null(input$PeptideMatrix))
@@ -610,13 +624,28 @@ function(input, output,session) {
       paste(feature_sel_prot()$features, collapse = ",")
     )
   })
+
   output$fs_parameter <- renderPlot({
     plot(feature_sel_prot()$mod)
   })
   output$featureSelected <- DT::renderDataTable(DT::datatable({
     data.frame(feature_sel_prot()$features)
   }))
-
+  #####download
+  output$downloadfeatureSelData <- downloadHandler(
+    filename = function() {
+      paste("prot", Sys.Date(), ".txt", sep = "")
+    },
+    content = function(file) {
+      write.table(
+        DPdataprecessInput(),
+        file,
+        row.names = T,
+        quote = F,
+        sep = "\t"
+      )
+    }
+  )
 
   #################################
   # ANNO

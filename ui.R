@@ -294,9 +294,8 @@ navbarPage(
       mainPanel(
         tabPanel(
           "Methods",
-          DTOutput("preprocessedprotM")
-          
-
+          DTOutput("preprocessedprotM"),
+          downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
         )
       )
     ),
@@ -613,7 +612,9 @@ navbarPage(
           h5("Summary:"),
           verbatimTextOutput("fs_summary"),
           plotOutput("fs_parameter"),
-          DTOutput("featureSelected")
+          DTOutput("featureSelected"),
+          downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
+          
         ),
         #################################
         # Machine Learning
