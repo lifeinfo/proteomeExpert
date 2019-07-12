@@ -206,6 +206,110 @@ function(input, output,session) {
       qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
     }
     print(qc_label)
+    
+    #################################
+    # Pearson Correlation
+    #################################
+    
+    
+    output$Qpcctable <- renderRHandsontable({
+      if (input$reproducibility){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
+      
+    })
+    output$Qpccplot <- renderPlot({
+      if (input$reproducibility){
+        if(!is.null(readProteinM()))
+        {
+          data <- t(readProteinM())
+          data[is.na(data)] <- 0
+          drawcorrplot(data)
+        }
+      }
+      
+    })
+    #output$Qsmoothplot <- renderPlot({
+    #  data1 <- iris[, 1]
+    #  data2 <- iris[, 1]
+    #  drawsmooth(data1, data2)
+    #})
+    
+    #################################
+    # PCA
+    #################################
+    output$Qpcatable <- renderRHandsontable({
+      if (input$qcPca){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
+    })
+    output$Qpcaplot <- renderPlotly({
+      if (input$qcPca){
+        if(!is.null(readProteinM()))
+        {
+          data <- t(readProteinM())
+          data[is.na(data)] <- 0
+          label <- qc_label
+          p <- drawPCA(data, label)
+          ggplotly(p) %>% config(displaylogo = F)
+        }
+      }
+    })
+    #################################
+    # T-sne
+    #################################
+    output$Qtsnetable <- renderRHandsontable({
+      if (input$qctsne){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
+    })
+    output$Qtsneplot <- renderPlotly({
+      if (input$qctsne){
+        if(!is.null(readProteinM()))
+        {
+          data <- t(readProteinM())
+          data[is.na(data)] <- 0
+          label <- qc_label
+          p <- drawTSNE(data, label)
+          ggplotly(p) %>% config(displaylogo = F)
+        }
+      }
+      
+    })
+    
+    #################################
+    # umap
+    #################################
+    output$Qumaptable <- renderRHandsontable({
+      if (input$qcUmap){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
+    })
+    output$Qumapplot <- renderPlotly({
+      if (input$qcUmap){
+        if(!is.null(readProteinM()))
+        {
+          data <- t(readProteinM())
+          data[is.na(data)] <- 0
+          label <- qc_label
+          p <- drawUMAP(data, label)
+          ggplotly(p) %>% config(displaylogo = F)
+        }
+      }
+      
+    })
   })
   
   #################################
@@ -253,73 +357,10 @@ function(input, output,session) {
       dev.off()
     }
   )
-  output$densityPlot <- renderPlot({
-    data <- iris[, 1]
-    #drawdensity(as.data.frame(data))
-  })
-
-  #################################
-  # Pearson Correlation
-  #################################
-
-  output$Qpcctable <- renderRHandsontable({
-    if(!is.null(readProteinM()))
-    {
-      rhandsontable(head(readProteinM(), n = 20L))
-    }
-  })
-  output$Qpccplot <- renderPlot({
-    if(!is.null(readProteinM()))
-    {
-      data <- t(readProteinM())
-      drawcorrplot(data)
-    }
-
-  })
-  output$Qsmoothplot <- renderPlot({
-    data1 <- iris[, 1]
-    data2 <- iris[, 1]
-    drawsmooth(data1, data2)
-  })
-
-  #################################
-  # PCA
-  #################################
-  output$Qpcatable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
-  })
-  output$Qpcaplot <- renderPlotly({
-    data <- t(iris[, 1:4])
-    label <- iris[, 5]
-    p <- drawPCA(data, label)
-    ggplotly(p) %>% config(displaylogo = F)
-  })
-  #################################
-  # T-sne
-  #################################
-  output$Qtsnetable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
-  })
-  output$Qtsneplot <- renderPlotly({
-    data <- t(iris[, 1:4])
-    label <- iris[, 5]
-    p <- drawTSNE(data, label)
-    ggplotly(p) %>% config(displaylogo = F)
-  })
-
-  #################################
-  # umap
-  #################################
-  output$Qumaptable <- renderRHandsontable({
-    rhandsontable(head(iris, n = 20L))
-  })
-  output$Qumapplot <- renderPlotly({
-    data <- t(iris[, 1:4])
-    label <- iris[, 5]
-    p <- drawUMAP(data, label)
-    ggplotly(p) %>% config(displaylogo = F)
-  })
-
+  #output$densityPlot <- renderPlot({
+  #  data <- iris[, 1]
+  #  drawdensity(as.data.frame(data))
+  #})
 
   #################################
   # data console
@@ -522,45 +563,90 @@ function(input, output,session) {
     # Heatmap
     #################################
     output$DMheatmaptable <- renderRHandsontable({
-      rhandsontable(head(iris, n = 20L))
+      if (input$dmheatmap){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
     })
     output$DMheatmapparameters <- renderPlotly({
-      data <- iris[, 1:4]
-      label <- iris[, 5]
-      drawheatmap(data, label)
+      if (input$dmheatmap){
+        if(!is.null(readProteinM()))
+        {
+          data <- readProteinM()
+          data[is.na(data)] <- 0
+          label <- qc_label
+          drawheatmap(data, label)
+        }
+      }
+      
     })
     
     #################################
     # VocanoPlot
     #################################
     output$DMvocanotable <- renderRHandsontable({
-      rhandsontable(head(iris, n = 20L))
+      if (input$vocanoPlot){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
     })
     output$DMvocanoparameters <- renderPlot({
-      drawVolcano((iris[, 1:4]), c("a", "a", "b", "b"), "a", "b")
+      if (input$vocanoPlot){
+        if(!is.null(readProteinM()))
+        {
+          pair <- unique(qc_label, fromLast = FALSE)
+          drawVolcano(readProteinM(), qc_label, pair[1], pair[2])
+        }
+      }
     })
     
     #################################
     # ViolinPlot
     #################################
     output$DMviolintable <- renderRHandsontable({
-      rhandsontable(head(iris[, c(1, 5)], n = 20L))
+      if (input$ViolinPlot){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
     })
     output$DMviolinparameters <- renderPlot({
-      data <- iris[, 4]
-      sample <- iris[, 5]
-      drawviolin(data, sample)
+      if (input$ViolinPlot){
+        if(!is.null(readProteinM()))
+        {
+          data <- readProteinM()
+          sample <- qc_label
+          drawviolin(data, sample)
+        }
+      }
+      
     })
     
     #################################
     # Radar
     #################################
     output$DMradartable <- renderRHandsontable({
-      rhandsontable(head(iris[, c(1, 2)], n = 20L))
+      if (input$radarmap){
+        if(!is.null(readProteinM()))
+        {
+          rhandsontable(head(readProteinM(), n = 20L))
+        }
+      }
     })
     output$DMradarparameters <- renderCanvasXpress({
-      data <- t(iris[, 3:4])
-      drawradar(data)
+      if (input$radarmap){
+        if(!is.null(readProteinM()))
+        {
+          data <- t(readProteinM())
+          drawradar(data)
+        }
+      }
+      
     })
   })
 
@@ -730,7 +816,7 @@ function(input, output,session) {
                  output$DMmlText <- renderPrint({
                    print(input$mlframework)
                    print(input$mlmethod)
-                   print(input$mlptype)
+                   print(unique(qc_label, fromLast = FALSE))
                  })
                  #################################
                  # R Packages
@@ -741,66 +827,74 @@ function(input, output,session) {
                    # Decision Tree
                    #################################
                    if (input$mlmethod == "Decision Tree") {
-                     dtree <- rpart(Species ~ ., data = iris, method = "class")
-                     tree <-
-                       prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
-                     output$DMmlPlot <- renderPlot({
-                       rpart.plot(
-                         tree,
-                         branch = 0,
-                         type = 0,
-                         fallen.leaves = T,
-                         cex = 1,
-                         sub = "Demo"
-                       )
-                     })
-                     output$DMmloutputText <- renderPrint({
-                       printcp(tree)
-                     })
-                     output$DMmltables <- renderRHandsontable({
-                       rhandsontable(head(iris[1:10,], n = 20L))
-                     })
+                     if(!is.null(readProteinM()))
+                     {
+                       data <- readProteinM()
+                       data$Label <- qc_label
+                       dtree <- rpart(Label ~ ., data = data, method = "class")
+                       tree <-
+                         prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
+                       output$DMmlPlot <- renderPlot({
+                         rpart.plot(
+                           tree,
+                           branch = 0,
+                           type = 0,
+                           fallen.leaves = T,
+                           cex = 1,
+                           sub = "Demo"
+                          )
+                       })
+                       output$DMmloutputText <- renderPrint({
+                         printcp(tree)
+                       })
+                       output$DMmltables <- renderRHandsontable({
+                         rhandsontable(head(data, n = 20L))
+                       })
+                     }
                    } else if (input$mlmethod == "Random Forest")
                    {
                      #################################
                      # Random Forest
                      #################################
-                     model.forest <-
-                       randomForest(Species ~ ., data = iris)
-                     pre.forest <- predict(model.forest, iris)
-
-                     #obs_p_ran = data.frame(prob=pre.forest, obs=iris$Species)
-                     ran_roc <-
-                       roc(iris$Species, as.numeric(pre.forest))
-
-                     output$DMmlPlot <- renderPlot({
-                       layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
-                       varImpPlot(model.forest, main = "variable importance")
-                       plot(model.forest)
-                       plot(
-                         ran_roc,
-                         print.auc = TRUE,
-                         auc.polygon = TRUE,
-                         grid = c(0.1, 0.2),
-                         grid.col = c("green", "red"),
-                         max.auc.polygon = TRUE,
-                         auc.polygon.col = "skyblue",
-                         print.thres = TRUE,
-                         main = 'RF ROC,mtry=3,ntree=500'
-                       )
-                     })
-
-                     output$DMmloutputText <- renderPrint({
-                       model.forest$importance
-                       #
-                       table(iris$Species, pre.forest, dnn = c("Obs", "Pre"))
-
-                     })
-
-                     output$DMmltables <- renderRHandsontable({
-                       rhandsontable(head(iris[1:10,], n = 20L))
-                     })
-
+                     if(!is.null(readProteinM()))
+                     {
+                       data <- readProteinM()
+                       data$Label <- qc_label
+                       model.forest <-
+                         randomForest(Label ~ ., data = data)
+                       pre.forest <- predict(model.forest, data)
+  
+                       ran_roc <-
+                         roc(data$Label, as.numeric(pre.forest))
+  
+                       output$DMmlPlot <- renderPlot({
+                         layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
+                         varImpPlot(model.forest, main = "variable importance")
+                         plot(model.forest)
+                         plot(
+                           ran_roc,
+                           print.auc = TRUE,
+                           auc.polygon = TRUE,
+                           grid = c(0.1, 0.2),
+                           grid.col = c("green", "red"),
+                           max.auc.polygon = TRUE,
+                           auc.polygon.col = "skyblue",
+                           print.thres = TRUE,
+                           main = 'RF ROC,mtry=3,ntree=500'
+                         )
+                       })
+  
+                       output$DMmloutputText <- renderPrint({
+                         model.forest$importance
+                         #
+                         table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
+  
+                       })
+  
+                       output$DMmltables <- renderRHandsontable({
+                         rhandsontable(head(data, n = 20L))
+                       })
+                     }
                    } else if (input$mlmethod == "k-NearestNeighbor")
                    {
                      cat("k-NearestNeighbor comming soon!")

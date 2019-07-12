@@ -412,6 +412,7 @@ navbarPage(
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
       checkboxInput("reproducibility", "Reproducibility", TRUE),
       checkboxInput("qcPca", "PCA", TRUE),
+      checkboxInput("qctsne", "t-SNE", TRUE),
       checkboxInput("qcUmap", "UMAP", FALSE),
 
       hr(),
@@ -523,6 +524,7 @@ navbarPage(
       checkboxInput("test", "t-test", TRUE),
       checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
       checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
+      checkboxInput("radarmap", "RadarMap", TRUE),
       actionButton("dm", "Submit", class = "btn-primary")
     ),
 
@@ -639,11 +641,6 @@ navbarPage(
                 "Support Vector Machine",
                 "Artificial Neural Network"
               )
-            ),
-            selectInput(
-              "mlptype",
-              "Select the column name that you want to classify:",
-              choices = c("Species", "PType", "Age", "Loc")
             ),
             HTML(
               '<p>
