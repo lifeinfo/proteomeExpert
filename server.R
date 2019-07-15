@@ -201,6 +201,11 @@ function(input, output,session) {
   print("QC other")
     print(dim(readProteinM()))
     qc_label<-input$QCLabel
+    data <- readProteinM()
+    data <- t(data.matrix(data))
+    data[is.na(data)] <- 0
+    print(head(data))
+    
     if(!is.null(qc_label) & qc_label!="None"){
       sample_names<-colnames(readProteinM())[-1]
       qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
@@ -214,19 +219,17 @@ function(input, output,session) {
     
     output$Qpcctable <- renderRHandsontable({
       if (input$reproducibility){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          rhandsontable(head(readProteinM(), n = 20L))
+          rhandsontable(head(data, n = 20L))
         }
       }
       
     })
     output$Qpccplot <- renderPlot({
       if (input$reproducibility){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          data <- t(readProteinM())
-          data[is.na(data)] <- 0
           drawcorrplot(data)
         }
       }
@@ -243,20 +246,17 @@ function(input, output,session) {
     #################################
     output$Qpcatable <- renderRHandsontable({
       if (input$qcPca){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          rhandsontable(head(readProteinM(), n = 20L))
+          rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qpcaplot <- renderPlotly({
       if (input$qcPca){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          data <- t(readProteinM())
-          data[is.na(data)] <- 0
-          label <- qc_label
-          p <- drawPCA(data, label)
+          p <- drawPCA(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
         }
       }
@@ -266,20 +266,17 @@ function(input, output,session) {
     #################################
     output$Qtsnetable <- renderRHandsontable({
       if (input$qctsne){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          rhandsontable(head(readProteinM(), n = 20L))
+          rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qtsneplot <- renderPlotly({
       if (input$qctsne){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          data <- t(readProteinM())
-          data[is.na(data)] <- 0
-          label <- qc_label
-          p <- drawTSNE(data, label)
+          p <- drawTSNE(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
         }
       }
@@ -291,20 +288,17 @@ function(input, output,session) {
     #################################
     output$Qumaptable <- renderRHandsontable({
       if (input$qcUmap){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          rhandsontable(head(readProteinM(), n = 20L))
+          rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qumapplot <- renderPlotly({
       if (input$qcUmap){
-        if(!is.null(readProteinM()))
+        if(!is.null(data))
         {
-          data <- t(readProteinM())
-          data[is.na(data)] <- 0
-          label <- qc_label
-          p <- drawUMAP(data, label)
+          p <- drawUMAP(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
         }
       }
@@ -574,7 +568,7 @@ function(input, output,session) {
       if (input$dmheatmap){
         if(!is.null(readProteinM()))
         {
-          data <- readProteinM()
+          data <- as.matrix(readProteinM())
           data[is.na(data)] <- 0
           label <- qc_label
           drawheatmap(data, label)
@@ -599,7 +593,7 @@ function(input, output,session) {
         if(!is.null(readProteinM()))
         {
           pair <- unique(qc_label, fromLast = FALSE)
-          drawVolcano(readProteinM(), qc_label, pair[1], pair[2])
+          drawVolcano(as.matrix(readProteinM()), qc_label, pair[1], pair[2])
         }
       }
     })
@@ -619,7 +613,7 @@ function(input, output,session) {
       if (input$ViolinPlot){
         if(!is.null(readProteinM()))
         {
-          data <- readProteinM()
+          data <- as.matrix(readProteinM())
           sample <- qc_label
           drawviolin(data, sample)
         }
@@ -642,7 +636,7 @@ function(input, output,session) {
       if (input$radarmap){
         if(!is.null(readProteinM()))
         {
-          data <- t(readProteinM())
+          data <- as.matrix(t(readProteinM()))
           drawradar(data)
         }
       }
@@ -829,7 +823,7 @@ function(input, output,session) {
                    if (input$mlmethod == "Decision Tree") {
                      if(!is.null(readProteinM()))
                      {
-                       data <- readProteinM()
+                       data <- as.matrix(readProteinM())
                        data$Label <- qc_label
                        dtree <- rpart(Label ~ ., data = data, method = "class")
                        tree <-
@@ -858,7 +852,7 @@ function(input, output,session) {
                      #################################
                      if(!is.null(readProteinM()))
                      {
-                       data <- readProteinM()
+                       data <- as.matrix(readProteinM())
                        data$Label <- qc_label
                        model.forest <-
                          randomForest(Label ~ ., data = data)

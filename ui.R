@@ -685,8 +685,8 @@ navbarPage(
             verbatimTextOutput("DMmloutputText"),
             rHandsontableOutput("DMmltables")
           )
-          )
-          )
+         )
+        )
       )
     ),
   #################################
