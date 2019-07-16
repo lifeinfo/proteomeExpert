@@ -201,10 +201,21 @@ function(input, output,session) {
   print("QC other")
     print(dim(readProteinM()))
     qc_label<-input$QCLabel
+    
     data <- readProteinM()
-    data <- t(data.matrix(data))
+    col_name <- colnames(data)
+    row_name <- as.matrix(data['Protein_ID'])
+    row_name <- as.vector(row_name[,1])
+    print(col_name)
+    print(row_name)
+    data <- data.matrix(data)
+    data <- data[,-1]
+    colnames(data) <- col_name[2:length(col_name)]
+    row.names(data) <- row_name
+    
     data[is.na(data)] <- 0
     print(head(data))
+    
     
     if(!is.null(qc_label) & qc_label!="None"){
       sample_names<-colnames(readProteinM())[-1]
