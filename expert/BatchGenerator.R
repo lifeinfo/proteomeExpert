@@ -13,11 +13,11 @@ continue2discrete<-function(a){
 }
 
 batchGenerator<-function(fpath,headers,numeric_headers,weights,batchSize){
-print(fpath)
-print(headers)
-print(numeric_headers)
-print(weights)
-print(batchSize)
+# print(fpath)
+# print(headers)
+# print(numeric_headers)
+# print(weights)
+# print(batchSize)
 weights<-normWeights(weights)
 samples <- read.csv(fpath,stringsAsFactors=F,header = T,encoding = "UTF-8",check.names=F)
 steps = nrow(samples)*100

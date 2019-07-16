@@ -39,7 +39,6 @@ function(input, output,session) {
     )
     })
   batch_design_result <- eventReactive(input$BDdo, {
-    print(input$BDweight)
     col_weights<-strsplit(input$BDweight,",")
     col_weights<-as.numeric(unlist(col_weights))
     result<-batchGenerator(input$BDfile$datapath,input$BDcol,input$BDnumeric_headers,col_weights,input$BDsize)
