@@ -18,17 +18,53 @@ function(input, output,session) {
                       choices = c("None",anno_name),
                       selected = NULL
     )
-    
+
   })
   #################################
   # batch Design
   #################################
-  output$txtout <- renderText({
-    paste(input$n, input$m, sep = ", ")
-  })
-  output$table <- renderTable({
-    head(iris, 4)
-  })
+  observe({input$BDfile
+    input$BDsep
+    if(!is.null(input$BDfile)){
+         batchf<-read.table(input$BDfile$datapath,stringsAsFactors=F,sep = input$BDsep,header = T,encoding = "UTF-8",check.names=F,nrow=1)
+         BDcol_name<-colnames(batchf)
+    }
+    updateSelectInput(session, "BDcol",
+                      choices = c("None",BDcol_name),
+                      selected = NULL
+    )
+    updateSelectInput(session, "BDnumeric_headers",
+                      choices = c("None",BDcol_name),
+                      selected = NULL
+    )
+    })
+  batch_design_result <- eventReactive(input$BDdo, {
+    print(input$BDweight)
+    col_weights<-strsplit(input$BDweight,",")
+    col_weights<-as.numeric(unlist(col_weights))
+    result<-batchGenerator(input$BDfile$datapath,input$BDcol,input$BDnumeric_headers,col_weights,input$BDsize)
+  },
+  ignoreNULL = T,
+  ignoreInit = T)
+  
+  ####show and download data
+  output$BDresult <- DT::renderDataTable(DT::datatable({
+    data.frame(batch_design_result())
+  }))
+  output$downloadBDresult <- downloadHandler(
+    filename = function() {
+      paste("BatchDesignResult", Sys.Date(), ".txt", sep = "")
+    },
+    content = function(file) {
+      write.table(
+        batch_design_result(),
+        file,
+        row.names = T,
+        quote = F,
+        sep = "\t"
+      )
+    }
+  )
   #################################
   # Power Analysis
   #################################

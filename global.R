@@ -4,6 +4,8 @@ options(stringsAsFactors = F)
 set.seed(1)
 #defalut value for na
 NA_VALUE<-0
+####new added library
+library(sqldf)
 
 #################################
 # loading model
@@ -79,6 +81,7 @@ source("expert/heatmap.R")
 source("expert/violin.R")
 source("expert/missingValueExplore_zts.R")
 source("function.R")
+source("expert/BatchGenerator.R")
 #################################
 # global variable
 #################################
@@ -86,7 +89,8 @@ protM_name<-c("uploadedProtMatrix","featureSelected")
 #protM_name<-c("uploadedProtMatrix","featureSelected","preprocessedOriginal","preprocessedFeatureSeleceted")
 
 anno_name<-"Please upload your annotation file in data console first"
-
+#batch design use
+BDcol_name<-"Please upload your file first"
 #################################
 # ML
 #################################

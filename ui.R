@@ -69,20 +69,51 @@ navbarPage(
       sidebarPanel(
         tags$h4("Batch Design"),
         hr(),
-        fileInput("file", "File input:"),
-        sliderInput("n", "Technical replica number for each sample:", 1, 10, 2),
-        sliderInput("m", "Number of samples in each batch:", 1, 100, 15),
-
+        fileInput(
+          "BDfile",
+          "Select your file (required):",
+          multiple = TRUE,
+          accept = c("text/csv",
+                     "text/comma-separated-values,text/plain",
+                     ".csv"),
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        radioButtons(
+          "BDsep",
+          "Separator for your file",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        hr(),
+        selectInput(
+          'BDcol',
+          'Select columns for balanced batch design:',
+          BDcol_name,
+          multiple = T,
+          selectize = TRUE
+        ),
+        textInput("BDweight","Weights for columns (using ',' to separate mutilplue columns.)"),
+        numericInput("BDsize", "Number of samples in each batch:", 15),
+        selectInput(
+          'BDnumeric_headers',
+          'Select numeric columns for balanced batch design:',
+          BDcol_name,
+          multiple = T,
+          selectize = TRUE
+        ),
         tags$h5("Click to design:"),
-        actionButton("design", "Submit", class = "btn-primary")
+        actionButton("BDdo", "Submit", class = "btn-primary")
       ),
       mainPanel(tabsetPanel(
         tabPanel(
           "Result",
-          h4("Summary"),
-          tableOutput("table"),
-          h4("Your input info."),
-          verbatimTextOutput("txtout")
+          DTOutput("BDresult"),
+          downloadButton("downloadBDresult", "Download", class = "btn-primary")
         )
       ))
     )
