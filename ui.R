@@ -484,8 +484,9 @@ navbarPage(
             "<p>None</p>"
           ),
           hr(),
-          column(6, plotOutput("Qpccplot")),
-          column(6, plotOutput("Qsmoothplot")),
+          plotOutput("Qpccplot", height = "800px"),
+          #column(6, plotOutput("Qpccplot")),
+          #column(6, plotOutput("Qsmoothplot")),
           hr(),
           h4("Data:"),
           column(12, rHandsontableOutput("Qpcctable")),
