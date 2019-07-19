@@ -6,7 +6,13 @@ set.seed(1)
 NA_VALUE<-0
 ####new added library
 library(sqldf)
-
+# Load libraries for genetic algorithem
+library(caret)
+library(randomForest)
+library(funModeling)
+library(tidyverse)
+library(GA)
+source("expert/lib_ga.R")
 #################################
 # loading model
 #################################

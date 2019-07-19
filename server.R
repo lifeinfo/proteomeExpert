@@ -697,7 +697,7 @@ function(input, output,session) {
   feature_sel_prot <- eventReactive(input$feature_do,
                                     {
                                       if (!is.null(isolate(input$DMprotM))) {
-                                        if (isolate(input$DMprotM) == "original") {
+                                        if (isolate(input$DMprotM) == "uploadedProtMatrix") {
                                           protM <- isolate(readProteinM())
                                         }
                                         #if(length(isolate(input$DManno))==1){
