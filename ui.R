@@ -129,16 +129,16 @@ navbarPage(
     sidebarPanel(
       tags$h4("Upload Data:"),
       hr(),
-      fileInput(
-        "peptide_matrix",
-        "Select your peptide file (optional):",
-        multiple = F,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
-      ),
-      hr(),
+      # fileInput(
+      #   "peptide_matrix",
+      #   "Select your peptide file (optional):",
+      #   multiple = F,
+      #   accept = c("text/csv",
+      #              "text/comma-separated-values,text/plain",
+      #              ".csv"),
+      #   placeholder = "*.csv or *.TXT required!"
+      # ),
+      # hr(),
 
       fileInput(
         "protein_matrix",
@@ -148,6 +148,17 @@ navbarPage(
                    "text/comma-separated-values,text/plain",
                    ".csv"),
         placeholder = "*.csv or *.TXT required!"
+      ),
+      radioButtons(
+        "DCprotmSep",
+        "Separator for your file",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
       ),
       hr(),
 
@@ -160,6 +171,17 @@ navbarPage(
                    ".csv"),
         placeholder = "*.csv or *.TXT required!"
       ),
+      radioButtons(
+        "DCsampleSep",
+        "Separator for your file",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = ","
+      ),
       #actionButton("sampleInfo", "annotation", class = "btn-primary"),
       hr(),
 
@@ -171,6 +193,17 @@ navbarPage(
                    "text/comma-separated-values,text/plain",
                    ".csv"),
         placeholder = "*.csv or *.TXT required!"
+      ),
+      radioButtons(
+        "DCindividualSep",
+        "Separator for your file",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = ","
       )
       #actionButton("individualInfo", "annotation", class = "btn-primary")
 

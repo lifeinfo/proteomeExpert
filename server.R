@@ -357,7 +357,7 @@ function(input, output,session) {
   #################################
 
   output$missingPlot <- renderPlot({
-    if (input$MissingValueExplore_check) {
+    if (input$MissingValueExplore_check & input$QC) {
       if (class(QCdatasetInput()) == "data.frame") {
         output$QMparameters <- renderText({
           "Results are showed below:"
@@ -413,7 +413,7 @@ function(input, output,session) {
         read.table(
           input$protein_matrix$datapath,
           header = T,
-          sep = "\t",
+          sep = input$DCprotmSep,
           check.names = F,
           encoding = "UTF-8",
           stringsAsFactors = F
@@ -429,7 +429,7 @@ function(input, output,session) {
         read.csv(
           input$sample_info$datapath,
           header = T,
-          sep = ",",
+          sep = input$DCsampleSep,
           nrow = 1,
           check.names = F,
           encoding = "UTF-8"
@@ -442,27 +442,27 @@ function(input, output,session) {
           choices = sample_header,
           selected = sample_header[1]
         ),
-        selectInput(
-          "sample_info_type",
-          "select sample type",
-          choices = sample_header,
-          selected = sample_header[2]
-        ),
-        selectInput(
-          "sample_info_batch_id",
-          "select batch id",
-          choices = c(sample_header, "select..."),
-          selected = "select..."
-        ),
-        selectInput(
-          "sample_info_technicalRep_id",
-          "select technical replica id",
-          choices = c(sample_header, "select..."),
-          selected = "select..."
-        ),
+        # selectInput(
+        #   "sample_info_type",
+        #   "select sample type",
+        #   choices = sample_header,
+        #   selected = sample_header[2]
+        # ),
+        # selectInput(
+        #   "sample_info_batch_id",
+        #   "select batch id",
+        #   choices = c(sample_header, "select..."),
+        #   selected = "select..."
+        # ),
+        # selectInput(
+        #   "sample_info_technicalRep_id",
+        #   "select technical replica id",
+        #   choices = c(sample_header, "select..."),
+        #   selected = "select..."
+        # ),
         selectInput(
           "sample_info_individual_id",
-          "select individual id",
+          "select individual id/name",
           choices = c(sample_header, "select..."),
           selected = "select..."
         ),
@@ -481,7 +481,7 @@ function(input, output,session) {
         read.csv(
           input$individual_info$datapath,
           header = T,
-          sep = ",",
+          sep = input$DCindividualSep,
           nrow = 1,
           check.names = F,
           encoding = "UTF-8"
@@ -494,12 +494,12 @@ function(input, output,session) {
           choices = individual_header,
           selected = individual_header[1]
         ),
-        selectInput(
-          "individual_info_type",
-          "select individual type",
-          choices = individual_header,
-          selected = individual_header[2]
-        ),
+        # selectInput(
+        #   "individual_info_type",
+        #   "select individual type",
+        #   choices = individual_header,
+        #   selected = individual_header[2]
+        # ),
 
         actionButton("individual_info_annotation", "Submit", class = "btn-primary")
       )
@@ -509,19 +509,21 @@ function(input, output,session) {
     sampleInfo <-
       read.csv(input$sample_info$datapath,
                header = T,
-               sep = ",")
+               sep = input$DCsampleSep,
+               check.names = F,
+               encoding = "UTF-8")
     sample_header <- colnames(sampleInfo)
     colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <-
       "sampleId"
-    colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
-      "sampleType"
+    # colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
+    #   "sampleType"
 
-    if (input$sample_info_batch_id != 'select...')
-      colnames(sampleInfo)[which(sample_header == input$sample_info_batch_id)] <-
-      "batchId"
-    if (input$sample_info_technicalRep_id != 'select...')
-      colnames(sampleInfo)[which(sample_header == input$sample_info_technicalRep_id)] <-
-      "technicalId"
+    # if (input$sample_info_batch_id != 'select...')
+    #   colnames(sampleInfo)[which(sample_header == input$sample_info_batch_id)] <-
+    #   "batchId"
+    # if (input$sample_info_technicalRep_id != 'select...')
+    #   colnames(sampleInfo)[which(sample_header == input$sample_info_technicalRep_id)] <-
+    #   "technicalId"
     if (input$sample_info_individual_id != 'select...')
       colnames(sampleInfo)[which(sample_header == input$sample_info_individual_id)] <-
       "individualId"
@@ -543,12 +545,14 @@ function(input, output,session) {
       individualInfo <-
         read.csv(input$individual_info$datapath,
                  header = T,
-                 sep = ",")
+                 sep = input$DCindividualSep,
+                 check.names = F,
+                 encoding = "UTF-8")
       individual_header <- colnames(individualInfo)
       colnames(individualInfo)[which(individual_header == input$individual_info_id)] <-
         "individualId"
-      colnames(individualInfo)[which(individual_header == input$individual_info_type)] <-
-        "individualType"
+      # colnames(individualInfo)[which(individual_header == input$individual_info_type)] <-
+      #   "individualType"
 
       individualInfo
     }, ignoreNULL = T)
