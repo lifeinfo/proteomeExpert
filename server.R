@@ -233,30 +233,30 @@ function(input, output,session) {
   }, ignoreNULL = FALSE)
 
   observeEvent(input$QC, {
-  print("QC other")
-    print(dim(readProteinM()))
+  #print("QC other")
+    #print(dim(readProteinM()))
     qc_label<-input$QCLabel
     
     data <- readProteinM()
     col_name <- colnames(data)
     row_name <- as.matrix(data['Protein_ID'])
     row_name <- as.vector(row_name[,1])
-    print(col_name)
-    print(row_name)
+    #print(col_name)
+    #print(row_name)
     data <- data.matrix(data)
     data <- data[,-1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
     data[is.na(data)] <- 0
-    print(head(data))
+    #print(head(data))
     
     
     if(!is.null(qc_label) & qc_label!="None"){
       sample_names<-colnames(readProteinM())[-1]
       qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
     }
-    print(qc_label)
+    #print(qc_label)
     
     #################################
     # Pearson Correlation
@@ -596,7 +596,22 @@ function(input, output,session) {
     if(!is.null(qc_label) & qc_label!="None"){
       sample_names<-colnames(readProteinM())[-1]
       qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
+    }else{
+      return()
     }
+    
+    data <- readProteinM()
+    col_name <- colnames(data)
+    row_name <- as.matrix(data['Protein_ID'])
+    row_name <- as.vector(row_name[,1])
+    data <- data.matrix(data)
+    data <- data[,-1]
+    colnames(data) <- col_name[2:length(col_name)]
+    row.names(data) <- row_name
+    
+    data[is.na(data)] <- 0
+    print(head(data))
+
     print(qc_label)
     #################################
     # Heatmap
@@ -613,10 +628,7 @@ function(input, output,session) {
       if (input$dmheatmap){
         if(!is.null(readProteinM()))
         {
-          data <- as.matrix(readProteinM())
-          data[is.na(data)] <- 0
-          label <- qc_label
-          drawheatmap(data, label)
+          drawheatmap(t(data), qc_label)
         }
       }
       
@@ -638,7 +650,7 @@ function(input, output,session) {
         if(!is.null(readProteinM()))
         {
           pair <- unique(qc_label, fromLast = FALSE)
-          drawVolcano(as.matrix(readProteinM()), qc_label, pair[1], pair[2])
+          drawVolcano(t(data), qc_label, pair[1], pair[2])
         }
       }
     })
@@ -658,9 +670,7 @@ function(input, output,session) {
       if (input$ViolinPlot){
         if(!is.null(readProteinM()))
         {
-          data <- as.matrix(readProteinM())
-          sample <- qc_label
-          drawviolin(data, sample)
+          drawviolin(t(data), qc_label)
         }
       }
       
@@ -681,7 +691,6 @@ function(input, output,session) {
       if (input$radarmap){
         if(!is.null(readProteinM()))
         {
-          data <- as.matrix(t(readProteinM()))
           drawradar(data)
         }
       }
@@ -852,13 +861,31 @@ function(input, output,session) {
   #################################
   observeEvent(input$mlsubmit,
                {
+                 
                  output$DMmlText <- renderPrint({
                    print(input$mlframework)
                    print(input$mlmethod)
                    print(unique(qc_label, fromLast = FALSE))
                  })
+                 if (is.null(input$DManno))
+                 {
+                   return()
+                 }
+                 data <- readProteinM()
+                 col_name <- colnames(data)
+                 row_name <- as.matrix(data['Protein_ID'])
+                 row_name <- as.vector(row_name[,1])
+                 data <- data.matrix(data)
+                 data <- data[,-1]
+                 colnames(data) <- col_name[2:length(col_name)]
+                 row.names(data) <- row_name
+                 
+                 data[is.na(data)] <- 0
+                 data <- t(data)
+                 print(head(data))
                  qc_label<-input$DManno
-                 print(qc_label)
+                 data$Label <- qc_label
+                 print(head(data))
                  #################################
                  # R Packages
                  #################################
@@ -870,8 +897,6 @@ function(input, output,session) {
                    if (input$mlmethod == "Decision Tree") {
                      if(!is.null(readProteinM()))
                      {
-                       data <- as.matrix(readProteinM())
-                       data$Label <- qc_label
                        dtree <- rpart(Label ~ ., data = data, method = "class")
                        tree <-
                          prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
@@ -899,8 +924,6 @@ function(input, output,session) {
                      #################################
                      if(!is.null(readProteinM()))
                      {
-                       data <- as.matrix(readProteinM())
-                       data$Label <- qc_label
                        model.forest <-
                          randomForest(Label ~ ., data = data)
                        pre.forest <- predict(model.forest, data)
