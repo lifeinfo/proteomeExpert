@@ -281,11 +281,6 @@ function(input, output,session) {
       }
       
     })
-    #output$Qsmoothplot <- renderPlot({
-    #  data1 <- iris[, 1]
-    #  data2 <- iris[, 1]
-    #  drawsmooth(data1, data2)
-    #})
     
     #################################
     # PCA
@@ -858,6 +853,8 @@ function(input, output,session) {
                    print(input$mlmethod)
                    print(unique(qc_label, fromLast = FALSE))
                  })
+                 qc_label<-input$DManno
+                 print(qc_label)
                  #################################
                  # R Packages
                  #################################
