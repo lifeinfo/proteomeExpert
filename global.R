@@ -6,7 +6,13 @@ set.seed(1)
 NA_VALUE<-0
 ####new added library
 library(sqldf)
-
+# Load libraries for genetic algorithem
+library(caret)
+library(randomForest)
+library(funModeling)
+library(tidyverse)
+library(GA)
+source("expert/lib_ga.R")
 #################################
 # loading model
 #################################
@@ -85,9 +91,9 @@ source("expert/BatchGenerator.R")
 #################################
 # global variable
 #################################
-protM_name<-c("uploadedProtMatrix","featureSelected")
+#protM_name<-c("uploadedProtMatrix","featureSelected")
 #protM_name<-c("uploadedProtMatrix","featureSelected","preprocessedOriginal","preprocessedFeatureSeleceted")
-
+protM_name<-c("uploadedProtMatrix","comming soon")
 anno_name<-"Please upload your annotation file in data console first"
 #batch design use
 BDcol_name<-"Please upload your file first"

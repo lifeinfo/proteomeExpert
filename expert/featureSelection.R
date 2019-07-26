@@ -60,7 +60,8 @@ featureSel<-function(label_protM,featureSel_algorithm,nfeatures=50){
 
   switch (featureSel_algorithm,
           random_forest = fsRf(label_protM,nfeatures),
-          lasso = fsLasso(label_protM)
+          lasso = fsLasso(label_protM),
+          GA = fsga(label_protM)
   )
 }
 ############################## random froest ####################
@@ -109,4 +110,32 @@ fsLasso<-function(label_protM){
     features<-c(features,names(glm_multi_coef)[glm_multi_coef!=0])
   }
   return(list(features=unique(features),mod=cvglm))
+}
+##################################################  GA
+fsga<-function(label_protM){
+  label<-label_protM[,"label"]
+  protM<-label_protM[,-which(colnames(label_protM)=="label")]
+  protM[is.na(protM)]<-0
+  protM<-tbl_df(protM)
+  ga_fs = ga(fitness = function(vars) custom_fitness(vars = vars, 
+                                                       data_x =  protM, 
+                                                       data_y = label, 
+                                                       p_sampling = 0.7), # custom fitness function
+               type = "binary", # optimization data type
+               crossover=gabin_uCrossover,  # cross-over method
+               elitism = 3, # number of best ind. to pass to next iteration
+               pmutation = 0.03, # mutation rate prob
+               popSize = 50, # the number of indivduals/solutions
+               nBits = ncol(protM), # total number of variables
+               names=colnames(protM), # variable name
+               run=5, # max iter without improvement (stopping criteria)
+               maxiter = 30, # total runs or generations
+               monitor=FALSE, # plot the result at each iteration
+               keepBest = TRUE, # keep the best solution at the end
+               parallel = T, # allow parallel procesing
+               seed=123 # for reproducibility purposes
+  )
+  features=colnames(protM)[ga_fs@solution[1,]==1]
+  
+  return(list(features=features,mod=ga_fs))
 }

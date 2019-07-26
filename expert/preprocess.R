@@ -32,6 +32,7 @@ auto_preprocess <-
         quote = "",
         fill = TRUE
       )
+    pep.data[is.na(pep.data)]<-NA
     pep.data <- pep.data[!grepl("^1/CON", pep.data[, 2], fixed = F), ]
     
     pep.data[pep.data == 0] <- NA
