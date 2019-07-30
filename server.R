@@ -763,6 +763,9 @@ function(input, output,session) {
         if(!is.null(readProteinM()))
         {
           print(dim(data))
+          print(class(data))
+          print(head(data))
+          data$Label <- as.factor(data$Label)
           model.forest <-
             randomForest(Label ~ ., data = data)
           pre.forest <- predict(model.forest, data)
