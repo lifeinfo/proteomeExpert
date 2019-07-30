@@ -30,7 +30,6 @@ drawVolcano <-
       df8$P_value <- p.adjust(x, method = "BH")
     }
     
-    
     #pdf(pdfPath)
     plot(
       df8$fd,

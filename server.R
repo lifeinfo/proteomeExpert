@@ -605,11 +605,13 @@ function(input, output,session) {
     row_name <- as.matrix(data['Protein_ID'])
     row_name <- as.vector(row_name[,1])
     data <- data.matrix(data)
+    
     data <- data[,-1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
     data[is.na(data)] <- 0
+    #data <- as.numeric(data)
     print(head(data))
 
     print(qc_label)
@@ -634,48 +636,54 @@ function(input, output,session) {
       
     })
     
-    #################################
-    # VocanoPlot
-    #################################
-    output$DMvocanotable <- renderRHandsontable({
-      if (input$vocanoPlot){
-        if(!is.null(readProteinM()))
-        {
-          rhandsontable(head(readProteinM(), n = 20L))
-        }
-      }
-    })
-    output$DMvocanoparameters <- renderPlot({
-      if (input$vocanoPlot){
-        if(!is.null(readProteinM()))
-        {
-          pair <- unique(qc_label, fromLast = FALSE)
-          drawVolcano(t(data), qc_label, pair[1], pair[2])
-        }
-      }
-    })
-    
-    #################################
-    # ViolinPlot
-    #################################
-    output$DMviolintable <- renderRHandsontable({
-      if (input$ViolinPlot){
-        if(!is.null(readProteinM()))
-        {
-          rhandsontable(head(readProteinM(), n = 20L))
-        }
-      }
-    })
-    output$DMviolinparameters <- renderPlot({
-      if (input$ViolinPlot){
-        if(!is.null(readProteinM()))
-        {
-          drawviolin(t(data), qc_label)
-        }
-      }
-      
-    })
-    
+    # #################################
+    # # VocanoPlot
+    # #################################
+    # output$DMvocanotable <- renderRHandsontable({
+    #   if (input$vocanoPlot){
+    #     if(!is.null(readProteinM()))
+    #     {
+    #       rhandsontable(head(readProteinM(), n = 20L))
+    #     }
+    #   }
+    # })
+    # output$DMvocanoparameters <- renderPlot({
+    #   if (input$vocanoPlot){
+    #     if(!is.null(readProteinM()))
+    #     {
+    #       print("vovanoplot")
+    #       pair <- unique(qc_label, fromLast = FALSE)
+    #       print(pair)
+    #       print(qc_label)
+    #       if(length(pair) == 2)
+    #       {
+    #         drawVolcano(t(data), qc_label, pair[1], pair[2])
+    #       }
+    #     }
+    #   }
+    # })
+    # 
+    # #################################
+    # # ViolinPlot
+    # #################################
+    # output$DMviolintable <- renderRHandsontable({
+    #   if (input$ViolinPlot){
+    #     if(!is.null(readProteinM()))
+    #     {
+    #       rhandsontable(head(readProteinM(), n = 20L))
+    #     }
+    #   }
+    # })
+    # output$DMviolinparameters <- renderPlot({
+    #   if (input$ViolinPlot){
+    #     if(!is.null(readProteinM()))
+    #     {
+    #       drawviolin(t(data), qc_label)
+    #     }
+    #   }
+    #   
+    # })
+    # 
     #################################
     # Radar
     #################################
@@ -696,6 +704,129 @@ function(input, output,session) {
       }
       
     })
+    
+    
+    observeEvent(input$mlsubmit, {
+    #################################
+    # ML
+    #################################
+    output$DMmlText <- renderPrint({
+      print(input$mlframework)
+      print(input$mlmethod)
+      print(unique(qc_label, fromLast = FALSE))
+    })
+    if (is.null(input$DManno))
+    {
+      return()
+    }
+    data <- as.data.frame(t(data))
+    print("ML")
+    print(qc_label)
+    data$Label <- qc_label
+    print(head(data))
+    #################################
+    # R Packages
+    #################################
+    if (input$mlframework == "R Packages")
+    {
+      #################################
+      # Decision Tree
+      #################################
+      if (input$mlmethod == "Decision Tree") {
+        if(!is.null(readProteinM()))
+        {
+          dtree <- rpart(Label ~ ., data = data, method = "class")
+          tree <-
+            prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
+          output$DMmlPlot <- renderPlot({
+            rpart.plot(
+              tree,
+              branch = 0,
+              type = 0,
+              fallen.leaves = T,
+              cex = 1,
+              sub = "Decision Tree"
+            )
+          })
+          output$DMmloutputText <- renderPrint({
+            printcp(tree)
+          })
+          output$DMmltables <- renderRHandsontable({
+            rhandsontable(head(data, n = 20L))
+          })
+        }
+      } else if (input$mlmethod == "Random Forest")
+      {
+        #################################
+        # Random Forest
+        #################################
+        if(!is.null(readProteinM()))
+        {
+          print(dim(data))
+          model.forest <-
+            randomForest(Label ~ ., data = data)
+          pre.forest <- predict(model.forest, data)
+          
+          if(pre.forest)
+          {
+            ran_roc <-
+            roc(data$Label, as.numeric(pre.forest))
+          }
+          
+          
+          output$DMmlPlot <- renderPlot({
+            layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
+            varImpPlot(model.forest, main = "variable importance")
+            plot(model.forest)
+            # plot(
+            #   ran_roc,
+            #   print.auc = TRUE,
+            #   auc.polygon = TRUE,
+            #   grid = c(0.1, 0.2),
+            #   grid.col = c("green", "red"),
+            #   max.auc.polygon = TRUE,
+            #   auc.polygon.col = "skyblue",
+            #   print.thres = TRUE,
+            #   main = 'RF ROC'
+            # )
+          })
+          
+          output$DMmloutputText <- renderPrint({
+            model.forest$importance
+            #
+            table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
+            
+          })
+          
+          output$DMmltables <- renderRHandsontable({
+            rhandsontable(head(data, n = 20L))
+          })
+        }
+      } else if (input$mlmethod == "k-NearestNeighbor")
+      {
+        cat("k-NearestNeighbor comming soon!")
+      } else if (input$mlmethod == "Support Vector Machine")
+      {
+        cat("Support Vector Machine comming soon!")
+      } else if (input$mlmethod == "Artificial Neural Network")
+      {
+        cat("Artificial Neural Network comming soon!")
+      }
+      
+    } else if (input$mlframework == "Tensorflow")
+    {
+      #################################
+      # Tensorflow
+      #################################
+      cat("Tensorflow comming soon!")
+    } else if (input$mlframework == "MxNet")
+    {
+      #################################
+      # MxNet
+      #################################
+      cat("MxNet comming soon!")
+    }
+  })
   })
 
 
@@ -856,133 +987,5 @@ function(input, output,session) {
       hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
       hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
   })
-  #################################
-  # ML
-  #################################
-  observeEvent(input$mlsubmit,
-               {
-                 
-                 output$DMmlText <- renderPrint({
-                   print(input$mlframework)
-                   print(input$mlmethod)
-                   print(unique(qc_label, fromLast = FALSE))
-                 })
-                 if (is.null(input$DManno))
-                 {
-                   return()
-                 }
-                 data <- readProteinM()
-                 col_name <- colnames(data)
-                 row_name <- as.matrix(data['Protein_ID'])
-                 row_name <- as.vector(row_name[,1])
-                 data <- data.matrix(data)
-                 data <- data[,-1]
-                 colnames(data) <- col_name[2:length(col_name)]
-                 row.names(data) <- row_name
-                 
-                 data[is.na(data)] <- 0
-                 data <- t(data)
-                 print(head(data))
-                 qc_label<-input$DManno
-                 data$Label <- qc_label
-                 print(head(data))
-                 #################################
-                 # R Packages
-                 #################################
-                 if (input$mlframework == "R Packages")
-                 {
-                   #################################
-                   # Decision Tree
-                   #################################
-                   if (input$mlmethod == "Decision Tree") {
-                     if(!is.null(readProteinM()))
-                     {
-                       dtree <- rpart(Label ~ ., data = data, method = "class")
-                       tree <-
-                         prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
-                       output$DMmlPlot <- renderPlot({
-                         rpart.plot(
-                           tree,
-                           branch = 0,
-                           type = 0,
-                           fallen.leaves = T,
-                           cex = 1,
-                           sub = "Demo"
-                          )
-                       })
-                       output$DMmloutputText <- renderPrint({
-                         printcp(tree)
-                       })
-                       output$DMmltables <- renderRHandsontable({
-                         rhandsontable(head(data, n = 20L))
-                       })
-                     }
-                   } else if (input$mlmethod == "Random Forest")
-                   {
-                     #################################
-                     # Random Forest
-                     #################################
-                     if(!is.null(readProteinM()))
-                     {
-                       model.forest <-
-                         randomForest(Label ~ ., data = data)
-                       pre.forest <- predict(model.forest, data)
-  
-                       ran_roc <-
-                         roc(data$Label, as.numeric(pre.forest))
-  
-                       output$DMmlPlot <- renderPlot({
-                         layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
-                         varImpPlot(model.forest, main = "variable importance")
-                         plot(model.forest)
-                         plot(
-                           ran_roc,
-                           print.auc = TRUE,
-                           auc.polygon = TRUE,
-                           grid = c(0.1, 0.2),
-                           grid.col = c("green", "red"),
-                           max.auc.polygon = TRUE,
-                           auc.polygon.col = "skyblue",
-                           print.thres = TRUE,
-                           main = 'RF ROC,mtry=3,ntree=500'
-                         )
-                       })
-  
-                       output$DMmloutputText <- renderPrint({
-                         model.forest$importance
-                         #
-                         table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
-  
-                       })
-  
-                       output$DMmltables <- renderRHandsontable({
-                         rhandsontable(head(data, n = 20L))
-                       })
-                     }
-                   } else if (input$mlmethod == "k-NearestNeighbor")
-                   {
-                     cat("k-NearestNeighbor comming soon!")
-                   } else if (input$mlmethod == "Support Vector Machine")
-                   {
-                     cat("Support Vector Machine comming soon!")
-                   } else if (input$mlmethod == "Artificial Neural Network")
-                   {
-                     cat("Artificial Neural Network comming soon!")
-                   }
 
-                 } else if (input$mlframework == "Tensorflow")
-                 {
-                   #################################
-                   # Tensorflow
-                   #################################
-                   cat("Tensorflow comming soon!")
-                 } else if (input$mlframework == "MxNet")
-                 {
-                   #################################
-                   # MxNet
-                   #################################
-                   cat("MxNet comming soon!")
-                 }
-
-               })
 }
