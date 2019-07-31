@@ -60,6 +60,7 @@ function(input, output,session) {
         file,
         row.names = T,
         quote = F,
+        na="",
         sep = "\t"
       )
     }
@@ -168,6 +169,7 @@ function(input, output,session) {
         file,
         row.names = T,
         quote = F,
+        na="",
         sep = "\t"
       )
     }
@@ -215,6 +217,7 @@ function(input, output,session) {
         file,
         row.names = FALSE,
         quote = F,
+        na="",
         sep = "\t"
       )
     }
@@ -910,6 +913,7 @@ function(input, output,session) {
         file,
         row.names = T,
         quote = F,
+        na="",
         sep = "\t"
       )
     }
