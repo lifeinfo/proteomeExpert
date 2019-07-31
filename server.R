@@ -239,7 +239,7 @@ function(input, output,session) {
     
     data <- readProteinM()
     col_name <- colnames(data)
-    row_name <- as.matrix(data['Protein_ID'])
+    row_name <- as.matrix(data[,1])
     row_name <- as.vector(row_name[,1])
     #print(col_name)
     #print(row_name)
@@ -602,7 +602,7 @@ function(input, output,session) {
     
     data <- readProteinM()
     col_name <- colnames(data)
-    row_name <- as.matrix(data['Protein_ID'])
+    row_name <- as.matrix(data[,1])
     row_name <- as.vector(row_name[,1])
     data <- data.matrix(data)
     
