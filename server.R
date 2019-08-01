@@ -164,10 +164,13 @@ function(input, output,session) {
       paste("PreProcessed", Sys.Date(), ".txt", sep = "")
     },
     content = function(file) {
+      DPM<-data.frame(DPdataprecessInput())
+      protein<-rownames(DPM)
+      DPM<-cbind(protein,DPM)
       write.table(
-        DPdataprecessInput(),
+        DPM,
         file,
-        row.names = T,
+        row.names = F,
         quote = F,
         na="",
         sep = "\t"
