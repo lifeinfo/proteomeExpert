@@ -177,17 +177,22 @@ function(input, output,session) {
     if (is.null(input$PeptideMatrix))
       "Please upload your files!"
     else
-      auto_preprocess(
-        isolate(input$PeptideMatrix$datapath),
-        isolate(input$TechnicalReplicate$datapath),
-        isolate(input$BatchFile$datapath),
-        psep = isolate(input$Dpsep),
-        pheader = isolate(input$Dpheader),
-        tsep = isolate(input$Dtsep),
-        theader = isolate(input$Dtheader),
-        bsep = isolate(input$Dbsep),
-        bheader = isolate(input$Dbheader)
-      )
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...', value = 0, {
+                     incProgress(1/10)
+                     auto_preprocess(
+                       isolate(input$PeptideMatrix$datapath),
+                       isolate(input$TechnicalReplicate$datapath),
+                       isolate(input$BatchFile$datapath),
+                       psep = isolate(input$Dpsep),
+                       pheader = isolate(input$Dpheader),
+                       tsep = isolate(input$Dtsep),
+                       theader = isolate(input$Dtheader),
+                       bsep = isolate(input$Dbsep),
+                       bheader = isolate(input$Dbheader)
+                     )
+                     incProgress(4/5)
+                   })
 
   }, ignoreNULL = FALSE)
 
