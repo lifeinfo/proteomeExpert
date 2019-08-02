@@ -1,4 +1,4 @@
-drawUMAP <- function(data,label, strTitle="UMAP",rowNormalization=T,colNormalization=F){
+drawUMAP <- function(data,label, strTitle="UMAP",rowNormalization=F,colNormalization=F){
   DF <- data.frame(t(data))
   DF$label <- label
   M1 <- DF
