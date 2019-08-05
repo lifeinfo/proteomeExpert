@@ -916,13 +916,16 @@ function(input, output,session) {
   #####download
   output$downloadfeatureSelData <- downloadHandler(
     filename = function() {
-      paste("prot", Sys.Date(), ".txt", sep = "")
+      paste("featureSelected", Sys.Date(), ".txt", sep = "")
     },
     content = function(file) {
+      protM<-readProteinM()
+      rownames(protM)<-as.vector(unlist(protM[1]))
+      protM<-protM[feature_sel_prot()$features,]
       write.table(
-        DPdataprecessInput(),
+        protM,
         file,
-        row.names = T,
+        row.names = F,
         quote = F,
         na="",
         sep = "\t"
