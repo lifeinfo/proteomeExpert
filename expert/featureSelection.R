@@ -1,5 +1,3 @@
-library(caret)
-
 ####feature filter
 featureFilter<-function(label_protM,methods,fs_missing_ratio){
   
@@ -117,7 +115,8 @@ fsga<-function(label_protM){
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   protM[is.na(protM)]<-0
   protM<-tbl_df(protM)
-  ga_fs = ga(fitness = function(vars) custom_fitness(vars = vars, 
+  if(length(unique(label))==2){
+      ga_fs = ga(fitness = function(vars) custom_fitness(vars = vars, 
                                                        data_x =  protM, 
                                                        data_y = label, 
                                                        p_sampling = 0.7), # custom fitness function
@@ -129,12 +128,36 @@ fsga<-function(label_protM){
                nBits = ncol(protM), # total number of variables
                names=colnames(protM), # variable name
                run=5, # max iter without improvement (stopping criteria)
-               maxiter = 30, # total runs or generations
+               maxiter = 50, # total runs or generations
                monitor=FALSE, # plot the result at each iteration
                keepBest = TRUE, # keep the best solution at the end
                parallel = T, # allow parallel procesing
-               seed=123 # for reproducibility purposes
+               seed=1 # for reproducibility purposes
   )
+  }
+  else{
+    ga_fs = ga(fitness = function(vars) custom_fitness_multi(vars = vars, 
+                                                       data_x =  protM, 
+                                                       data_y = label, 
+                                                       p_sampling = 0.7), # custom fitness function
+               type = "binary", # optimization data type
+               crossover=gabin_uCrossover,  # cross-over method
+               elitism = 3, # number of best ind. to pass to next iteration
+               pmutation = 0.03, # mutation rate prob
+               popSize = 50, # the number of indivduals/solutions
+               nBits = ncol(protM), # total number of variables
+               names=colnames(protM), # variable name
+               run=5, # max iter without improvement (stopping criteria)
+               maxiter = 50, # total runs or generations
+               monitor=FALSE, # plot the result at each iteration
+               keepBest = TRUE, # keep the best solution at the end
+               parallel = T, # allow parallel procesing
+               seed=1 # for reproducibility purposes
+    )
+  }
+
+  
+  
   features=colnames(protM)[ga_fs@solution[1,]==1]
   
   return(list(features=features,mod=ga_fs))

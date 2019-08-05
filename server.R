@@ -181,11 +181,11 @@ function(input, output,session) {
   DdatasetInput <- eventReactive(input$process, {
     if (is.null(input$PeptideMatrix))
       "Please upload your files!"
-    else
-      withProgress(message = 'Calculation in progress',
+    else{
+            withProgress(message = 'Calculation in progress',
                    detail = 'This may take a while...', value = 0, {
                      incProgress(1/10)
-                     auto_preprocess(
+                     prot_matrix<-auto_preprocess(
                        isolate(input$PeptideMatrix$datapath),
                        isolate(input$TechnicalReplicate$datapath),
                        isolate(input$BatchFile$datapath),
@@ -198,6 +198,9 @@ function(input, output,session) {
                      )
                      incProgress(4/5)
                    })
+      prot_matrix
+      }
+
 
   }, ignoreNULL = FALSE)
 
@@ -913,13 +916,16 @@ function(input, output,session) {
   #####download
   output$downloadfeatureSelData <- downloadHandler(
     filename = function() {
-      paste("prot", Sys.Date(), ".txt", sep = "")
+      paste("featureSelected", Sys.Date(), ".txt", sep = "")
     },
     content = function(file) {
+      protM<-readProteinM()
+      rownames(protM)<-as.vector(unlist(protM[1]))
+      protM<-protM[feature_sel_prot()$features,]
       write.table(
-        DPdataprecessInput(),
+        protM,
         file,
-        row.names = T,
+        row.names = F,
         quote = F,
         na="",
         sep = "\t"
