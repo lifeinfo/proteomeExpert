@@ -577,19 +577,36 @@ navbarPage(
   tabPanel(
     "Statistics",
     sidebarPanel(
-      tags$h5("Welcome to ProteomeExpert, it makes your research easy!")
+      tags$h5("Input:")
     ),
-    mainPanel(tabsetPanel(tabPanel(
-      "Introduction",
-      h4("Summary"),
-      HTML("<p>proteomeExpert was published in * 2019 </p>")
+    mainPanel(tabsetPanel(
+      #################################
+      # Vocano Plot
+      #################################
+      tabPanel(
+        "VocanoPlot",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify chans in large datasets composed of replicate data. It plots significance versus fold-change on the y-and-axes, respectively.</p>"
+        ),
+        hr(),
+        column(6, plotOutput("DMvocanoparameters")),
+        column(6, rHandsontableOutput("DMvocanotable"))
+      ),
+      tabPanel(
+        "ViolinPlot",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel densy plot on each side. The violin plot is similar to box plots, except that they also show the probility density of the data at different values (in the simplest case this could be a histogram).</p>"
+        ),
+        hr(),
+        column(6, plotOutput("DMviolinparameters")),
+        column(6, rHandsontableOutput("DMviolintable"))
+      )
       
-    )),
-    tabsetPanel(tabPanel(
-      "Citation",
-      h4("")
-      
-    )))
+    ))
   ),
   #################################
   # data mining
@@ -628,31 +645,6 @@ navbarPage(
         column(6, plotlyOutput("DMheatmapparameters")),
         column(6, rHandsontableOutput("DMheatmaptable"))
       ),
-      # #################################
-      # # Vocano Plot
-      # #################################
-      # tabPanel(
-      #   "VocanoPlot",
-      #   h4("Summary"),
-      #   h5("Description:"),
-      #   HTML(
-      #     "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y-and x-axes, respectively.</p>"
-      #   ),
-      #   hr(),
-      #   column(6, plotOutput("DMvocanoparameters")),
-      #   column(6, rHandsontableOutput("DMvocanotable"))
-      # ),
-      # tabPanel(
-      #   "ViolinPlot",
-      #   h4("Summary"),
-      #   h5("Description:"),
-      #   HTML(
-      #     "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel density plot on each side. The violin plot is similar to box plots, except that they also show the probability density of the data at different values (in the simplest case this could be a histogram).</p>"
-      #   ),
-      #   hr(),
-      #   column(6, plotOutput("DMviolinparameters")),
-      #   column(6, rHandsontableOutput("DMviolintable"))
-      # ),
       tabPanel(
         "RadarMap",
         h4("Summary"),
