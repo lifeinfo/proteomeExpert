@@ -16,13 +16,13 @@ navbarPage(
       "Introduction",
       h4("Summary"),
       HTML("<p>proteomeExpert was published in * 2019 </p>")
-
+      
     )),
     tabsetPanel(tabPanel(
       "Citation",
       h4(""),
       HTML("<p>proteomeExpert was published in * 2019 </p>")
-
+      
     )))
   ),
   #################################
@@ -44,7 +44,7 @@ navbarPage(
         hr(),
         actionButton("powerb", "Submit", class = "btn-primary")
       ),
-
+      
       mainPanel(tabsetPanel(
         tabPanel(
           "Summary",
@@ -97,7 +97,10 @@ navbarPage(
           multiple = T,
           selectize = TRUE
         ),
-        textInput("BDweight","Weights for columns (using ',' to separate mutilplue columns.)"),
+        textInput(
+          "BDweight",
+          "Weights for columns (using ',' to separate mutilplue columns.)"
+        ),
         numericInput("BDsize", "Number of samples in each batch:", 15),
         selectInput(
           'BDnumeric_headers',
@@ -139,7 +142,7 @@ navbarPage(
       #   placeholder = "*.csv or *.TXT required!"
       # ),
       # hr(),
-
+      
       fileInput(
         "protein_matrix",
         "Select your protein file (optional):",
@@ -161,7 +164,7 @@ navbarPage(
         selected = "\t"
       ),
       hr(),
-
+      
       fileInput(
         "sample_info",
         "Select your sample file (optional):",
@@ -184,7 +187,7 @@ navbarPage(
       ),
       #actionButton("sampleInfo", "annotation", class = "btn-primary"),
       hr(),
-
+      
       fileInput(
         "individual_info",
         "Select your individual file (optional):",
@@ -206,22 +209,22 @@ navbarPage(
         selected = ","
       )
       #actionButton("individualInfo", "annotation", class = "btn-primary")
-
+      
     ),
     mainPanel(
       fluidRow(column(3, wellPanel(
         tags$h4("Annotate sample columns:"),
         hr(),
-
+        
         # This outputs the dynamic UI component
         uiOutput("sampleUi")
       )),
-
+      
       column(
         3, offset = 0.5, wellPanel(
           tags$h4("Annotate individual columns:"),
           hr(),
-
+          
           # This outputs the dynamic UI component
           uiOutput("individualUi")
         )
@@ -229,12 +232,12 @@ navbarPage(
       fluidRow(column(width = 6, wellPanel(
         # This outputs the dynamic UI component
         textOutput("sampleRes")
-
+        
       ))),
       fluidRow(column(width = 6, wellPanel(
         # This outputs the dynamic UI component
         textOutput("individualRes")
-
+        
       ))),
       hr(),
       actionButton("DoAnnoTable", "Merge", class = "btn-primary"),
@@ -243,11 +246,11 @@ navbarPage(
       fluidRow(column(width = 8, wellPanel(
         # This outputs the dynamic UI component
         DT::dataTableOutput("annoTable")
-
+        
       )))
     )
   ),
-
+  
   #################################
   # data preprocessing
   #################################
@@ -355,15 +358,13 @@ navbarPage(
         hr(),
         actionButton("DPDo", "Submit", class = "btn-primary")
       ),
-      mainPanel(
-        tabPanel(
-          "Methods",
-          DTOutput("preprocessedprotM"),
-          downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
-        )
-      )
+      mainPanel(tabPanel(
+        "Methods",
+        DTOutput("preprocessedprotM"),
+        downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
+      ))
     ),
-
+    
     tabPanel(
       "Peptide2Protein",
       "",
@@ -390,7 +391,7 @@ navbarPage(
           selected = "\t"
         ),
         hr(),
-
+        
         fileInput(
           "TechnicalReplicate",
           "Select your technical replicate file (required):",
@@ -408,9 +409,9 @@ navbarPage(
           inline = TRUE,
           selected = "\t"
         ),
-
+        
         hr(),
-
+        
         fileInput(
           "BatchFile",
           "Select your batch effect file (optional):",
@@ -428,12 +429,12 @@ navbarPage(
           inline = TRUE,
           selected = "\t"
         ),
-
+        
         hr(),
-
+        
         tags$h5("Click to process:"),
         actionButton("process", "Submit", class = "btn-primary")
-
+        
       ),
       mainPanel(tabsetPanel(
         tabPanel(
@@ -442,14 +443,14 @@ navbarPage(
           tableOutput("Dtable"),
           h4("Download all protein matrix"),
           downloadButton("downloadData", "Download", class = "btn-primary")
-
+          
         )
-
+        
       ))
     )
-
+    
   ),
-
+  
   #################################
   # QC
   #################################
@@ -464,10 +465,10 @@ navbarPage(
       selectInput(
         'QCLabel',
         "Select your intresting column name, is't usally tissue/disease type.",
-          anno_name,
-          multiple = FALSE,
-          selectize = TRUE
-        ),
+        anno_name,
+        multiple = FALSE,
+        selectize = TRUE
+      ),
       
       hr(),
       tags$h3("Select modules you want to process:"),
@@ -478,14 +479,14 @@ navbarPage(
       checkboxInput("qcPca", "PCA", TRUE),
       checkboxInput("qctsne", "t-SNE", TRUE),
       checkboxInput("qcUmap", "UMAP", FALSE),
-
+      
       hr(),
-
+      
       tags$h5("Click to process:"),
       actionButton("QC", "Submit", class = "btn-primary")
-
+      
     ),
-
+    
     mainPanel(
       tabsetPanel(
         tabPanel(
@@ -501,21 +502,19 @@ navbarPage(
             "output.QMparameters == 'Results are showed below:'",
             downloadButton('downloadMissingPlot')
           ),
-
+          
           plotOutput("missingPlot"),
-
+          
           column(4, plotOutput("densityPlot")),
           hr(),
           br()
-
+          
         ),
         tabPanel(
           "Pearson Correlation",
           h4("Summary"),
           h5("Description:"),
-          HTML(
-            "<p>None</p>"
-          ),
+          HTML("<p>None</p>"),
           hr(),
           plotOutput("Qpccplot", height = "800px"),
           #column(6, plotOutput("Qpccplot")),
@@ -538,7 +537,7 @@ navbarPage(
           hr(),
           column(6, plotlyOutput("Qpcaplot")),
           column(6, rHandsontableOutput("Qpcatable"))
-        ),
+          ),
         tabPanel(
           "T-SNE",
           h4("Summary"),
@@ -569,10 +568,29 @@ navbarPage(
           column(6, plotlyOutput("Qumapplot")),
           column(6, rHandsontableOutput("Qumaptable"))
         )
-      )
+        )
     )
   ),
-
+  #################################
+  # 
+  #################################
+  tabPanel(
+    "Statistics",
+    sidebarPanel(
+      tags$h5("Welcome to ProteomeExpert, it makes your research easy!")
+    ),
+    mainPanel(tabsetPanel(tabPanel(
+      "Introduction",
+      h4("Summary"),
+      HTML("<p>proteomeExpert was published in * 2019 </p>")
+      
+    )),
+    tabsetPanel(tabPanel(
+      "Citation",
+      h4("")
+      
+    )))
+  ),
   #################################
   # data mining
   #################################
@@ -581,7 +599,9 @@ navbarPage(
     "",
     sidebarPanel(
       h3("Data section:"),
-      h5("Please note: protein matrix and annotation file shoule be upload in data console first."),
+      h5(
+        "Please note: protein matrix and annotation file shoule be upload in data console first."
+      ),
       uiOutput("DMprot_anno_Ui"),
       hr(),
       tags$h5("Module section:"),
@@ -592,138 +612,131 @@ navbarPage(
       checkboxInput("radarmap", "RadarMap", TRUE),
       actionButton("dm", "Submit", class = "btn-primary")
     ),
-
-    mainPanel(
-      tabsetPanel(
-        #################################
-        # HeatMap
-        #################################
-        tabPanel(
-          "HeatMap",
+    
+    mainPanel(tabsetPanel(
+      #################################
+      # HeatMap
+      #################################
+      tabPanel(
+        "HeatMap",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
+        ),
+        hr(),
+        column(6, plotlyOutput("DMheatmapparameters")),
+        column(6, rHandsontableOutput("DMheatmaptable"))
+      ),
+      # #################################
+      # # Vocano Plot
+      # #################################
+      # tabPanel(
+      #   "VocanoPlot",
+      #   h4("Summary"),
+      #   h5("Description:"),
+      #   HTML(
+      #     "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y-and x-axes, respectively.</p>"
+      #   ),
+      #   hr(),
+      #   column(6, plotOutput("DMvocanoparameters")),
+      #   column(6, rHandsontableOutput("DMvocanotable"))
+      # ),
+      # tabPanel(
+      #   "ViolinPlot",
+      #   h4("Summary"),
+      #   h5("Description:"),
+      #   HTML(
+      #     "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel density plot on each side. The violin plot is similar to box plots, except that they also show the probability density of the data at different values (in the simplest case this could be a histogram).</p>"
+      #   ),
+      #   hr(),
+      #   column(6, plotOutput("DMviolinparameters")),
+      #   column(6, rHandsontableOutput("DMviolintable"))
+      # ),
+      tabPanel(
+        "RadarMap",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
+        ),
+        hr(),
+        column(6, canvasXpressOutput("DMradarparameters")),
+        column(6, rHandsontableOutput("DMradartable"))
+      ),
+      tabPanel(
+        "FeatureSel",
+        h5(
+          "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+        ),
+        textInput(
+          inputId = "fs_missing_ratio",
+          label = "Allowable missing ratio",
+          value = 0.8
+        ),
+        checkboxGroupInput(
+          "featureSel_filter",
+          "Please select filter rules" ,
+          c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
+          selected = c("nearZeoVar", "high_correlation"),
+          inline = T,
+          width = NULL
+        ),
+        radioButtons(
+          "featureSel_algorithm",
+          "Please select feature selection algorithm",
+          choices = c(
+            "Random Forest" = 'random_forest',
+            'LASSO' = "lasso",
+            'Genetic Algorithm' = "GA"
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
+        hr(),
+        actionButton("feature_do", "Submit", class = "btn-primary"),
+        h5("Summary:"),
+        verbatimTextOutput("fs_summary"),
+        plotOutput("fs_parameter"),
+        DTOutput("featureSelected"),
+        downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
+        
+      ),
+      #################################
+      # Machine Learning
+      #################################
+      tabPanel(
+        "ML",
+        column(
+          4,
           h4("Summary"),
-          h5("Description:"),
+          selectInput(
+            "mlmethod",
+            "Choose a ML method:",
+            choices = c("Decision Tree",
+                        "Random Forest")
+          ),
           HTML(
-            "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
+            '<p>
+            (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
+            </p>
+            <p>
+            <span style="font-size: 14px;"></span>
+            </p>'
           ),
-          hr(),
-          column(6, plotlyOutput("DMheatmapparameters")),
-          column(6, rHandsontableOutput("DMheatmaptable"))
-        ),
-        # #################################
-        # # Vocano Plot
-        # #################################
-        # tabPanel(
-        #   "VocanoPlot",
-        #   h4("Summary"),
-        #   h5("Description:"),
-        #   HTML(
-        #     "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y-and x-axes, respectively.</p>"
-        #   ),
-        #   hr(),
-        #   column(6, plotOutput("DMvocanoparameters")),
-        #   column(6, rHandsontableOutput("DMvocanotable"))
-        # ),
-        # tabPanel(
-        #   "ViolinPlot",
-        #   h4("Summary"),
-        #   h5("Description:"),
-        #   HTML(
-        #     "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel density plot on each side. The violin plot is similar to box plots, except that they also show the probability density of the data at different values (in the simplest case this could be a histogram).</p>"
-        #   ),
-        #   hr(),
-        #   column(6, plotOutput("DMviolinparameters")),
-        #   column(6, rHandsontableOutput("DMviolintable"))
-        # ),
-        tabPanel(
-          "RadarMap",
-          h4("Summary"),
-          h5("Description:"),
-          HTML(
-            "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
+          actionButton("mlsubmit", "Submit", class = "btn-primary")
           ),
-          hr(),
-          column(6, canvasXpressOutput("DMradarparameters")),
-          column(6, rHandsontableOutput("DMradartable"))
-        ),
-        tabPanel(
-          "FeatureSel",
-          h5(
-            "Please note that feature selection including two parts: filter rules and feature selection algorithm"
-          ),
-          textInput(
-            inputId = "fs_missing_ratio",
-            label = "Allowable missing ratio",
-            value = 0.8
-          ),
-          checkboxGroupInput(
-            "featureSel_filter",
-            "Please select filter rules" ,
-            c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
-            selected = c("nearZeoVar", "high_correlation"),
-            inline = T,
-            width = NULL
-          ),
-          radioButtons(
-            "featureSel_algorithm",
-            "Please select feature selection algorithm",
-            choices = c(
-              "Random Forest" = 'random_forest',
-              'LASSO' = "lasso",
-              'Genetic Algorithm' = "GA"
-            ),
-            inline = TRUE,
-            selected = NULL
-          ),
-          hr(),
-          actionButton("feature_do", "Submit", class = "btn-primary"),
-          h5("Summary:"),
-          verbatimTextOutput("fs_summary"),
-          plotOutput("fs_parameter"),
-          DTOutput("featureSelected"),
-          downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
-          
-        ),
-        #################################
-        # Machine Learning
-        #################################
-        tabPanel(
-          "ML",
-          column(
-            4,
-            h4("Summary"),
-            selectInput(
-              "mlmethod",
-              "Choose a ML method:",
-              choices = c(
-                "Decision Tree",
-                "Random Forest"
-                #"k-NearestNeighbor",
-                #"Support Vector Machine",
-                #"Artificial Neural Network"
-              )
-            ),
-            HTML(
-              '<p>
-              (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
-              </p>
-              <p>
-              <span style="font-size: 14px;"></span>
-              </p>'
-            ),
-            actionButton("mlsubmit", "Submit", class = "btn-primary")
-            ),
-          column(
-            6,
-            h3("Result"),
-            #plotlyOutput(),
-            verbatimTextOutput("DMmlText"),
-            plotOutput("DMmlPlot"),
-            verbatimTextOutput("DMmloutputText"),
-            rHandsontableOutput("DMmltables")
-          )
-         )
+        column(
+          6,
+          h3("Result"),
+          #plotlyOutput(),
+          verbatimTextOutput("DMmlText"),
+          plotOutput("DMmlPlot"),
+          verbatimTextOutput("DMmloutputText"),
+          rHandsontableOutput("DMmltables")
         )
-      )
+        )
+        ))
     ),
   #################################
   # Annotation
@@ -752,14 +765,11 @@ navbarPage(
         fluidRow(column(12, "Uniport"),
                  hr(),
                  column(8,
-                        uiOutput("annouiuniport")
-                        )),
+                        uiOutput("annouiuniport"))),
         fluidRow(column(12, "String"),
                  hr(),
-                 column(
-                   8,
-                   uiOutput("annouistring")
-                 )),
+                 column(8,
+                        uiOutput("annouistring"))),
         fluidRow(column(12, "KEGG"),
                  hr(),
                  column(8, "")),
@@ -767,10 +777,12 @@ navbarPage(
                  hr()),
         fluidRow(column(12, "Reactome"),
                  hr(),
-                 column(8,
-                        HTML("<iframe src=\"https://reactome.org/PathwayBrowser/\" width=\"1200\" height=\"700\"></iframe>")
-                        )
-                 ),
+                 column(
+                   8,
+                   HTML(
+                     "<iframe src=\"https://reactome.org/PathwayBrowser/\" width=\"1200\" height=\"700\"></iframe>"
+                   )
+                 )),
         h4('Database'),
         fluidRow(column(
           4,
@@ -798,15 +810,5 @@ navbarPage(
     tabPanel("Docs"),
     tabPanel("Q&A"),
     tabPanel("GitHub")
-   )
-  # #################################
-  # # footer
-  # #################################
-  # ,footer = "",
-  # div(
-  #   br(),
-  #   hr(),
-  #   includeCSS("www/css/footer.css"),
-  #   includeHTML("www/footer.html")
-  # )
+  )
         )
