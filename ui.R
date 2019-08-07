@@ -132,16 +132,6 @@ navbarPage(
     sidebarPanel(
       tags$h4("Upload Data:"),
       hr(),
-      # fileInput(
-      #   "peptide_matrix",
-      #   "Select your peptide file (optional):",
-      #   multiple = F,
-      #   accept = c("text/csv",
-      #              "text/comma-separated-values,text/plain",
-      #              ".csv"),
-      #   placeholder = "*.csv or *.TXT required!"
-      # ),
-      # hr(),
       
       fileInput(
         "protein_matrix",

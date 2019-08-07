@@ -482,12 +482,12 @@ function(input, output, session) {
         )
       sample_header <<- colnames(sample_info)
       tagList(
-        selectInput(
-          "sample_info_id",
-          "select sample id",
-          choices = sample_header,
-          selected = sample_header[1]
-        ),
+        #selectInput(
+        #  "sample_info_id",
+        #  "select sample id",
+        #  choices = sample_header,
+        #  selected = sample_header[1]
+        #),
         # selectInput(
         #   "sample_info_type",
         #   "select sample type",
@@ -561,8 +561,7 @@ function(input, output, session) {
         encoding = "UTF-8"
       )
     sample_header <- colnames(sampleInfo)
-    colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <-
-      "sampleId"
+    # colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <- "sampleId"
     # colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
     #   "sampleType"
     
@@ -620,7 +619,7 @@ function(input, output, session) {
   getAnnoTable <- eventReactive(input$DoAnnoTable, {
     anno <-
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
-    rownames(anno) <- anno[, "sampleId"]
+    #rownames(anno) <- anno[, "sampleId"]
     anno
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
