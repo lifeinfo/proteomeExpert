@@ -1,47 +1,66 @@
 ###label update
-function(input, output,session) {
+function(input, output, session) {
   observe({
-    anno_name<-colnames(getAnnoTable())
-    updateSelectInput(session, "DManno2",
-                      choices = c("None",anno_name),
-                      selected = NULL
-    )
-    updateSelectInput(session, "DPTR",
-                      choices = c("None",anno_name),
-                      selected = NULL
-    )
-    updateSelectInput(session, "DPBR",
-                      choices = c("None",anno_name),
-                      selected = NULL
-    )
-    updateSelectInput(session, "QCLabel",
-                      choices = c("None",anno_name),
-                      selected = NULL
-    )
-
+    anno_name <- colnames(getAnnoTable())
+    updateSelectInput(session,
+                      "DManno2",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "DPTR",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "DPBR",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "QCLabel",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    
   })
   #################################
   # batch Design
   #################################
-  observe({input$BDfile
+  observe({
+    input$BDfile
     input$BDsep
-    if(!is.null(input$BDfile)){
-         batchf<-read.table(input$BDfile$datapath,stringsAsFactors=F,sep = input$BDsep,header = T,encoding = "UTF-8",check.names=F,nrow=1)
-         BDcol_name<-colnames(batchf)
+    if (!is.null(input$BDfile)) {
+      batchf <-
+        read.table(
+          input$BDfile$datapath,
+          stringsAsFactors = F,
+          sep = input$BDsep,
+          header = T,
+          encoding = "UTF-8",
+          check.names = F,
+          nrow = 1
+        )
+      BDcol_name <- colnames(batchf)
     }
-    updateSelectInput(session, "BDcol",
-                      choices = c("None",BDcol_name),
-                      selected = NULL
+    updateSelectInput(session,
+                      "BDcol",
+                      choices = c("None", BDcol_name),
+                      selected = NULL)
+    updateSelectInput(
+      session,
+      "BDnumeric_headers",
+      choices = c("None", BDcol_name),
+      selected = NULL
     )
-    updateSelectInput(session, "BDnumeric_headers",
-                      choices = c("None",BDcol_name),
-                      selected = NULL
-    )
-    })
+  })
   batch_design_result <- eventReactive(input$BDdo, {
-    col_weights<-strsplit(input$BDweight,",")
-    col_weights<-as.numeric(unlist(col_weights))
-    result<-batchGenerator(input$BDfile$datapath,input$BDcol,input$BDnumeric_headers,col_weights,input$BDsize)
+    col_weights <- strsplit(input$BDweight, ",")
+    col_weights <- as.numeric(unlist(col_weights))
+    result <-
+      batchGenerator(
+        input$BDfile$datapath,
+        input$BDcol,
+        input$BDnumeric_headers,
+        col_weights,
+        input$BDsize
+      )
   },
   ignoreNULL = T,
   ignoreInit = T)
@@ -60,7 +79,7 @@ function(input, output,session) {
         file,
         row.names = T,
         quote = F,
-        na="",
+        na = "",
         sep = "\t"
       )
     }
@@ -77,7 +96,7 @@ function(input, output,session) {
       z1 = qnorm(1 - ap / 2)
       zb = qnorm(1 - as.numeric(input$Pbeta))
       proN = 2 * (sd * (z1 + zb) / (mean_null - mean_alt)) ^ 2
-
+      
       print(paste0("Number of proteins: ", input$Pm))
       print(paste0("Alpha: ", input$Palpha))
       print(paste0("Power: ", 1 - as.numeric(input$Pbeta)))
@@ -86,7 +105,7 @@ function(input, output,session) {
         ceiling(proN)
       ))
     })
-
+    
     output$powerPlot <- renderPlotly({
       mean_null = as.numeric(input$Pmu)
       mean_alt = as.numeric(input$Pmu0)
@@ -133,27 +152,43 @@ function(input, output,session) {
   #################################
   # updated when the user clicks the button
   ###data preprocessing
-  DPdataprecessInput<-eventReactive(input$DPDo,{
-    batch_factor<-input$DManno2
-    if(!is.null(batch_factor) & batch_factor!="None"){
-      sample_names<-colnames(readProteinM())[-1]
-      batch_factor<-as.vector(getAnnoTable()[sample_names, batch_factor])
+  DPdataprecessInput <- eventReactive(input$DPDo, {
+    batch_factor <- input$DManno2
+    if (!is.null(batch_factor) & batch_factor != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      batch_factor <-
+        as.vector(getAnnoTable()[sample_names, batch_factor])
     }
-    else batch_factor=NULL
-    technical_col<-input$DPTR
-    if(!is.null(technical_col) & technical_col!="None"){
-      sample_names<-colnames(readProteinM())[-1]
-      technical_col<-as.vector(getAnnoTable()[sample_names, technical_col])
+    else
+      batch_factor = NULL
+    technical_col <- input$DPTR
+    if (!is.null(technical_col) & technical_col != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      technical_col <-
+        as.vector(getAnnoTable()[sample_names, technical_col])
     }
-    else technical_col=NULL
-    biological_col<-input$DPBR
-    if(!is.null(biological_col) & biological_col!="None"){
-      sample_names<-colnames(readProteinM())[-1]
-      biological_col<-as.vector(getAnnoTable()[sample_names, biological_col])
+    else
+      technical_col = NULL
+    biological_col <- input$DPBR
+    if (!is.null(biological_col) & biological_col != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      biological_col <-
+        as.vector(getAnnoTable()[sample_names, biological_col])
     }
-    else biological_col=NULL
+    else
+      biological_col = NULL
     
-    dataPreprocess(readProteinM(),input$DPmissingV,input$DPLog,input$DPnormaliztion,batch_factor,technical_col,input$DPTechnicalRepMethod,biological_col,input$DPBiologicalRep)
+    dataPreprocess(
+      readProteinM(),
+      input$DPmissingV,
+      input$DPLog,
+      input$DPnormaliztion,
+      batch_factor,
+      technical_col,
+      input$DPTechnicalRepMethod,
+      biological_col,
+      input$DPBiologicalRep
+    )
   })
   ####download data
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
@@ -164,15 +199,15 @@ function(input, output,session) {
       paste("PreProcessed", Sys.Date(), ".txt", sep = "")
     },
     content = function(file) {
-      DPM<-data.frame(DPdataprecessInput())
-      protein<-rownames(DPM)
-      DPM<-cbind(protein,DPM)
+      DPM <- data.frame(DPdataprecessInput())
+      protein <- rownames(DPM)
+      DPM <- cbind(protein, DPM)
       write.table(
         DPM,
         file,
         row.names = F,
         quote = F,
-        na="",
+        na = "",
         sep = "\t"
       )
     }
@@ -182,10 +217,12 @@ function(input, output,session) {
     if (is.null(input$PeptideMatrix))
       "Please upload your files!"
     else{
-            withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     incProgress(1/10)
-                     prot_matrix<-auto_preprocess(
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...',
+                   value = 0,
+                   {
+                     incProgress(1 / 10)
+                     prot_matrix <- auto_preprocess(
                        isolate(input$PeptideMatrix$datapath),
                        isolate(input$TechnicalReplicate$datapath),
                        isolate(input$BatchFile$datapath),
@@ -196,14 +233,14 @@ function(input, output,session) {
                        bsep = isolate(input$Dbsep),
                        bheader = isolate(input$Dbheader)
                      )
-                     incProgress(4/5)
+                     incProgress(4 / 5)
                    })
       prot_matrix
-      }
-
-
+    }
+    
+    
   }, ignoreNULL = FALSE)
-
+  
   output$Dtable <- renderTable({
     #peptide<-read.table(input$PeptideMatrix$datapath,header=TRUE)
     #protM<<-head(peptide,5)
@@ -228,7 +265,7 @@ function(input, output,session) {
         file,
         row.names = FALSE,
         quote = F,
-        na="",
+        na = "",
         sep = "\t"
       )
     }
@@ -236,7 +273,7 @@ function(input, output,session) {
   #################################
   # QC
   #################################
-
+  
   QCdatasetInput <- eventReactive(input$QC, {
     print("missing value explore")
     if (class(readProteinM()) != "data.frame")
@@ -245,20 +282,20 @@ function(input, output,session) {
       readProteinM()
     
   }, ignoreNULL = FALSE)
-
+  
   observeEvent(input$QC, {
-  #print("QC other")
+    #print("QC other")
     #print(dim(readProteinM()))
-    qc_label<-input$QCLabel
+    qc_label <- input$QCLabel
     
     data <- readProteinM()
     col_name <- colnames(data)
-    row_name <- as.matrix(data[,1])
-    row_name <- as.vector(row_name[,1])
+    row_name <- as.matrix(data[, 1])
+    row_name <- as.vector(row_name[, 1])
     #print(col_name)
     #print(row_name)
     data <- data.matrix(data)
-    data <- data[,-1]
+    data <- data[, -1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
@@ -266,9 +303,9 @@ function(input, output,session) {
     #print(head(data))
     
     
-    if(!is.null(qc_label) & qc_label!="None"){
-      sample_names<-colnames(readProteinM())[-1]
-      qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
+    if (!is.null(qc_label) & qc_label != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      qc_label <- as.vector(getAnnoTable()[sample_names, qc_label])
     }
     #print(qc_label)
     
@@ -278,8 +315,8 @@ function(input, output,session) {
     
     
     output$Qpcctable <- renderRHandsontable({
-      if (input$reproducibility){
-        if(!is.null(data))
+      if (input$reproducibility) {
+        if (!is.null(data))
         {
           rhandsontable(head(data, n = 20L))
         }
@@ -287,8 +324,8 @@ function(input, output,session) {
       
     })
     output$Qpccplot <- renderPlot({
-      if (input$reproducibility){
-        if(!is.null(data))
+      if (input$reproducibility) {
+        if (!is.null(data))
         {
           drawcorrplot(data)
         }
@@ -300,16 +337,16 @@ function(input, output,session) {
     # PCA
     #################################
     output$Qpcatable <- renderRHandsontable({
-      if (input$qcPca){
-        if(!is.null(data))
+      if (input$qcPca) {
+        if (!is.null(data))
         {
           rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qpcaplot <- renderPlotly({
-      if (input$qcPca){
-        if(!is.null(data))
+      if (input$qcPca) {
+        if (!is.null(data))
         {
           p <- drawPCA(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
@@ -320,16 +357,16 @@ function(input, output,session) {
     # T-sne
     #################################
     output$Qtsnetable <- renderRHandsontable({
-      if (input$qctsne){
-        if(!is.null(data))
+      if (input$qctsne) {
+        if (!is.null(data))
         {
           rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qtsneplot <- renderPlotly({
-      if (input$qctsne){
-        if(!is.null(data))
+      if (input$qctsne) {
+        if (!is.null(data))
         {
           p <- drawTSNE(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
@@ -342,16 +379,16 @@ function(input, output,session) {
     # umap
     #################################
     output$Qumaptable <- renderRHandsontable({
-      if (input$qcUmap){
-        if(!is.null(data))
+      if (input$qcUmap) {
+        if (!is.null(data))
         {
           rhandsontable(head(data, n = 20L))
         }
       }
     })
     output$Qumapplot <- renderPlotly({
-      if (input$qcUmap){
-        if(!is.null(data))
+      if (input$qcUmap) {
+        if (!is.null(data))
         {
           p <- drawUMAP(data, qc_label)
           ggplotly(p) %>% config(displaylogo = F)
@@ -364,7 +401,7 @@ function(input, output,session) {
   #################################
   # missing value explore
   #################################
-
+  
   output$missingPlot <- renderPlot({
     if (input$MissingValueExplore_check & input$QC) {
       if (class(QCdatasetInput()) == "data.frame") {
@@ -387,15 +424,15 @@ function(input, output,session) {
             "Please click the submit button!"
           })
     }
-
+    
     else
       output$QMparameters <-
         renderText({
           "Please select MissingValueExplore checkbox and sumbit!"
         })
-
+    
   }, height = 800, units = "px")
-
+  
   output$downloadMissingPlot <- downloadHandler(
     filename = function() {
       paste("missingValueExplore", Sys.time(), ".pdf", sep = "")
@@ -410,11 +447,11 @@ function(input, output,session) {
   #  data <- iris[, 1]
   #  drawdensity(as.data.frame(data))
   #})
-
+  
   #################################
   # data console
   #################################
-
+  
   #for read protein matrix
   readProteinM <- reactive({
     if (!is.null(input$protein_matrix))
@@ -479,8 +516,8 @@ function(input, output,session) {
       )
     }
   })
-
-
+  
+  
   output$individualUi <- renderUI({
     if (is.null(input$individual_info))
       "Please upload your files!"
@@ -509,24 +546,26 @@ function(input, output,session) {
         #   choices = individual_header,
         #   selected = individual_header[2]
         # ),
-
+        
         actionButton("individual_info_annotation", "Submit", class = "btn-primary")
       )
     }
   })
   sampleInfoInput <- eventReactive(input$sample_info_annotation, {
     sampleInfo <-
-      read.csv(input$sample_info$datapath,
-               header = T,
-               sep = input$DCsampleSep,
-               check.names = F,
-               encoding = "UTF-8")
+      read.csv(
+        input$sample_info$datapath,
+        header = T,
+        sep = input$DCsampleSep,
+        check.names = F,
+        encoding = "UTF-8"
+      )
     sample_header <- colnames(sampleInfo)
     colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <-
       "sampleId"
     # colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
     #   "sampleType"
-
+    
     # if (input$sample_info_batch_id != 'select...')
     #   colnames(sampleInfo)[which(sample_header == input$sample_info_batch_id)] <-
     #   "batchId"
@@ -539,7 +578,7 @@ function(input, output,session) {
     #print(head(sampleInfoInput()))
     sampleInfo
   }, ignoreNULL = T)
-
+  
   sampleResInput <- eventReactive(input$sample_info_annotation, {
     sampleInfoInput()
   })
@@ -552,20 +591,22 @@ function(input, output,session) {
   individualInfoInput <-
     eventReactive(input$individual_info_annotation, {
       individualInfo <-
-        read.csv(input$individual_info$datapath,
-                 header = T,
-                 sep = input$DCindividualSep,
-                 check.names = F,
-                 encoding = "UTF-8")
+        read.csv(
+          input$individual_info$datapath,
+          header = T,
+          sep = input$DCindividualSep,
+          check.names = F,
+          encoding = "UTF-8"
+        )
       individual_header <- colnames(individualInfo)
       colnames(individualInfo)[which(individual_header == input$individual_info_id)] <-
         "individualId"
       # colnames(individualInfo)[which(individual_header == input$individual_info_type)] <-
       #   "individualType"
-
+      
       individualInfo
     }, ignoreNULL = T)
-
+  
   individualResInput <-
     eventReactive(input$individual_info_annotation, {
       individualInfoInput()
@@ -586,7 +627,7 @@ function(input, output,session) {
     #anno_name<<-colnames(getAnnoTable())
     getAnnoTable()
   }))
-
+  
   output$DMprot_anno_Ui <- renderUI({
     anno_name <<- colnames(getAnnoTable())
     tagList(
@@ -606,43 +647,43 @@ function(input, output,session) {
   observeEvent(input$dm, {
     print("data mining")
     print(dim(readProteinM()))
-    qc_label<-input$DManno
-    if(!is.null(qc_label) & qc_label!="None"){
-      sample_names<-colnames(readProteinM())[-1]
-      qc_label<-as.vector(getAnnoTable()[sample_names, qc_label])
-    }else{
+    qc_label <- input$DManno
+    if (!is.null(qc_label) & qc_label != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      qc_label <- as.vector(getAnnoTable()[sample_names, qc_label])
+    } else{
       return()
     }
     
     data <- readProteinM()
     col_name <- colnames(data)
-    row_name <- as.matrix(data[,1])
-    row_name <- as.vector(row_name[,1])
+    row_name <- as.matrix(data[, 1])
+    row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
     
-    data <- data[,-1]
+    data <- data[, -1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
     data[is.na(data)] <- 0
     #data <- as.numeric(data)
     print(head(data))
-
+    
     print(qc_label)
     #################################
     # Heatmap
     #################################
     output$DMheatmaptable <- renderRHandsontable({
-      if (input$dmheatmap){
-        if(!is.null(readProteinM()))
+      if (input$dmheatmap) {
+        if (!is.null(readProteinM()))
         {
           rhandsontable(head(readProteinM(), n = 20L))
         }
       }
     })
     output$DMheatmapparameters <- renderPlotly({
-      if (input$dmheatmap){
-        if(!is.null(readProteinM()))
+      if (input$dmheatmap) {
+        if (!is.null(readProteinM()))
         {
           drawheatmap(t(data), qc_label)
         }
@@ -676,7 +717,7 @@ function(input, output,session) {
     #     }
     #   }
     # })
-    # 
+    #
     # #################################
     # # ViolinPlot
     # #################################
@@ -695,23 +736,23 @@ function(input, output,session) {
     #       drawviolin(t(data), qc_label)
     #     }
     #   }
-    #   
+    #
     # })
-    # 
+    #
     #################################
     # Radar
     #################################
     output$DMradartable <- renderRHandsontable({
-      if (input$radarmap){
-        if(!is.null(readProteinM()))
+      if (input$radarmap) {
+        if (!is.null(readProteinM()))
         {
           rhandsontable(head(readProteinM(), n = 20L))
         }
       }
     })
     output$DMradarparameters <- renderCanvasXpress({
-      if (input$radarmap){
-        if(!is.null(readProteinM()))
+      if (input$radarmap) {
+        if (!is.null(readProteinM()))
         {
           drawradar(data)
         }
@@ -721,33 +762,28 @@ function(input, output,session) {
     
     
     observeEvent(input$mlsubmit, {
-    #################################
-    # ML
-    #################################
-    output$DMmlText <- renderPrint({
-      print(input$mlframework)
-      print(input$mlmethod)
-      print(unique(qc_label, fromLast = FALSE))
-    })
-    if (is.null(input$DManno))
-    {
-      return()
-    }
-    data <- as.data.frame(t(data))
-    print("ML")
-    print(qc_label)
-    data$Label <- qc_label
-    print(head(data))
-    #################################
-    # R Packages
-    #################################
-    if (input$mlframework == "R Packages")
-    {
+      #################################
+      # ML
+      #################################
+      output$DMmlText <- renderPrint({
+        print(input$mlframework)
+        print(input$mlmethod)
+        print(unique(qc_label, fromLast = FALSE))
+      })
+      if (is.null(input$DManno))
+      {
+        return()
+      }
+      data <- as.data.frame(t(data))
+      print("ML")
+      print(qc_label)
+      data$Label <- qc_label
+      #print(head(data))
       #################################
       # Decision Tree
       #################################
       if (input$mlmethod == "Decision Tree") {
-        if(!is.null(readProteinM()))
+        if (!is.null(readProteinM()))
         {
           dtree <- rpart(Label ~ ., data = data, method = "class")
           tree <-
@@ -774,7 +810,7 @@ function(input, output,session) {
         #################################
         # Random Forest
         #################################
-        if(!is.null(readProteinM()))
+        if (!is.null(readProteinM()))
         {
           #print(dim(data))
           #print(class(data))
@@ -784,28 +820,31 @@ function(input, output,session) {
             randomForest(Label ~ ., data = data)
           pre.forest <- predict(model.forest, data)
           
-          if(pre.forest)
+          if (pre.forest)
           {
             ran_roc <-
-            roc(data$Label, as.numeric(pre.forest))
+              roc(data$Label, as.numeric(pre.forest))
           }
           
           
           output$DMmlPlot <- renderPlot({
-            layout(matrix(c(1,2,3,0),2,2),widths = c(1,1),heights = c(1,1), F)
+            layout(matrix(c(1, 2, 3, 0), 2, 2),
+                   widths = c(1, 1),
+                   heights = c(1, 1),
+                   F)
             varImpPlot(model.forest, main = "variable importance")
             plot(model.forest)
-            # plot(
-            #   ran_roc,
-            #   print.auc = TRUE,
-            #   auc.polygon = TRUE,
-            #   grid = c(0.1, 0.2),
-            #   grid.col = c("green", "red"),
-            #   max.auc.polygon = TRUE,
-            #   auc.polygon.col = "skyblue",
-            #   print.thres = TRUE,
-            #   main = 'RF ROC'
-            # )
+            plot(
+              ran_roc,
+              print.auc = TRUE,
+              auc.polygon = TRUE,
+              grid = c(0.1, 0.2),
+              grid.col = c("green", "red"),
+              max.auc.polygon = TRUE,
+              auc.polygon.col = "skyblue",
+              print.thres = TRUE,
+              main = 'RF ROC'
+            )
           })
           
           output$DMmloutputText <- renderPrint({
@@ -830,23 +869,11 @@ function(input, output,session) {
         cat("Artificial Neural Network comming soon!")
       }
       
-    } else if (input$mlframework == "Tensorflow")
-    {
-      #################################
-      # Tensorflow
-      #################################
-      cat("Tensorflow comming soon!")
-    } else if (input$mlframework == "MxNet")
-    {
-      #################################
-      # MxNet
-      #################################
-      cat("MxNet comming soon!")
-    }
+      
+    })
   })
-  })
-
-
+  
+  
   #################################
   # feature selection
   #################################
@@ -861,20 +888,20 @@ function(input, output,session) {
                                         #}
                                         rownames(protM) <-
                                           protM[, 1]
-                                        protM <- protM[,-1]
+                                        protM <- protM[, -1]
                                         protM <- t(protM)
                                         sample_names <-
                                           rownames(protM)
                                         label_temp <-
                                           as.vector(getAnnoTable()[sample_names, label])
-
+                                        
                                         labeled_protM <-
                                           cbind(label = label_temp, protM, stringsAsFactors = FALSE)
                                         fs_features <-
                                           colnames(protM)
                                         if (!is.null(input$featureSel_filter))
                                           fs_features <-
-                                          featureFilter(labeled_protM,!is.na(match(
+                                          featureFilter(labeled_protM, !is.na(match(
                                             c("nearZeoVar", "high_correlation"),
                                             input$featureSel_filter
                                           )), input$fs_missing_ratio)
@@ -887,26 +914,26 @@ function(input, output,session) {
                                         if (!is.null(input$featureSel_algorithm))
                                           fs_features <-
                                           featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
-
+                                        
                                         return(fs_features)
                                       }
                                     },
                                     ignoreNULL = T,
                                     ignoreInit = T)
-
+  
   ####feature selection
-
+  
   ####feature selection
   output$fs_summary <- renderText({
     paste(
       "After feature selection your matrix contains",
-
+      
       length(feature_sel_prot()$features),
       "features:",
       paste(feature_sel_prot()$features, collapse = ",")
     )
   })
-
+  
   output$fs_parameter <- renderPlot({
     plot(feature_sel_prot()$mod)
   })
@@ -919,20 +946,20 @@ function(input, output,session) {
       paste("featureSelected", Sys.Date(), ".txt", sep = "")
     },
     content = function(file) {
-      protM<-readProteinM()
-      rownames(protM)<-as.vector(unlist(protM[1]))
-      protM<-protM[feature_sel_prot()$features,]
+      protM <- readProteinM()
+      rownames(protM) <- as.vector(unlist(protM[1]))
+      protM <- protM[feature_sel_prot()$features, ]
       write.table(
         protM,
         file,
         row.names = F,
         quote = F,
-        na="",
+        na = "",
         sep = "\t"
       )
     }
   )
-
+  
   #################################
   # ANNO
   #################################
@@ -948,30 +975,33 @@ function(input, output,session) {
         "Reactome, "
       ))
     })
-
+    
     observeEvent(input$proteinlist, {
       output$annouistring <- renderUI({
         if (is.null(input$proteinlist))
         {
           return()
-        }else{
+        } else{
           if (length(input$proteinlist) < 1)
             return()
-          img(src = paste0("https://string-db.org/api/image/network?identifiers=", gsub(",", "%0d", input$proteinlist)))
+          img(src = paste0(
+            "https://string-db.org/api/image/network?identifiers=",
+            gsub(",", "%0d", input$proteinlist)
+          ))
         }
       })
     })
   })
-
-
-
+  
+  
+  
   output$annouiuniport <- renderUI({
     if (is.null(input$proteinlist))
       return()
   })
-
-
-
+  
+  
+  
   output$anno_table <- renderRHandsontable({
     DF = data.frame(
       Name = c("Uniport",
@@ -995,7 +1025,7 @@ function(input, output,session) {
       ),
       stringsAsFactors = FALSE
     )
-
+    
     rhandsontable(
       DF,
       allowedTags = "<em><b><strong><a><big>",
@@ -1008,5 +1038,5 @@ function(input, output,session) {
       hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
       hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
   })
-
+  
 }

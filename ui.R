@@ -692,11 +692,6 @@ navbarPage(
             4,
             h4("Summary"),
             selectInput(
-              "mlframework",
-              "Choose a ML framework:",
-              choices = c("R Packages", "Tensorflow", "MxNet")
-            ),
-            selectInput(
               "mlmethod",
               "Choose a ML method:",
               choices = c(
@@ -709,30 +704,6 @@ navbarPage(
             ),
             HTML(
               '<p>
-              <strong><span style="font-size: 14px;"></span></strong>
-              </p>
-              <p>
-              <strong>Info:</strong>
-              </p>
-              <ul class=" list-paddingleft-2" style="list-style-type: disc;">
-              <li>
-              <p>
-              Tensorflow:TensorFlow makes it easy for beginners and experts to create machine learning models for desktop, mobile, web, and cloud.
-              </p>
-              <p>
-              <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">https://tensorflow.google.cn</span>
-              </p>
-              </li>
-              <li>
-              <p>
-              MxNet:A flexible and efficient library for deep learning.&nbsp;
-              </p>
-              <p>
-              <span style="color: rgb(255, 0, 0);">web:</span><span style="color: rgb(255, 0, 0); text-decoration: underline;">http://mxnet.incubator.apache.org</span>
-              </p>
-              </li>
-              </ul>
-              <p>
               (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
               </p>
               <p>
