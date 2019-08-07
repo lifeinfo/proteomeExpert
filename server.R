@@ -642,6 +642,19 @@ function(input, output, session) {
     )
   })
   
+  output$STprot_anno_Ui <- renderUI({
+    anno_name <<- colnames(getAnnoTable())
+    tagList(
+      selectInput(
+        'STanno',
+        'Select Groups (Compare the two groups)',
+        anno_name,
+        multiple = F,
+        selectize = TRUE
+      )
+    )
+  })
+  
   ####################################################
   #data mining
   observeEvent(input$dm, {

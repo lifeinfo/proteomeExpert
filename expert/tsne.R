@@ -12,10 +12,6 @@ drawTSNE <- function(data,label,rowNormalization=F,colNormalization=F,perplexity
   tsn <- data.frame(tsn,DF$label)
   colnames(tsn) <- c("X","Y","label")
   rownames(tsn) <- rownames(M)
-  #tsn <- tsn[-c(which(tsn$X==min(tsn$X)),which(tsn$Y==min(tsn$Y))),]
-  #tsn <- tsn[-c(which(tsn$X==max(tsn$X)),which(tsn$Y==max(tsn$Y))),]
-  #lblColors <- c(N='#537e35',M='#e17832',A='#f5b819',C='#5992c6',P='#282f89',W='mediumorchid3')
-  #lblColors <- c(A='#537e35',M='#e17832',N='#f5b819',B='#5992c6',C='#282f89',W='mediumorchid3')
   p <- ggplot(tsn, aes(x=X, y=Y, colour=label)) + geom_point(size=4)
   p <- p + theme(  panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank(),

@@ -577,7 +577,11 @@ navbarPage(
   tabPanel(
     "Statistics",
     sidebarPanel(
-      tags$h5("Input:")
+      tags$h5("Select input parameters:"),
+      hr(),
+      uiOutput("STprot_anno_Ui")
+      #selectInput('statlabel', 'select matrix', protM_name, selectize = FALSE),
+      
     ),
     mainPanel(tabsetPanel(
       #################################
@@ -710,7 +714,7 @@ navbarPage(
           ),
           HTML(
             '<p>
-            (*Note:<em>If you have a lot of data, the system may be slow, please be patient.</em>)
+            (*Note:<em>If you have a large matrix, the system may be slow, please be patient.</em>)
             </p>
             <p>
             <span style="font-size: 14px;"></span>
