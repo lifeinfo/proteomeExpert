@@ -562,7 +562,7 @@ navbarPage(
     )
   ),
   #################################
-  # 
+  #
   #################################
   tabPanel(
     "Statistics",
@@ -791,10 +791,37 @@ navbarPage(
   #################################
   navbarMenu(
     "Resources",
-    tabPanel("Tutorials"),
+    tabPanel("Tutorials",
+             mainPanel(
+               tabsetPanel(
+                 tabPanel("Plot", plotOutput("plot")),
+                 tabPanel("Summary", verbatimTextOutput("summary")),
+                 tabPanel("Table", tableOutput("table"))
+               )
+             )),
     "----",
-    tabPanel("Docs"),
-    tabPanel("Q&A"),
-    tabPanel("GitHub")
+    tabPanel("Docs",
+             mainPanel(
+               tabsetPanel(
+                 tabPanel("Plot", plotOutput("plot")),
+                 tabPanel("Summary", verbatimTextOutput("summary")),
+                 tabPanel("Table", tableOutput("table"))
+               )
+             )),
+    tabPanel("Q&A",
+             mainPanel(
+               tabsetPanel(
+                 tabPanel("Plot", plotOutput("plot")),
+                 tabPanel("Summary", verbatimTextOutput("summary")),
+                 tabPanel("Table", tableOutput("table"))
+               )
+             )),
+    tabPanel("GitHub",
+             mainPanel(
+               h4("Github"),
+               HTML(
+                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
+               )
+             ))
   )
         )
