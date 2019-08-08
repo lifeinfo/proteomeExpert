@@ -150,8 +150,6 @@ function(input, output, session) {
   #################################
   # data preprocess
   #################################
-  # updated when the user clicks the button
-  ###data preprocessing
   DPdataprecessInput <- eventReactive(input$DPDo, {
     batch_factor <- input$DManno2
     if (!is.null(batch_factor) & batch_factor != "None") {
@@ -242,9 +240,6 @@ function(input, output, session) {
   }, ignoreNULL = FALSE)
   
   output$Dtable <- renderTable({
-    #peptide<-read.table(input$PeptideMatrix$datapath,header=TRUE)
-    #protM<<-head(peptide,5)
-    #if (!is.na(DdatasetInput()))
     t <- data.frame(DdatasetInput())
     n = 5
     if (ncol(t) < 5)
@@ -284,23 +279,18 @@ function(input, output, session) {
   }, ignoreNULL = FALSE)
   
   observeEvent(input$QC, {
-    #print("QC other")
-    #print(dim(readProteinM()))
     qc_label <- input$QCLabel
     
     data <- readProteinM()
     col_name <- colnames(data)
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
-    #print(col_name)
-    #print(row_name)
     data <- data.matrix(data)
     data <- data[, -1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
     data[is.na(data)] <- 0
-    #print(head(data))
     
     
     if (!is.null(qc_label) & qc_label != "None") {
@@ -408,7 +398,6 @@ function(input, output, session) {
         output$QMparameters <- renderText({
           "Results are showed below:"
         })
-        #source("missingValueExplore_zts.R", local = T)
         missing_plot(readProteinM())
       }
       else if (is.null(readProteinM()))
@@ -443,11 +432,7 @@ function(input, output, session) {
       dev.off()
     }
   )
-  #output$densityPlot <- renderPlot({
-  #  data <- iris[, 1]
-  #  drawdensity(as.data.frame(data))
-  #})
-  
+
   #################################
   # data console
   #################################
@@ -482,30 +467,6 @@ function(input, output, session) {
         )
       sample_header <<- colnames(sample_info)
       tagList(
-        #selectInput(
-        #  "sample_info_id",
-        #  "select sample id",
-        #  choices = sample_header,
-        #  selected = sample_header[1]
-        #),
-        # selectInput(
-        #   "sample_info_type",
-        #   "select sample type",
-        #   choices = sample_header,
-        #   selected = sample_header[2]
-        # ),
-        # selectInput(
-        #   "sample_info_batch_id",
-        #   "select batch id",
-        #   choices = c(sample_header, "select..."),
-        #   selected = "select..."
-        # ),
-        # selectInput(
-        #   "sample_info_technicalRep_id",
-        #   "select technical replica id",
-        #   choices = c(sample_header, "select..."),
-        #   selected = "select..."
-        # ),
         selectInput(
           "sample_info_individual_id",
           "select individual id/name",
@@ -540,12 +501,6 @@ function(input, output, session) {
           choices = individual_header,
           selected = individual_header[1]
         ),
-        # selectInput(
-        #   "individual_info_type",
-        #   "select individual type",
-        #   choices = individual_header,
-        #   selected = individual_header[2]
-        # ),
         
         actionButton("individual_info_annotation", "Submit", class = "btn-primary")
       )
@@ -561,20 +516,9 @@ function(input, output, session) {
         encoding = "UTF-8"
       )
     sample_header <- colnames(sampleInfo)
-    # colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <- "sampleId"
-    # colnames(sampleInfo)[which(sample_header == input$sample_info_type)] <-
-    #   "sampleType"
-    
-    # if (input$sample_info_batch_id != 'select...')
-    #   colnames(sampleInfo)[which(sample_header == input$sample_info_batch_id)] <-
-    #   "batchId"
-    # if (input$sample_info_technicalRep_id != 'select...')
-    #   colnames(sampleInfo)[which(sample_header == input$sample_info_technicalRep_id)] <-
-    #   "technicalId"
     if (input$sample_info_individual_id != 'select...')
       colnames(sampleInfo)[which(sample_header == input$sample_info_individual_id)] <-
       "individualId"
-    #print(head(sampleInfoInput()))
     sampleInfo
   }, ignoreNULL = T)
   
@@ -600,9 +544,6 @@ function(input, output, session) {
       individual_header <- colnames(individualInfo)
       colnames(individualInfo)[which(individual_header == input$individual_info_id)] <-
         "individualId"
-      # colnames(individualInfo)[which(individual_header == input$individual_info_type)] <-
-      #   "individualType"
-      
       individualInfo
     }, ignoreNULL = T)
   
@@ -702,55 +643,6 @@ function(input, output, session) {
       }
       
     })
-    
-    # #################################
-    # # VocanoPlot
-    # #################################
-    # output$DMvocanotable <- renderRHandsontable({
-    #   if (input$vocanoPlot){
-    #     if(!is.null(readProteinM()))
-    #     {
-    #       rhandsontable(head(readProteinM(), n = 20L))
-    #     }
-    #   }
-    # })
-    # output$DMvocanoparameters <- renderPlot({
-    #   if (input$vocanoPlot){
-    #     if(!is.null(readProteinM()))
-    #     {
-    #       print("vovanoplot")
-    #       pair <- unique(qc_label, fromLast = FALSE)
-    #       print(pair)
-    #       print(qc_label)
-    #       if(length(pair) == 2)
-    #       {
-    #         drawVolcano(t(data), qc_label, pair[1], pair[2])
-    #       }
-    #     }
-    #   }
-    # })
-    #
-    # #################################
-    # # ViolinPlot
-    # #################################
-    # output$DMviolintable <- renderRHandsontable({
-    #   if (input$ViolinPlot){
-    #     if(!is.null(readProteinM()))
-    #     {
-    #       rhandsontable(head(readProteinM(), n = 20L))
-    #     }
-    #   }
-    # })
-    # output$DMviolinparameters <- renderPlot({
-    #   if (input$ViolinPlot){
-    #     if(!is.null(readProteinM()))
-    #     {
-    #       drawviolin(t(data), qc_label)
-    #     }
-    #   }
-    #
-    # })
-    #
     #################################
     # Radar
     #################################
