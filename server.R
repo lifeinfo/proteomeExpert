@@ -468,6 +468,12 @@ function(input, output, session) {
       sample_header <<- colnames(sample_info)
       tagList(
         selectInput(
+          "sample_info_id",
+          "select sample id",
+          choices = sample_header,
+          selected = sample_header[1]
+        ),
+        selectInput(
           "sample_info_individual_id",
           "select individual id/name",
           choices = c(sample_header, "select..."),
@@ -516,6 +522,8 @@ function(input, output, session) {
         encoding = "UTF-8"
       )
     sample_header <- colnames(sampleInfo)
+    colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <-
+      "sampleId"
     if (input$sample_info_individual_id != 'select...')
       colnames(sampleInfo)[which(sample_header == input$sample_info_individual_id)] <-
       "individualId"
@@ -560,7 +568,7 @@ function(input, output, session) {
   getAnnoTable <- eventReactive(input$DoAnnoTable, {
     anno <-
       merge(individualInfoInput(), sampleInfoInput(), by = 'individualId')
-    #rownames(anno) <- anno[, "sampleId"]
+    rownames(anno) <- anno[, "sampleId"]
     anno
   })
   output$annoTable <- DT::renderDataTable(DT::datatable({
@@ -603,6 +611,8 @@ function(input, output, session) {
     qc_label <- input$DManno
     if (!is.null(qc_label) & qc_label != "None") {
       sample_names <- colnames(readProteinM())[-1]
+      print("qc_label")
+      print(getAnnoTable())
       qc_label <- as.vector(getAnnoTable()[sample_names, qc_label])
     } else{
       return()
@@ -634,11 +644,11 @@ function(input, output, session) {
         }
       }
     })
-    output$DMheatmapparameters <- renderPlotly({
+    output$DMheatmapparameters <- renderPlot({
       if (input$dmheatmap) {
         if (!is.null(readProteinM()))
         {
-          drawheatmap(t(data), qc_label)
+          drawheatmap(data, qc_label)
         }
       }
       

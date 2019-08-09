@@ -562,7 +562,7 @@ navbarPage(
     )
   ),
   #################################
-  #
+  #   Statistics
   #################################
   tabPanel(
     "Statistics",
@@ -636,7 +636,7 @@ navbarPage(
           "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
         ),
         hr(),
-        column(6, plotlyOutput("DMheatmapparameters")),
+        column(6, plotOutput("DMheatmapparameters")),
         column(6, rHandsontableOutput("DMheatmaptable"))
       ),
       tabPanel(
@@ -794,26 +794,26 @@ navbarPage(
     tabPanel("Tutorials",
              mainPanel(
                tabsetPanel(
-                 tabPanel("Plot", plotOutput("plot")),
-                 tabPanel("Summary", verbatimTextOutput("summary")),
-                 tabPanel("Table", tableOutput("table"))
+                 tabPanel("Test"),
+                 tabPanel("Summary"),
+                 tabPanel("Table")
                )
              )),
     "----",
     tabPanel("Docs",
              mainPanel(
                tabsetPanel(
-                 tabPanel("Plot", plotOutput("plot")),
-                 tabPanel("Summary", verbatimTextOutput("summary")),
-                 tabPanel("Table", tableOutput("table"))
+                 tabPanel("Plot"),
+                 tabPanel("Summary"),
+                 tabPanel("Table")
                )
              )),
     tabPanel("Q&A",
              mainPanel(
                tabsetPanel(
-                 tabPanel("Plot", plotOutput("plot")),
-                 tabPanel("Summary", verbatimTextOutput("summary")),
-                 tabPanel("Table", tableOutput("table"))
+                 tabPanel("Plot"),
+                 tabPanel("Summary"),
+                 tabPanel("Table")
                )
              )),
     tabPanel("GitHub",
