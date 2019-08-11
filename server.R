@@ -877,7 +877,8 @@ function(input, output, session) {
   #################################
   # ANNO
   #################################
-  observeEvent(input$proteinlist, {
+  observeEvent(input$annosubmit, {
+    
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
       print(paste0(
@@ -890,25 +891,22 @@ function(input, output, session) {
       ))
     })
     
-    observeEvent(input$proteinlist, {
-      output$annouistring <- renderUI({
-        if (is.null(input$proteinlist))
-        {
+    output$annouistring <- renderUI({
+      if (is.null(input$proteinlist))
+      {
+        return()
+      } else{
+        if (length(input$proteinlist) < 1)
           return()
-        } else{
-          if (length(input$proteinlist) < 1)
-            return()
-          img(src = paste0(
-            "https://string-db.org/api/image/network?identifiers=",
-            gsub(",", "%0d", input$proteinlist)
-          ))
-        }
-      })
+        img(src = paste0(
+          "https://string-db.org/api/image/network?identifiers=",
+          gsub(",", "%0d", input$proteinlist)
+        ))
+      }
     })
   })
-  
-  
-  
+
+
   output$annouiuniport <- renderUI({
     if (is.null(input$proteinlist))
       return()
