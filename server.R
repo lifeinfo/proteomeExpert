@@ -51,6 +51,9 @@ function(input, output, session) {
     )
   })
   batch_design_result <- eventReactive(input$BDdo, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   incProgress(1/15)  
     col_weights <- strsplit(input$BDweight, ",")
     col_weights <- as.numeric(unlist(col_weights))
     result <-
@@ -61,6 +64,9 @@ function(input, output, session) {
         col_weights,
         input$BDsize
       )
+    incProgress(14/15,message = "Ready to finish!")
+                 })
+    return(result)
   },
   ignoreNULL = T,
   ignoreInit = T)
@@ -231,7 +237,7 @@ function(input, output, session) {
                        bsep = isolate(input$Dbsep),
                        bheader = isolate(input$Dbheader)
                      )
-                     incProgress(9 / 10)
+                     incProgress(9 / 10,message = "Ready to finish!")
                    })
       prot_matrix
     }

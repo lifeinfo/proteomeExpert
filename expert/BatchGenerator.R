@@ -50,7 +50,7 @@ batch=list()
 bestBatch=list()
 bestScore=0;
 
-
+incProgress(3/15,message = "Iteration beginning!")
 for(stp in 1:steps){
 	batch=list()
 	scores=c();
@@ -80,7 +80,7 @@ for(stp in 1:steps){
 		#cat(sprintf("step %d:better batch generated with score %f\n",stp,bestScore))
 	}
 }
-
+incProgress(13/15,message = "Iteration finishing! Post data processing now...")
 for(i in 1:batchNumber){
    bestBatch[[i]]$batchId <- i 
 }
