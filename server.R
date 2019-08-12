@@ -231,7 +231,7 @@ function(input, output, session) {
                        bsep = isolate(input$Dbsep),
                        bheader = isolate(input$Dbheader)
                      )
-                     incProgress(4 / 5)
+                     incProgress(9 / 10)
                    })
       prot_matrix
     }

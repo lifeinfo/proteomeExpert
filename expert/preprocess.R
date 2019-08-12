@@ -32,6 +32,7 @@ auto_preprocess <-
         quote = "",
         fill = TRUE
       )
+    incProgress(1/5,message = "Data read completed! Starting to do normalizaion and precursor selection...")
     pep.data[is.na(pep.data)]<-NA
     pep.data <- pep.data[!grepl("^1/CON", pep.data[, 2], fixed = F), ]
     
@@ -159,9 +160,11 @@ auto_preprocess <-
     #write.table(pep_order2.top3, paste("data/",Sys.Date(),"pep.top3.txt",sep = ""),row.names = F,  quote = F,sep = "\t",na = "NA")
     
     #############lr for pep2prot
+    incProgress(1/2,message = "Peptide inferencing now!")
     prot.matrix <- pep2prot(pep_order2.top3)
     prot.matrix[, -c(1:2)] <- round(prot.matrix[, -c(1:2)], 2)
     prot.matrix <- prot.matrix[, -2]
+    incProgress(8/10,message = "Protein matrix completed!")
     return(prot.matrix)
     
   }
