@@ -36,10 +36,9 @@ missing_plot <- function(df) {
   mymagnify = 1.5
   layout(matrix(c(1:4, 2, 3), 3))
   plot(
-    cna.cut,
-    main = "missing rate for column",
-    xlab = "missing rate",
-    ylab = "#of column",
+    density(cna),
+    main = "Density plot of missing rate by column",
+    bty="n",xlim = c(0,1),
     col = cbbPalette[2],
     cex = mymagnify,
     cex.lab = mymagnify,
@@ -69,10 +68,9 @@ missing_plot <- function(df) {
     cex.main = mymagnify
   )
   plot(
-    rna.cut,
-    main = "missing rate for row",
-    xlab = "missing rate for column",
-    ylab = "#of row",
+    density(rna),
+    main = "Density plot of missing rate by row",
+    bty="n",xlim = c(0,1),
     col = cbbPalette[3],
     cex = mymagnify,
     cex.lab = mymagnify,

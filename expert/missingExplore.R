@@ -1,4 +1,6 @@
 # Define UI for data upload app ----
+options(shiny.host = '0.0.0.0')
+options(shiny.port = 8888)
 ui <- fluidPage(# App title ----
                 titlePanel("Uploading Files"),
                 
@@ -115,10 +117,13 @@ server <- function(input, output) {
     mymagnify = 1.5
     layout(matrix(c(1:4, 2, 3), 3))
     plot(
-      cna.cut,
-      main = "missing rate for column",
-      xlab = "missing rate",
-      ylab = "#of column",
+      density(cna),
+      main = "Density plot of missing rate by column",
+      bty="n",
+      xlim = c(0,1)
+      ,ylim = c(0,8),
+      #xlab = "missing rate",
+      #ylab = "#of column",
       col = cbbPalette[2],
       cex = mymagnify,
       cex.lab = mymagnify,
@@ -148,10 +153,10 @@ server <- function(input, output) {
       cex.main = mymagnify
     )
     plot(
-      rna.cut,
-      main = "missing rate for row",
-      xlab = "missing rate for column",
-      ylab = "#of row",
+      density(rna),
+      main = "Density plot of missing rate by row",
+      bty="n",      xlim = c(0,1)
+      ,ylim = c(0,8),
       col = cbbPalette[3],
       cex = mymagnify,
       cex.lab = mymagnify,
@@ -163,6 +168,5 @@ server <- function(input, output) {
     
   }, height = 800, units = "px")
 }
-
 # Create Shiny app ----
-shinyApp(ui, server)
+shinyApp(ui, server,options = list(shiny.port='80', shiny.host="0.0.0.0"))
