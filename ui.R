@@ -384,7 +384,7 @@ navbarPage(
         
         fileInput(
           "TechnicalReplicate",
-          "Select your technical replicate file (required):",
+          "Select your technical replicate file (optional):",
           placeholder = "*.csv or *.TXT required!"
         ),
         checkboxInput("Dtheader", "Header", FALSE),

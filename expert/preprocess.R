@@ -15,7 +15,7 @@ pepstat <- function(d) {
 ###########format peptide data matrix tg,prot,int; tech_rep_f:no header, sample name,replicate label
 auto_preprocess <-
   function(filename = "peptides.txt",
-           tech_rep_f = "technical_rep.txt",
+           tech_rep_f = NULL,
            batchf = NULL,
            psep = "\t",
            tsep = "\t",
@@ -53,48 +53,53 @@ auto_preprocess <-
     colnames(pep.data.log2.qn) <- colnames(pep.data.log2)[-1]
     rownames(pep.data.log2.qn) <- rownames(pep.data.log2)
     #write.table(pep.data.log2.qn, "data/qn_log2_pep.txt",col.names=T,row.names=T,quote = F,sep = "\t",na = "NA")
-    
-    #read annotation
-    anno <-
-      read.table(tech_rep_f,
-                 header = theader,
-                 sep = tsep,
-                 check.names = F)
-    colnames(anno) <- c("V1", "V2")
-    rownames(anno) <- anno$V1
-    anno <- anno[colnames(pep.data.log2.qn), ]
-    replicates <- split(as.vector(anno$V1), as.factor(anno$V2))
-    replicates_impute <- function(x) {
-      index <- which(is.na(x))
-      x.median <- median(x, na.rm = T)
-      x[index] <- x.median
-      return(x)
+   ####technical imputation
+    #no technical imputaiton
+    if(is.null(tech_rep_f)){
+      data.tech.rep<-cbind(pep.data[,1:2],pep.data.log2.qn)
     }
-    
-    data <- pep.data.log2.qn
-    
-    data.reps <- data.frame()
-    for (reps in replicates) {
-      if (length(reps) > 1) {
-        d <- apply(data[, reps], 1, function(x) {
-          return(replicates_impute(x))
-        })
+    ##technical imputation
+    else{    
+      #read annotation
+      anno <-
+        read.table(tech_rep_f,
+                   header = theader,
+                   sep = tsep,
+                   check.names = F)
+      colnames(anno) <- c("V1", "V2")
+      rownames(anno) <- anno$V1
+      anno <- anno[colnames(pep.data.log2.qn), ]
+      replicates <- split(as.vector(anno$V1), as.factor(anno$V2))
+      replicates_impute <- function(x) {
+        index <- which(is.na(x))
+        x.median <- median(x, na.rm = T)
+        x[index] <- x.median
+        return(x)
       }
-      else {
-        d <- data[, reps]
-        d <- t(as.matrix(d))
-        rownames(d) <- reps
+      
+      data <- pep.data.log2.qn
+      
+      data.reps <- data.frame()
+      for (reps in replicates) {
+        if (length(reps) > 1) {
+          d <- apply(data[, reps], 1, function(x) {
+            return(replicates_impute(x))
+          })
+        }
+        else {
+          d <- data[, reps]
+          d <- t(as.matrix(d))
+          rownames(d) <- reps
+        }
+        data.reps <- rbind(data.reps, d)
       }
-      data.reps <- rbind(data.reps, d)
+      data.tech.rep <- t(data.reps)
+      data.tech.rep[is.nan(data.tech.rep)] <- NA
+      data.tech.rep <- cbind(pep.data[, 1:2], data.tech.rep)
+      #write.table(data.tech.rep, "data/data.tech.rep.txt",col.names=T,row.names=F,quote = F,sep = "\t",na = "NA")
     }
-    data.tech.rep <- t(data.reps)
-    data.tech.rep[is.nan(data.tech.rep)] <- NA
-    data.tech.rep <- cbind(pep.data[, 1:2], data.tech.rep)
-    #write.table(data.tech.rep, "data/data.tech.rep.txt",col.names=T,row.names=F,quote = F,sep = "\t",na = "NA")
-    ###############no need:using python to do combat #########
-    ################ignore here
-    #######################################################################
-    #print(batchf)
+
+
     if (!is.null(batchf)) {
       #print(batchf)
       
