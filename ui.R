@@ -1,8 +1,10 @@
 #shinythemes::themeSelector(),
+
 navbarPage(
+  "ProteomeExpert",
   theme = shinytheme("cerulean"),
   windowTitle = "ProteomeExpert | A user friendly Web for proteome analysis.",
-  "ProteomeExpert",
+  
   #################################
   # Home
   #################################
@@ -357,7 +359,8 @@ navbarPage(
     
     tabPanel(
       "Peptide2Protein",
-      "",
+      h5("Description:"),
+      HTML("<p>Peptide2Protein is ... to be continued.</p>"),
       sidebarPanel(
         fileInput(
           "PeptideMatrix",
@@ -384,7 +387,7 @@ navbarPage(
         
         fileInput(
           "TechnicalReplicate",
-          "Select your technical replicate file (optional):",
+          "Select your technical replicate file (required):",
           placeholder = "*.csv or *.TXT required!"
         ),
         checkboxInput("Dtheader", "Header", FALSE),
@@ -437,8 +440,47 @@ navbarPage(
         )
         
       ))
-    )
+    ),
     
+    ########################################################
+    ###  PulseDIA preprocess
+    ########################################################
+    tabPanel(
+      "PulseDIA preprocess",
+      h5("Description:"),
+      HTML("<p>PulseDIA preprocess is ... to be continued.</p>")
+      ,
+      sidebarPanel(
+        
+        fileInput(
+          "pulseDiaFile",
+          "Select your pulseDIA file :",
+          multiple = FALSE,
+          accept = c("text/tsv",
+                     "text/comma-separated-values,text/plain",
+                     ".tsv"),
+          placeholder = "*.tsv or *.TXT required!"
+        ),
+        shinyjs::disabled(
+          actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
+        )
+        
+      ),
+      mainPanel(
+        # conditionalPanel(
+        #   condition = "input.mlmethod == \"XGBoost\"",
+        #   downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
+        # ),
+        #dataTableOutput("tabPulseDIAcombined") %>% withSpinner(color="#0dc5c1")
+        # conditionalPanel(
+        #   condition = "input.mlmethod == \"XGBoost\"",
+        #   p("please wait while combining data!")
+        # ),
+        #tags$p("please wait while combining data!"),
+        #downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary"),
+        uiOutput("ui")
+      )
+    )
   ),
   
   #################################
@@ -521,13 +563,13 @@ navbarPage(
           h5("Description:"),
           HTML(
             "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
-            <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
-            <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
+                <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
+                <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
           ),
           hr(),
           column(6, plotlyOutput("Qpcaplot")),
           column(6, rHandsontableOutput("Qpcatable"))
-          ),
+        ),
         tabPanel(
           "T-SNE",
           h4("Summary"),
@@ -558,7 +600,7 @@ navbarPage(
           column(6, plotlyOutput("Qumapplot")),
           column(6, rHandsontableOutput("Qumaptable"))
         )
-        )
+      )
     )
   ),
   #################################
@@ -700,18 +742,83 @@ navbarPage(
             "mlmethod",
             "Choose a ML method:",
             choices = c("Decision Tree",
-                        "Random Forest")
+                        "Random Forest",
+                        "XGBoost"),
+            selected = "Decision Tree"
           ),
           HTML(
             '<p>
-            (*Note:<em>If you have a large matrix, the system may be slow, please be patient.</em>)
-            </p>
-            <p>
-            <span style="font-size: 14px;"></span>
-            </p>'
+                (*Note:<em>If you have a large matrix, the system may be slow, please be patient.</em>)
+                </p>
+                <p>
+                <span style="font-size: 14px;"></span>
+                </p>'
           ),
+          ################################################################
+          # xgboost parameters
+          ################################################################
+          conditionalPanel(
+            condition = "input.mlmethod == \"XGBoost\"",
+            div(
+              id = "xgb_Parameters_container",
+              selectInput(
+                "xgb_xgbooster_type",
+                label = "Choose a xgbooster:",
+                choices = c("gbtree",
+                            "gblinear",
+                            "dart"),
+                selected = "gbtree"
+              )
+              ,
+              numericInput("xgb_nrounds",
+                           label = "The number of rounds for boosting:",
+                           value = 2)
+              
+              ,
+              selectInput(
+                "xgb_task_type",
+                label = "Choose a task type:",
+                choices = c("train",
+                            "pred",
+                            "eval",
+                            "dump"),
+                selected = "train"
+              )
+              #################################
+              #  parameter for gbtree
+              #################################
+              ,
+              conditionalPanel(
+                condition = "input.xgb_xgbooster_type == \"gbtree\"",
+                numericInput(
+                  "xgb_gbtree_max_depth",
+                  label = "max_depth:",
+                  min = 1,
+                  value = 6
+                )
+              )
+              #################################
+              #  parameter for gblinear
+              #################################
+              ,
+              conditionalPanel(
+                condition = "input.xgb_xgbooster_type == \"gblinear\"",
+                selectInput(
+                  "xgb_gblinear_feature_selector",
+                  label = "Choose a feature_selector:",
+                  choices = c("cyclic",
+                              "shuffle",
+                              "random",
+                              "greedy",
+                              "thrifty"),
+                  selected = "cyclic"
+                )
+              )
+            )#endof div id="xgb_Parameters_container"
+          )
+          ,
           actionButton("mlsubmit", "Submit", class = "btn-primary")
-          ),
+        ),
         column(
           6,
           h3("Result"),
@@ -721,9 +828,9 @@ navbarPage(
           verbatimTextOutput("DMmloutputText"),
           rHandsontableOutput("DMmltables")
         )
-        )
-        ))
-    ),
+      )
+    ))
+  ),
   #################################
   # Annotation
   #################################
@@ -774,18 +881,18 @@ navbarPage(
           4,
           HTML(
             '<ul class=" list-paddingleft-2" style="list-style-type: disc;">
-            <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
-            <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
-            <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
-            <li><p>Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.</p></li>
-            <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
-            <br/></p>'
+                <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
+                <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
+                <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
+                <li><p>Go:The Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes.</p></li>
+                <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
+                <br/></p>'
           )
-          ),
-          column(8, rHandsontableOutput("anno_table")))
-        )
-        )
         ),
+        column(8, rHandsontableOutput("anno_table")))
+      )
+    )
+  ),
   #################################
   # Resources
   #################################
@@ -793,28 +900,22 @@ navbarPage(
     "Resources",
     tabPanel("Tutorials",
              mainPanel(
-               tabsetPanel(
-                 tabPanel("Test"),
-                 tabPanel("Summary"),
-                 tabPanel("Table")
-               )
+               tabsetPanel(tabPanel("Test"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
              )),
     "----",
     tabPanel("Docs",
              mainPanel(
-               tabsetPanel(
-                 tabPanel("Plot"),
-                 tabPanel("Summary"),
-                 tabPanel("Table")
-               )
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
              )),
     tabPanel("Q&A",
              mainPanel(
-               tabsetPanel(
-                 tabPanel("Plot"),
-                 tabPanel("Summary"),
-                 tabPanel("Table")
-               )
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
              )),
     tabPanel("GitHub",
              mainPanel(
@@ -823,5 +924,7 @@ navbarPage(
                  "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
                )
              ))
-  )
-        )
+  ),
+  useShinyjs()
+  
+)

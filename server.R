@@ -52,19 +52,21 @@ function(input, output, session) {
   })
   batch_design_result <- eventReactive(input$BDdo, {
     withProgress(message = 'Calculation in progress',
-                 detail = 'This may take a while...', value = 0, {
-                   incProgress(1/15)  
-    col_weights <- strsplit(input$BDweight, ",")
-    col_weights <- as.numeric(unlist(col_weights))
-    result <-
-      batchGenerator(
-        input$BDfile$datapath,
-        input$BDcol,
-        input$BDnumeric_headers,
-        col_weights,
-        input$BDsize
-      )
-    incProgress(14/15,message = "Ready to finish!")
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   incProgress(1 / 15)
+                   col_weights <- strsplit(input$BDweight, ",")
+                   col_weights <- as.numeric(unlist(col_weights))
+                   result <-
+                     batchGenerator(
+                       input$BDfile$datapath,
+                       input$BDcol,
+                       input$BDnumeric_headers,
+                       col_weights,
+                       input$BDsize
+                     )
+                   incProgress(14 / 15, message = "Ready to finish!")
                  })
     return(result)
   },
@@ -237,7 +239,7 @@ function(input, output, session) {
                        bsep = isolate(input$Dbsep),
                        bheader = isolate(input$Dbheader)
                      )
-                     incProgress(9 / 10,message = "Ready to finish!")
+                     incProgress(9 / 10, message = "Ready to finish!")
                    })
       prot_matrix
     }
@@ -272,6 +274,83 @@ function(input, output, session) {
     }
   )
   #################################
+  # pulseDIA preprocess
+  #################################
+  #
+  #puslseDIAStatus
+  #  initStatus 
+  #  selected  user has select a DIAData file  to upload, but not sumbited.
+  #  submited  DIAData file is submited.
+  #  calculating  server is running the combining function
+  #  cal_finished combining function is finished.
+  pulseDIAStatus <- reactiveValues(status = "initStatus")
+  observeEvent(input$pulseDiaFile, {
+    if( !is.null(input$pulseDiaFile)){
+      pulseDIAStatus$status = "selected"
+      shinyjs::enable("submit_pulseDia_file")
+    }
+  })
+  #output_file_name <- ""
+  observeEvent(input$submit_pulseDia_file, {
+    #pulseDIAStatus$status = "submited"
+    
+    input_name <-input$pulseDiaFile$datapath
+    #output_file_name <<- tempfile("pulseDIACombined", fileext = ".txt")
+    print(input_name)
+    #print(output_file_name)
+    shinyjs::disable("submit_pulseDia_file")
+    
+  #   #source(file.path("server", "pulse_dia_combine.R"),  local = TRUE)$value
+  #   # sourced in global.R
+    pulseDIAStatus$status = "calculating"
+    result <<- pulseDIACombine(input_name)
+    pulseDIAStatus$status = "cal_finished"
+    #print(result)
+  #   
+  #   shinyjs::enable("downloadPulseDIAResult")
+  #   output$tabPulseDIAcombined <- renderTable(
+  #     
+  #   )
+    ##to do
+    ##
+    
+  })
+  output$ui <- renderUI({
+    switch (pulseDIAStatus$status,
+      "initStatus" = tags$h4("Please select a DIA file to upload"),
+      "selected"   = tags$h4("Please click Submit button, then waiting "),
+      "submited"   = tags$h4("calculate in progress ... Please waiting"),
+      "calculating"   = tags$h4("calculate in progeress ... Please waiting"),
+      "cal_finished"   = tags$div(
+        tags$h4("calculate finished! Please download the result file"),
+        downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
+      ),
+      "nextTry" = tags$div(
+        tags$h4("download finished! ,Please select a DIA file to upload"),
+        shinyjs::disabled(
+          downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
+        )
+      ),
+    )
+  })
+  output$downloadPulseDIAResult <- downloadHandler(
+    filename = "result.txt",
+    
+    content <- function(file) {
+      
+      #input_name <-input$pulseDiaFile$datapath
+      #print("abcceddd")
+      #print(input_name)
+      # result <- pulseDIACombine(input_name)
+      write.table(result,file,sep="\t",col.names = T,row.names = F,quote = F)
+      #file.copy(output_file_name, file)
+      pulseDIAStatus$status = "nextTry"
+      
+    }
+    #contentType = "text/tvs"
+  )
+  
+  #################################
   # QC
   #################################
   
@@ -292,7 +371,7 @@ function(input, output, session) {
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
-    data <- data[, -1]
+    data <- data[,-1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
@@ -438,7 +517,7 @@ function(input, output, session) {
       dev.off()
     }
   )
-
+  
   #################################
   # data console
   #################################
@@ -630,7 +709,7 @@ function(input, output, session) {
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
     
-    data <- data[, -1]
+    data <- data[,-1]
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <- row_name
     
@@ -679,8 +758,7 @@ function(input, output, session) {
       }
       
     })
-    
-    
+
     observeEvent(input$mlsubmit, {
       #################################
       # ML
@@ -808,7 +886,7 @@ function(input, output, session) {
                                         #}
                                         rownames(protM) <-
                                           protM[, 1]
-                                        protM <- protM[, -1]
+                                        protM <- protM[,-1]
                                         protM <- t(protM)
                                         sample_names <-
                                           rownames(protM)
@@ -821,7 +899,7 @@ function(input, output, session) {
                                           colnames(protM)
                                         if (!is.null(input$featureSel_filter))
                                           fs_features <-
-                                          featureFilter(labeled_protM, !is.na(match(
+                                          featureFilter(labeled_protM,!is.na(match(
                                             c("nearZeoVar", "high_correlation"),
                                             input$featureSel_filter
                                           )), input$fs_missing_ratio)
@@ -868,7 +946,7 @@ function(input, output, session) {
     content = function(file) {
       protM <- readProteinM()
       rownames(protM) <- as.vector(unlist(protM[1]))
-      protM <- protM[feature_sel_prot()$features, ]
+      protM <- protM[feature_sel_prot()$features,]
       write.table(
         protM,
         file,
@@ -884,7 +962,6 @@ function(input, output, session) {
   # ANNO
   #################################
   observeEvent(input$annosubmit, {
-    
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
       print(paste0(
@@ -911,8 +988,8 @@ function(input, output, session) {
       }
     })
   })
-
-
+  
+  
   output$annouiuniport <- renderUI({
     if (is.null(input$proteinlist))
       return()
