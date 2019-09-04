@@ -54,6 +54,10 @@ dataPreprocess<-function(d,replace_value,log_base,normaliztion,batch,DPTR,DPTech
   }
  ###biological replica
   if(!is.null(DPBR) & DPBiologicalRep!="none"){
+    if(!is.null(DPTR) & DPTechnicalRepMethod!="none"){
+      del_index<-which(duplicated(DPTR))
+      DPBR<-DPBR[-del_index]
+    }
     d.temp<-data.frame(d)
     biological.group<-split(1:ncol(d),DPBR)
     d.bio<-data.frame()

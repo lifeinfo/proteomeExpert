@@ -27,6 +27,8 @@ for(h in numeric_headers){
 }
 #samples$Age <- as.numeric(samples$Age)
 # colnames(samples)[1] <- "sampleId"
+rownames(samples)<-samples[,1]
+
 # samples$patientId<-1:nrow(samples)
 d <- dim(samples)[2]
 #samples <- samples[,c(d,1:(d-1))]
