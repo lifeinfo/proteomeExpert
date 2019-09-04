@@ -148,9 +148,9 @@ navbarPage(
         "DCprotmSep",
         "Separator for your file",
         choices = c(
-          Comma = ",",
-          Semicolon = ";",
-          Tab = "\t"
+          "Comma(,)" = ",",
+          "Semicolon(;)" = ";",
+          "Tab(\\t)" = "\t"
         ),
         inline = TRUE,
         selected = "\t"
