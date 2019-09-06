@@ -807,7 +807,7 @@ navbarPage(
             )#endof div id="xgb_Parameters_container"
           )
           ,
-          actionButton("mlsubmit", "Submit", class = "btn-primary")
+          actionButton("mlsubmitTrain", "Submit", class = "btn-primary")
         ),
         column(
           6,

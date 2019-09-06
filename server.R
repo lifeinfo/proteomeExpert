@@ -759,7 +759,7 @@ function(input, output, session) {
       
     })
 
-    observeEvent(input$mlsubmit, {
+    observeEvent(input$mlsubmitTrain, {
       #################################
       # ML
       #################################
@@ -865,6 +865,9 @@ function(input, output, session) {
       } else if (input$mlmethod == "Artificial Neural Network")
       {
         cat("Artificial Neural Network comming soon!")
+      } else if (input$mlmethod == "XGBoost")
+      {
+        print("XGBoost comming soon")
       }
       
       
