@@ -773,21 +773,11 @@ navbarPage(
               numericInput("xgb_nrounds",
                            label = "The number of rounds for boosting:",
                            value = 2)
-              
               ,
-              selectInput(
-                "xgb_task_type",
-                label = "Choose a task type:",
-                choices = c("train",
-                            "pred",
-                            "eval",
-                            "dump"),
-                selected = "train"
-              )
               #################################
               #  parameter for gbtree
               #################################
-              ,
+              
               conditionalPanel(
                 condition = "input.xgb_xgbooster_type == \"gbtree\"",
                 numericInput(
@@ -842,7 +832,7 @@ navbarPage(
         "proteinlist",
         "Protein list:",
         height = 150,
-        placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
+          placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
       ),
       actionButton("annosubmit", "Search", class = "btn-primary")
       #verbatimTextOutput("Annoparameters")
