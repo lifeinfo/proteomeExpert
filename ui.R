@@ -763,7 +763,7 @@ navbarPage(
             div(
               id = "xgb_Parameters_container",
               selectInput(
-                "xgb_xgbooster_type",
+                  "xgb_xgbooster_type",
                 label = "Choose a xgbooster:",
                 choices = c("gbtree",
                             "gblinear",

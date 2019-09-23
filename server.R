@@ -754,15 +754,11 @@ function(input, output, session) {
     })
     output$DMradarparameters <- renderCanvasXpress({
       if (input$radarmap) {
-        if (!is.null(readProteinM()))
-        {
+        if (!is.null(readProteinM()))        {
           drawradar(trainData)
         }
       }
-      
     })
-
-    
   })
   xgboost_classfier <- NULL
   observeEvent(input$mlsubmitTrain, {
@@ -772,43 +768,9 @@ function(input, output, session) {
     output$DMmlText <- renderPrint({
       #print(input$mlframework)
       print(input$mlmethod)
-      #print(unique(qc_label, fromLast = FALSE))
+      print(unique(qc_label, fromLast = FALSE))
     })
-    
-    if (input$mlmethod == "XGBoost")
-    {
-      print("XGBoost comming soon")
-      if(is.null(input$protein_matrix)){
-         #hint to upload train data
-        output$DMmlText <- renderPrint({
-          #print(input$mlframework)
-          print(input$mlmethod)
-          print("Please upload your training data from data console")
-        })
-        return()
-      }
-
-      buffer <- vector('character')
-      con    <- textConnection('buffer', 'wr', local = TRUE)
-      sink(con)
-      xgboost_classfier <<- xgboost_classfier_training(input$protein_matrix$datapath)
-      sink()
-      close(con)
-      output$DMmlPlot <- renderPlot({
-        importance_matrix <- xgb.importance(model = xgboost_classfier)
-        xgb.plot.importance(importance_matrix)
-      })
-      output$DMmloutputText <- renderPrint({
-        print("train error")
-        print(buffer)
-      })
-      
-      output$DMmltables <- renderRHandsontable({
-         rhandsontable()
-      })
-
-    }else{
-      if (is.null(input$DManno))
+    if (is.null(input$DManno))
       {
         return()
       }
@@ -906,9 +868,54 @@ function(input, output, session) {
       } else if (input$mlmethod == "Artificial Neural Network")
       {
         cat("Artificial Neural Network comming soon!")
+      }else if (input$mlmethod == "XGBoost")
+      {
+        print("XGBoost comming soon")
+        if(is.null(input$protein_matrix)){
+          #hint to upload train data
+          output$DMmlText <- renderPrint({
+            #print(input$mlframework)
+            print(input$mlmethod)
+            print("Please upload your training data from data console")
+          })
+          return()
+        }
+        #xgboost parameters
+        #https://xgboost.readthedocs.io/en/latest/parameter.html
+        params <- list(
+          booster = input$xgb_xgbooster_type,
+          objective='binary:logistic'
+        )
+        if(params$booster == "gbtree"){
+          params$max_depth = as.integer(input$xgb_gbtree_max_depth)
+          params$eta = 0.3
+        }else if(params$booster == "gblinear"){
+          params$feature_selector = input$xgb_gblinear_feature_selector
+        }else if(params$booster == "dart"){
+          #add 
+        }
+        buffer <- vector('character')
+        con    <- textConnection('buffer', 'wr', local = TRUE)
+        sink(con)
+        xgboost_classfier <<- xgboost_classfier_training(trainData =  data, parameters = params
+                                                         , numRounds = as.integer(input$xgb_nrounds))
+        sink()
+        close(con)
+        output$DMmlPlot <- renderPlot({
+          importance_matrix <- xgb.importance(model = xgboost_classfier)
+          xgb.plot.importance(importance_matrix)
+        })
+        output$DMmloutputText <- renderPrint({
+          print("train error")
+          print(buffer)
+        })
+        
+        output$DMmltables <- renderRHandsontable({
+          rhandsontable()
+        })
+        
       }
-    }
-    
+
     shinyjs::show(id = "mlPredictDiv")
   })
   
