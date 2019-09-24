@@ -860,23 +860,13 @@ function(input, output, session) {
             rhandsontable(head(data, n = 20L))
           })
         }
-      } else if (input$mlmethod == "k-NearestNeighbor")
+      } 
+      else if (input$mlmethod == "XGBoost")
       {
-        cat("k-NearestNeighbor comming soon!")
-      } else if (input$mlmethod == "Support Vector Machine")
-      {
-        cat("Support Vector Machine comming soon!")
-      } else if (input$mlmethod == "Artificial Neural Network")
-      {
-        cat("Artificial Neural Network comming soon!")
-      }else if (input$mlmethod == "XGBoost")
-      {
-        print("XGBoost comming soon")
+        print("xgboost starting")
         if(is.null(input$protein_matrix)){
           #hint to upload train data
           output$DMmlText <- renderPrint({
-            #print(input$mlframework)
-            print(input$mlmethod)
             print("Please upload your training data from data console")
           })
           return()
@@ -895,10 +885,12 @@ function(input, output, session) {
         }else if(params$booster == "dart"){
           #add 
         }
+        print(readProteinM()[1:3,1:4])
         buffer <- vector('character')
         con    <- textConnection('buffer', 'wr', local = TRUE)
         sink(con)
-        xgboost_classfier <<- xgboost_classfier_training(trainData =  data, parameters = params
+        
+        xgboost_classfier <<- xgboost_classfier_training(t(readProteinM()),qc_label, parameters = params
                                                          , numRounds = as.integer(input$xgb_nrounds))
         sink()
         close(con)
