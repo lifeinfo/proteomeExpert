@@ -712,27 +712,23 @@ function(input, output, session) {
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
-    
     trainData <<- data[,-1]
     colnames(trainData) <- col_name[2:length(col_name)]
     row.names(trainData) <- row_name
     
     trainData[is.na(trainData)] <- 0
-    #data <- as.numeric(data)
-    print(head(trainData))
-    
-    print(qc_label)
+
     #################################
     # Heatmap
     #################################
-    output$DMheatmaptable <- renderRHandsontable({
-      if (input$dmheatmap) {
-        if (!is.null(readProteinM()))
-        {
-          rhandsontable(head(readProteinM(), n = 20L))
-        }
-      }
-    })
+    # output$DMheatmaptable <- renderRHandsontable({
+    #   if (input$dmheatmap) {
+    #     if (!is.null(readProteinM()))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
     output$DMheatmapparameters <- renderPlot({
       if (input$dmheatmap) {
         if (!is.null(readProteinM()))
@@ -749,7 +745,7 @@ function(input, output, session) {
       if (input$radarmap) {
         if (!is.null(readProteinM()))
         {
-          rhandsontable(head(readProteinM(), n = 20L))
+          rhandsontable(head(trainData, n = 20L))
         }
       }
     })
@@ -776,6 +772,7 @@ function(input, output, session) {
         return()
       }
       data <- as.data.frame(t(trainData))
+      colnames(data)<-readProteinM()[,1]
       print("ML")
       print(qc_label)
       data$Label <- qc_label
@@ -785,9 +782,9 @@ function(input, output, session) {
       #################################
       
       if (input$mlmethod == "Decision Tree") {
+        print("Decision tree starting")
         if (!is.null(readProteinM()))
         {
-          set.seed(1234)
           dtree <- rpart(Label ~ ., data = data, method = "class")
           #tree <- prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
           tree <- dtree
@@ -863,9 +860,9 @@ function(input, output, session) {
             
           })
           
-          output$DMmltables <- renderRHandsontable({
-            rhandsontable(head(data, n = 20L))
-          })
+          # output$DMmltables <- renderRHandsontable({
+          #   rhandsontable(head(data, n = 20L))
+          # })
         }
       } 
       else if (input$mlmethod == "XGBoost")
@@ -892,27 +889,30 @@ function(input, output, session) {
         }else if(params$booster == "dart"){
           #add 
         }
-        print(readProteinM()[1:3,1:4])
-        buffer <- vector('character')
-        con    <- textConnection('buffer', 'wr', local = TRUE)
+        buffer <<- vector('character')
+        con    <<- textConnection('buffer', 'wr', local = TRUE)
         sink(con)
         
-        xgboost_classfier <<- xgboost_classfier_training(t(readProteinM()),qc_label, parameters = params
+        xgboost_classfier <<- xgboost_classfier_training(data[,which(colnames(data)!="Label")],data$Label, parameters = params
                                                          , numRounds = as.integer(input$xgb_nrounds))
         sink()
         close(con)
+ 
         output$DMmlPlot <- renderPlot({
           importance_matrix <- xgb.importance(model = xgboost_classfier)
-          xgb.plot.importance(importance_matrix)
+          imp_num<-nrow(importance_matrix)
+          if(imp_num>50)
+            imp_num<-50
+          xgb.plot.importance(importance_matrix[1:imp_num,])
         })
         output$DMmloutputText <- renderPrint({
           print("train error")
           print(buffer)
         })
         
-        output$DMmltables <- renderRHandsontable({
-          rhandsontable()
-        })
+        # output$DMmltables <- renderRHandsontable({
+        #   rhandsontable(data)
+        # })
         
       }
 

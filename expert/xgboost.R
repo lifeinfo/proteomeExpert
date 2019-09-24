@@ -8,7 +8,7 @@ xgboost_classfier_training<-function(trainX,trainY,parameters, numRounds){
     parameters[["num_class"]] <- num
   }
   bst <- xgb.train(
-    params = params,
+    params = parameters,
     data = xg_train,
     nrounds = numRounds
   )
