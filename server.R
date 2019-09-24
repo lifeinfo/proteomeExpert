@@ -783,19 +783,26 @@ function(input, output, session) {
       if (input$mlmethod == "Decision Tree") {
         if (!is.null(readProteinM()))
         {
+          set.seed(1234)
           dtree <- rpart(Label ~ ., data = data, method = "class")
-          tree <-
-            prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
-          output$DMmlPlot <- renderPlot({
+          #tree <- prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
+          tree <- dtree
+          output$DMmlPlot <- renderImage({
+            outfile <- tempfile(fileext='.png')
+            png(outfile, width=400, height=400)
             rpart.plot(
               tree,
+              box.palette = "auto",
               branch = 0,
               type = 0,
               fallen.leaves = T,
               cex = 1,
               sub = "Decision Tree"
             )
-          })
+            dev.off()
+            list(src = outfile,
+                 alt = "Decision Tree Plot")
+          }, deleteFile = TRUE)
           output$DMmloutputText <- renderPrint({
             printcp(tree)
           })
