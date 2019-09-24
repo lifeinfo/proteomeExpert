@@ -4,10 +4,11 @@ navbarPage(
   "ProteomeExpert",
   theme = shinytheme("cerulean"),
   windowTitle = "ProteomeExpert | A user friendly Web for proteome analysis.",
-  
+  useShinyjs(),
   #################################
   # Home
   #################################
+  
   tabPanel(
     "Home",
     sidebarPanel(
@@ -762,7 +763,7 @@ navbarPage(
             div(
               id = "xgb_Parameters_container",
               selectInput(
-                "xgb_xgbooster_type",
+                  "xgb_xgbooster_type",
                 label = "Choose a xgbooster:",
                 choices = c("gbtree",
                             "gblinear",
@@ -773,21 +774,11 @@ navbarPage(
               numericInput("xgb_nrounds",
                            label = "The number of rounds for boosting:",
                            value = 2)
-              
               ,
-              selectInput(
-                "xgb_task_type",
-                label = "Choose a task type:",
-                choices = c("train",
-                            "pred",
-                            "eval",
-                            "dump"),
-                selected = "train"
-              )
               #################################
               #  parameter for gbtree
               #################################
-              ,
+              
               conditionalPanel(
                 condition = "input.xgb_xgbooster_type == \"gbtree\"",
                 numericInput(
@@ -796,11 +787,11 @@ navbarPage(
                   min = 1,
                   value = 6
                 )
-              )
+              ),
               #################################
               #  parameter for gblinear
               #################################
-              ,
+              
               conditionalPanel(
                 condition = "input.xgb_xgbooster_type == \"gblinear\"",
                 selectInput(
@@ -817,10 +808,41 @@ navbarPage(
             )#endof div id="xgb_Parameters_container"
           )
           ,
-          actionButton("mlsubmit", "Submit", class = "btn-primary")
+          fluidRow(
+            shinyBS::bsButton("mlsubmitTrain", label = "Trainning ", style = "primary")
+            ,shinyBS::bsTooltip(id = "mlsubmitTrain", title = "click me to trainning", placement = "right", trigger = "hover")
+          
+          )
+          ,
+          #############################################
+          # ui for upload test file
+          #############################################
+          shinyjs::hidden(
+            div(
+              id = "mlPredictDiv",
+              fileInput(
+                "mlTestFile",
+                "Select your test data file (required):",
+                multiple = FALSE,
+                accept = c("text/csv",
+                           "text/comma-separated-values,text/plain",
+                           ".csv"),
+                placeholder = "*.csv or *.TXT required!"
+              ),
+              fluidRow(
+                shinyBS::bsButton("mlsubmitPredict", label = "Predicting", style = "primary",  disabled = TRUE)
+                ,shinyBS::bsTooltip(id = "mlsubmitPredict", title = "click me to predict", placement = "right", trigger = "hover")
+                
+              )
+            )
+          )
+          
+          
+          
+          
         ),
         column(
-          6,
+          8,
           h3("Result"),
           #plotlyOutput(),
           verbatimTextOutput("DMmlText"),
@@ -842,7 +864,7 @@ navbarPage(
         "proteinlist",
         "Protein list:",
         height = 150,
-        placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
+          placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
       ),
       actionButton("annosubmit", "Search", class = "btn-primary")
       #verbatimTextOutput("Annoparameters")
@@ -924,7 +946,5 @@ navbarPage(
                  "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
                )
              ))
-  ),
-  useShinyjs()
-  
+  )
 )

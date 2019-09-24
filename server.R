@@ -64,7 +64,8 @@ function(input, output, session) {
                        input$BDcol,
                        input$BDnumeric_headers,
                        col_weights,
-                       input$BDsize
+                       input$BDsize,
+                       input$BDsep
                      )
                    incProgress(14 / 15, message = "Ready to finish!")
                  })
@@ -690,15 +691,18 @@ function(input, output, session) {
   
   ####################################################
   #data mining
+  ####################################################
+  trainData <- NULL
+  qc_label <- NULL
   observeEvent(input$dm, {
     print("data mining")
     print(dim(readProteinM()))
-    qc_label <- input$DManno
-    if (!is.null(qc_label) & qc_label != "None") {
+    qc_label1 <- input$DManno
+    if (!is.null(qc_label1) & qc_label1 != "None") {
       sample_names <- colnames(readProteinM())[-1]
       print("qc_label")
       print(getAnnoTable())
-      qc_label <- as.vector(getAnnoTable()[sample_names, qc_label])
+      qc_label <<- as.vector(getAnnoTable()[sample_names, qc_label1])
     } else{
       return()
     }
@@ -709,13 +713,13 @@ function(input, output, session) {
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
     
-    data <- data[,-1]
-    colnames(data) <- col_name[2:length(col_name)]
-    row.names(data) <- row_name
+    trainData <<- data[,-1]
+    colnames(trainData) <- col_name[2:length(col_name)]
+    row.names(trainData) <- row_name
     
-    data[is.na(data)] <- 0
+    trainData[is.na(trainData)] <- 0
     #data <- as.numeric(data)
-    print(head(data))
+    print(head(trainData))
     
     print(qc_label)
     #################################
@@ -733,7 +737,7 @@ function(input, output, session) {
       if (input$dmheatmap) {
         if (!is.null(readProteinM()))
         {
-          drawheatmap(data, qc_label)
+          drawheatmap(trainData, qc_label)
         }
       }
       
@@ -751,28 +755,27 @@ function(input, output, session) {
     })
     output$DMradarparameters <- renderCanvasXpress({
       if (input$radarmap) {
-        if (!is.null(readProteinM()))
-        {
-          drawradar(data)
+        if (!is.null(readProteinM()))        {
+          drawradar(trainData)
         }
       }
-      
     })
-
-    observeEvent(input$mlsubmit, {
-      #################################
-      # ML
-      #################################
-      output$DMmlText <- renderPrint({
-        print(input$mlframework)
-        print(input$mlmethod)
-        print(unique(qc_label, fromLast = FALSE))
-      })
-      if (is.null(input$DManno))
+  })
+  xgboost_classfier <- NULL
+  observeEvent(input$mlsubmitTrain, {
+    #################################
+    # ML
+    #################################
+    output$DMmlText <- renderPrint({
+      #print(input$mlframework)
+      print(input$mlmethod)
+      print(unique(qc_label, fromLast = FALSE))
+    })
+    if (is.null(input$DManno))
       {
         return()
       }
-      data <- as.data.frame(t(data))
+      data <- as.data.frame(t(trainData))
       print("ML")
       print(qc_label)
       data$Label <- qc_label
@@ -780,6 +783,7 @@ function(input, output, session) {
       #################################
       # Decision Tree
       #################################
+      
       if (input$mlmethod == "Decision Tree") {
         if (!is.null(readProteinM()))
         {
@@ -872,13 +876,69 @@ function(input, output, session) {
       } else if (input$mlmethod == "Artificial Neural Network")
       {
         cat("Artificial Neural Network comming soon!")
+      }else if (input$mlmethod == "XGBoost")
+      {
+        print("XGBoost comming soon")
+        if(is.null(input$protein_matrix)){
+          #hint to upload train data
+          output$DMmlText <- renderPrint({
+            #print(input$mlframework)
+            print(input$mlmethod)
+            print("Please upload your training data from data console")
+          })
+          return()
+        }
+        #xgboost parameters
+        #https://xgboost.readthedocs.io/en/latest/parameter.html
+        params <- list(
+          booster = input$xgb_xgbooster_type,
+          objective='binary:logistic'
+        )
+        if(params$booster == "gbtree"){
+          params$max_depth = as.integer(input$xgb_gbtree_max_depth)
+          params$eta = 0.3
+        }else if(params$booster == "gblinear"){
+          params$feature_selector = input$xgb_gblinear_feature_selector
+        }else if(params$booster == "dart"){
+          #add 
+        }
+        buffer <- vector('character')
+        con    <- textConnection('buffer', 'wr', local = TRUE)
+        sink(con)
+        xgboost_classfier <<- xgboost_classfier_training(trainData =  data, parameters = params
+                                                         , numRounds = as.integer(input$xgb_nrounds))
+        sink()
+        close(con)
+        output$DMmlPlot <- renderPlot({
+          importance_matrix <- xgb.importance(model = xgboost_classfier)
+          xgb.plot.importance(importance_matrix)
+        })
+        output$DMmloutputText <- renderPrint({
+          print("train error")
+          print(buffer)
+        })
+        
+        output$DMmltables <- renderRHandsontable({
+          rhandsontable()
+        })
+        
       }
-      
-      
-    })
+
+    shinyjs::show(id = "mlPredictDiv")
   })
   
-  
+  observeEvent(input$mlTestFile, {
+    
+    shinyBS::updateButton(session, inputId = "mlsubmitPredict", label = "Predicting", style = "primary",  disabled = FALSE)
+  })
+  observeEvent(input$mlsubmitPredict, {
+    result <- xgboost_classfier_predict(xgboost_classfier, input$mlTestFile$datapath)
+    
+    output$DMmloutputText <- renderPrint({
+      print(result)
+    })
+    
+  })
   #################################
   # feature selection
   #################################

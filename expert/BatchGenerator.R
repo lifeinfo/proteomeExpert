@@ -12,14 +12,14 @@ continue2discrete<-function(a){
   return(a)
 }
 
-batchGenerator<-function(fpath,headers,numeric_headers,weights,batchSize){
+batchGenerator<-function(fpath,headers,numeric_headers,weights,batchSize,sep){
 # print(fpath)
 # print(headers)
 # print(numeric_headers)
 # print(weights)
 # print(batchSize)
 weights<-normWeights(weights)
-samples <- read.csv(fpath,stringsAsFactors=F,header = T,encoding = "UTF-8",check.names=F)
+samples <- read.csv(fpath,stringsAsFactors=F,header = T,encoding = "UTF-8",check.names=F,sep=sep)
 steps = nrow(samples)*100
 samples_ori<-samples
 for(h in numeric_headers){
