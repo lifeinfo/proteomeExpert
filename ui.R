@@ -34,7 +34,7 @@ navbarPage(
   navbarMenu(
     "Experimental Design",
     tabPanel(
-      "Study Design",
+      "Power Analysis",
       sidebarPanel(
         tags$h4("Power analysis by direct set parameters:"),
         hr(),
@@ -247,241 +247,113 @@ navbarPage(
   #################################
   # data preprocessing
   #################################
-  navbarMenu(
-    "Data Processing",
-    tabPanel(
-      "Data Preprocessing",
-      h5("Description:"),
-      HTML(
-        "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
-      ),
-      sidebarPanel(
-        selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
-        tags$h5("Log Transform:"),
-        radioButtons(
-          "DPLog",
-          "",
-          choices = c(
-            "None" = "none",
-            "Log2" = '2',
-            'Log10' = "10"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        
-        hr(),
-        tags$h5("Missing Value Substitution:"),
-        radioButtons(
-          "DPmissingV",
-          "",
-          choices = c(
-            "None" = "none",
-            "1" = '1',
-            '0' = "0",
-            "10% of minimum" = '0.1',
-            "minimum" = "minimum"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        hr(),
-        tags$h5("Normaliztion:"),
-        radioButtons(
-          "DPnormaliztion",
-          "",
-          choices = c(
-            "None" = "none",
-            "Quantile" = 'quantile',
-            "Z-score" = "zscore",
-            "Max-Min" = "maxmin"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        hr(),
-        tags$h5("Remove Batch Effect :"),
-        selectInput(
-          'DManno2',
-          'Select batch effect name',
-          anno_name,
-          multiple = FALSE,
-          selectize = TRUE
-        ),
-        hr(),
-        tags$h5("Technical Replicas:"),
-        selectInput(
-          'DPTR',
-          'Select technical replica column name',
-          anno_name,
-          multiple = FALSE,
-          selectize = TRUE
-        ),
-        radioButtons(
-          "DPTechnicalRepMethod",
-          "",
-          choices = c(
-            "None" = "none",
-            "Mean" = 'mean',
-            "Median" = "median"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        hr(),
-        tags$h5("Biological Replicas :"),
-        selectInput(
-          'DPBR',
-          'Select biological replica column name',
-          anno_name,
-          multiple = FALSE,
-          selectize = TRUE
-        ),
-        radioButtons(
-          "DPBiologicalRep",
-          "",
-          choices = c(
-            "None" = "none",
-            "Mean" = 'mean',
-            "Median" = "median"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        hr(),
-        actionButton("DPDo", "Submit", class = "btn-primary")
-      ),
-      mainPanel(tabPanel(
-        "Methods",
-        DTOutput("preprocessedprotM"),
-        downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
-      ))
+  tabPanel(
+    "Data Preprocessing",
+    h5("Description:"),
+    HTML(
+      "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
     ),
-    
-    tabPanel(
-      "Peptide2Protein",
-      h5("Description:"),
-      HTML("<p>Peptide2Protein is ... to be continued.</p>"),
-      sidebarPanel(
-        fileInput(
-          "PeptideMatrix",
-          "Select your peptide matrix (required):",
-          multiple = TRUE,
-          accept = c("text/csv",
-                     "text/comma-separated-values,text/plain",
-                     ".csv"),
-          placeholder = "*.csv or *.TXT required!"
+    sidebarPanel(
+      selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
+      tags$h5("Log Transform:"),
+      radioButtons(
+        "DPLog",
+        "",
+        choices = c(
+          "None" = "none",
+          "Log2" = '2',
+          'Log10' = "10"
         ),
-        checkboxInput("Dpheader", "Header", TRUE),
-        radioButtons(
-          "Dpsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        hr(),
-        
-        fileInput(
-          "TechnicalReplicate",
-          "Select your technical replicate file (required):",
-          placeholder = "*.csv or *.TXT required!"
-        ),
-        checkboxInput("Dtheader", "Header", FALSE),
-        radioButtons(
-          "Dtsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        
-        hr(),
-        
-        fileInput(
-          "BatchFile",
-          "Select your batch effect file (optional):",
-          placeholder = "*.csv or *.TXT required!"
-        ),
-        checkboxInput("Dbheader", "Header", TRUE),
-        radioButtons(
-          "Dbsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        
-        hr(),
-        
-        tags$h5("Click to process:"),
-        actionButton("process", "Submit", class = "btn-primary")
-        
+        inline = TRUE,
+        selected = NULL
       ),
-      mainPanel(tabsetPanel(
-        tabPanel(
-          "Result",
-          h4("Summary"),
-          tableOutput("Dtable"),
-          h4("Download all protein matrix"),
-          downloadButton("downloadData", "Download", class = "btn-primary")
-          
-        )
-        
-      ))
+      
+      hr(),
+      tags$h5("Missing Value Substitution:"),
+      radioButtons(
+        "DPmissingV",
+        "",
+        choices = c(
+          "None" = "none",
+          "1" = '1',
+          '0' = "0",
+          "10% of minimum" = '0.1',
+          "minimum" = "minimum"
+        ),
+        inline = TRUE,
+        selected = NULL
+      ),
+      hr(),
+      tags$h5("Normaliztion:"),
+      radioButtons(
+        "DPnormaliztion",
+        "",
+        choices = c(
+          "None" = "none",
+          "Quantile" = 'quantile',
+          "Z-score" = "zscore",
+          "Max-Min" = "maxmin"
+        ),
+        inline = TRUE,
+        selected = NULL
+      ),
+      hr(),
+      tags$h5("Remove Batch Effect :"),
+      selectInput(
+        'DManno2',
+        'Select batch effect name',
+        anno_name,
+        multiple = FALSE,
+        selectize = TRUE
+      ),
+      hr(),
+      tags$h5("Technical Replicas:"),
+      selectInput(
+        'DPTR',
+        'Select technical replica column name',
+        anno_name,
+        multiple = FALSE,
+        selectize = TRUE
+      ),
+      radioButtons(
+        "DPTechnicalRepMethod",
+        "",
+        choices = c(
+          "None" = "none",
+          "Mean" = 'mean',
+          "Median" = "median"
+        ),
+        inline = TRUE,
+        selected = NULL
+      ),
+      hr(),
+      tags$h5("Biological Replicas :"),
+      selectInput(
+        'DPBR',
+        'Select biological replica column name',
+        anno_name,
+        multiple = FALSE,
+        selectize = TRUE
+      ),
+      radioButtons(
+        "DPBiologicalRep",
+        "",
+        choices = c(
+          "None" = "none",
+          "Mean" = 'mean',
+          "Median" = "median"
+        ),
+        inline = TRUE,
+        selected = NULL
+      ),
+      hr(),
+      actionButton("DPDo", "Submit", class = "btn-primary")
     ),
-    
-    ########################################################
-    ###  PulseDIA preprocess
-    ########################################################
-    tabPanel(
-      "PulseDIA preprocess",
-      h5("Description:"),
-      HTML("<p>PulseDIA preprocess is ... to be continued.</p>")
-      ,
-      sidebarPanel(
-        
-        fileInput(
-          "pulseDiaFile",
-          "Select your pulseDIA file :",
-          multiple = FALSE,
-          accept = c("text/tsv",
-                     "text/comma-separated-values,text/plain",
-                     ".tsv"),
-          placeholder = "*.tsv or *.TXT required!"
-        ),
-        shinyjs::disabled(
-          actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
-        )
-        
-      ),
-      mainPanel(
-        # conditionalPanel(
-        #   condition = "input.mlmethod == \"XGBoost\"",
-        #   downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
-        # ),
-        #dataTableOutput("tabPulseDIAcombined") %>% withSpinner(color="#0dc5c1")
-        # conditionalPanel(
-        #   condition = "input.mlmethod == \"XGBoost\"",
-        #   p("please wait while combining data!")
-        # ),
-        #tags$p("please wait while combining data!"),
-        #downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary"),
-        uiOutput("ui")
-      )
-    )
+    mainPanel(tabPanel(
+      "Methods",
+      DTOutput("preprocessedprotM"),
+      downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
+    ))
   ),
   
   #################################
@@ -648,8 +520,66 @@ navbarPage(
   #################################
   # data mining
   #################################
-  tabPanel(
+  navbarMenu(
     "Data Mining",
+  tabPanel(
+    "Feature Selection",
+    "",
+    sidebarPanel(
+      h3("Data section:"),
+      h5(
+        "Please note: protein matrix and annotation file shoule be upload in data console first."
+      ),
+      uiOutput("DMprot_anno_Ui"),
+      hr()
+
+    ),
+    
+    mainPanel(tabsetPanel(
+     
+      tabPanel(
+        "FeatureSel",
+        h5(
+          "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+        ),
+        textInput(
+          inputId = "fs_missing_ratio",
+          label = "Allowable missing ratio",
+          value = 0.8
+        ),
+        checkboxGroupInput(
+          "featureSel_filter",
+          "Please select filter rules" ,
+          c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
+          selected = c("nearZeoVar", "high_correlation"),
+          inline = T,
+          width = NULL
+        ),
+        radioButtons(
+          "featureSel_algorithm",
+          "Please select feature selection algorithm",
+          choices = c(
+            "Random Forest" = 'random_forest',
+            'LASSO' = "lasso",
+            'Genetic Algorithm' = "GA"
+          ),
+          inline = TRUE,
+          selected = NULL
+        ),
+        hr(),
+        actionButton("feature_do", "Submit", class = "btn-primary"),
+        h5("Summary:"),
+        verbatimTextOutput("fs_summary"),
+        plotOutput("fs_parameter"),
+        DTOutput("featureSelected"),
+        downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
+        
+      )
+    )
+    )),
+  #####clustering
+  tabPanel(
+    "Clustering",
     "",
     sidebarPanel(
       h3("Data section:"),
@@ -692,48 +622,28 @@ navbarPage(
         hr(),
         column(6, canvasXpressOutput("DMradarparameters")),
         column(6, rHandsontableOutput("DMradartable"))
+      )
+    )
+    )),
+    #################################
+    # Machine Learning
+    #################################
+  tabPanel(
+    "Classification",
+    "",
+    sidebarPanel(
+      h3("Data section:"),
+      h5(
+        "Please note: protein matrix and annotation file shoule be upload in data console first."
       ),
-      tabPanel(
-        "FeatureSel",
-        h5(
-          "Please note that feature selection including two parts: filter rules and feature selection algorithm"
-        ),
-        textInput(
-          inputId = "fs_missing_ratio",
-          label = "Allowable missing ratio",
-          value = 0.8
-        ),
-        checkboxGroupInput(
-          "featureSel_filter",
-          "Please select filter rules" ,
-          c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
-          selected = c("nearZeoVar", "high_correlation"),
-          inline = T,
-          width = NULL
-        ),
-        radioButtons(
-          "featureSel_algorithm",
-          "Please select feature selection algorithm",
-          choices = c(
-            "Random Forest" = 'random_forest',
-            'LASSO' = "lasso",
-            'Genetic Algorithm' = "GA"
-          ),
-          inline = TRUE,
-          selected = NULL
-        ),
-        hr(),
-        actionButton("feature_do", "Submit", class = "btn-primary"),
-        h5("Summary:"),
-        verbatimTextOutput("fs_summary"),
-        plotOutput("fs_parameter"),
-        DTOutput("featureSelected"),
-        downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
-        
-      ),
-      #################################
-      # Machine Learning
-      #################################
+      uiOutput("DMprot_anno_Ui"),
+      hr(),
+      
+      actionButton("dm", "Submit", class = "btn-primary")
+    ),
+    
+    mainPanel(tabsetPanel(
+      
       tabPanel(
         "ML",
         column(
@@ -763,7 +673,7 @@ navbarPage(
             div(
               id = "xgb_Parameters_container",
               selectInput(
-                  "xgb_xgbooster_type",
+                "xgb_xgbooster_type",
                 label = "Choose a xgbooster:",
                 choices = c("gbtree",
                             "gblinear",
@@ -811,7 +721,7 @@ navbarPage(
           fluidRow(
             shinyBS::bsButton("mlsubmitTrain", label = "Trainning ", style = "primary")
             ,shinyBS::bsTooltip(id = "mlsubmitTrain", title = "click me to trainning", placement = "right", trigger = "hover")
-          
+            
           )
           ,
           #############################################
@@ -852,7 +762,8 @@ navbarPage(
         )
       )
     ))
-  ),
+  )
+    ),
   #################################
   # Annotation
   #################################
@@ -946,5 +857,135 @@ navbarPage(
                  "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
                )
              ))
+  ),
+  ################################
+  ### other tools
+  #################################
+  navbarMenu(
+    "Other Tools",
+     tabPanel(
+      "Peptide2Protein",
+      h5("Description:"),
+      HTML("<p>Peptide2Protein is ... to be continued.</p>"),
+      sidebarPanel(
+        fileInput(
+          "PeptideMatrix",
+          "Select your peptide matrix (required):",
+          multiple = TRUE,
+          accept = c("text/csv",
+                     "text/comma-separated-values,text/plain",
+                     ".csv"),
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        checkboxInput("Dpheader", "Header", TRUE),
+        radioButtons(
+          "Dpsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        hr(),
+        
+        fileInput(
+          "TechnicalReplicate",
+          "Select your technical replicate file (required):",
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        checkboxInput("Dtheader", "Header", FALSE),
+        radioButtons(
+          "Dtsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        
+        hr(),
+        
+        fileInput(
+          "BatchFile",
+          "Select your batch effect file (optional):",
+          placeholder = "*.csv or *.TXT required!"
+        ),
+        checkboxInput("Dbheader", "Header", TRUE),
+        radioButtons(
+          "Dbsep",
+          "Separator for your matrix",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        
+        hr(),
+        
+        tags$h5("Click to process:"),
+        actionButton("process", "Submit", class = "btn-primary")
+        
+      ),
+      mainPanel(tabsetPanel(
+        tabPanel(
+          "Result",
+          h4("Summary"),
+          tableOutput("Dtable"),
+          h4("Download all protein matrix"),
+          downloadButton("downloadData", "Download", class = "btn-primary")
+          
+        )
+        
+      ))
+    ),
+    
+    ########################################################
+    ###  PulseDIA preprocess
+    ########################################################
+    tabPanel(
+      "PulseDIA preprocess",
+      h5("Description:"),
+      HTML("<p>PulseDIA preprocess is ... to be continued.</p>")
+      ,
+      sidebarPanel(
+        
+        fileInput(
+          "pulseDiaFile",
+          "Select your pulseDIA file :",
+          multiple = FALSE,
+          accept = c("text/tsv",
+                     "text/comma-separated-values,text/plain",
+                     ".tsv"),
+          placeholder = "*.tsv or *.TXT required!"
+        ),
+        shinyjs::disabled(
+          actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
+        )
+        
+      ),
+      mainPanel(
+        # conditionalPanel(
+        #   condition = "input.mlmethod == \"XGBoost\"",
+        #   downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
+        # ),
+        #dataTableOutput("tabPulseDIAcombined") %>% withSpinner(color="#0dc5c1")
+        # conditionalPanel(
+        #   condition = "input.mlmethod == \"XGBoost\"",
+        #   p("please wait while combining data!")
+        # ),
+        #tags$p("please wait while combining data!"),
+        #downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary"),
+        uiOutput("ui")
+      )
+    )
   )
 )
