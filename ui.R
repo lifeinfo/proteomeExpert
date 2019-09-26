@@ -1,9 +1,9 @@
 #shinythemes::themeSelector(),
 
 navbarPage(
-  "ProteomeExpert",
+  "ProteomeExpert |",
   theme = shinytheme("cerulean"),
-  windowTitle = "ProteomeExpert | A user friendly Web for proteome analysis.",
+  windowTitle = "ProteomeExpert",
   useShinyjs(),
   #################################
   # Home
@@ -381,10 +381,7 @@ navbarPage(
       hr(),
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
       checkboxInput("reproducibility", "Reproducibility", TRUE),
-      checkboxInput("qcPca", "PCA", TRUE),
-      checkboxInput("qctsne", "t-SNE", TRUE),
-      checkboxInput("qcUmap", "UMAP", FALSE),
-      
+
       hr(),
       
       tags$h5("Click to process:"),
@@ -429,49 +426,6 @@ navbarPage(
           column(12, rHandsontableOutput("Qpcctable")),
           br(),
           h4("Note:")
-        ),
-        tabPanel(
-          "PCA",
-          h4("Summary"),
-          h5("Description:"),
-          HTML(
-            "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
-                <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
-                <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
-          ),
-          hr(),
-          column(6, plotlyOutput("Qpcaplot")),
-          column(6, rHandsontableOutput("Qpcatable"))
-        ),
-        tabPanel(
-          "T-SNE",
-          h4("Summary"),
-          h5("Description:"),
-          HTML(
-            "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
-          ),
-          h5("Reference:"),
-          HTML(
-            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
-          ),
-          hr(),
-          column(6, plotlyOutput("Qtsneplot")),
-          column(6, rHandsontableOutput("Qtsnetable"))
-        ),
-        tabPanel(
-          "Umap",
-          h4("Summary"),
-          h5("Description:"),
-          HTML(
-            "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
-          ),
-          h5("Reference:"),
-          HTML(
-            "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
-          ),
-          hr(),
-          column(6, plotlyOutput("Qumapplot")),
-          column(6, rHandsontableOutput("Qumaptable"))
         )
       )
     )
@@ -482,18 +436,18 @@ navbarPage(
   tabPanel(
     "Statistics",
     sidebarPanel(
-      tags$h5("Select input parameters:"),
+      tags$h5("Please upload your data files in data console first:"),
       hr(),
-      uiOutput("STprot_anno_Ui")
+      uiOutput("STprot_anno_Ui"),
       #selectInput('statlabel', 'select matrix', protM_name, selectize = FALSE),
-      
+      hr()
     ),
     mainPanel(tabsetPanel(
       #################################
       # Vocano Plot
       #################################
       tabPanel(
-        "VocanoPlot",
+        "VolcanoPlot",
         h4("Summary"),
         h5("Description:"),
         HTML(
@@ -513,8 +467,18 @@ navbarPage(
         hr(),
         column(6, plotOutput("DMviolinparameters")),
         column(6, rHandsontableOutput("DMviolintable"))
+      ),
+      tabPanel(
+        "RadarMap",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
+        ),
+        hr(),
+        column(6, canvasXpressOutput("DMradarparameters")),
+        column(6, rHandsontableOutput("DMradartable"))
       )
-      
     ))
   ),
   #################################
@@ -593,7 +557,10 @@ navbarPage(
       #checkboxInput("test", "t-test", TRUE),
       #checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
       #checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
-      checkboxInput("radarmap", "RadarMap", TRUE),
+      checkboxInput("qcPca", "PCA", TRUE),
+      checkboxInput("qctsne", "t-SNE", TRUE),
+      checkboxInput("qcUmap", "UMAP", FALSE),
+      
       actionButton("dmClustering", "Submit", class = "btn-primary")
     ),
     
@@ -612,16 +579,49 @@ navbarPage(
         column(6, plotOutput("DMheatmapparameters")),
         column(6, rHandsontableOutput("DMheatmaptable"))
       ),
+
       tabPanel(
-        "RadarMap",
+        "PCA",
         h4("Summary"),
         h5("Description:"),
         HTML(
-          "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
+          "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
+                <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
+                <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
         ),
         hr(),
-        column(6, canvasXpressOutput("DMradarparameters")),
-        column(6, rHandsontableOutput("DMradartable"))
+        column(6, plotlyOutput("Qpcaplot")),
+        column(6, rHandsontableOutput("Qpcatable"))
+      ),
+      tabPanel(
+        "T-SNE",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
+        ),
+        h5("Reference:"),
+        HTML(
+          "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
+        ),
+        hr(),
+        column(6, plotlyOutput("Qtsneplot")),
+        column(6, rHandsontableOutput("Qtsnetable"))
+      ),
+      tabPanel(
+        "Umap",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
+        ),
+        h5("Reference:"),
+        HTML(
+          "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
+        ),
+        hr(),
+        column(6, plotlyOutput("Qumapplot")),
+        column(6, rHandsontableOutput("Qumaptable"))
       )
     )
     )),

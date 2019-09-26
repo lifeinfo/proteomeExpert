@@ -408,70 +408,7 @@ function(input, output, session) {
       }
       
     })
-    
-    #################################
-    # PCA
-    #################################
-    output$Qpcatable <- renderRHandsontable({
-      if (input$qcPca) {
-        if (!is.null(data))
-        {
-          rhandsontable(head(data, n = 20L))
-        }
-      }
-    })
-    output$Qpcaplot <- renderPlotly({
-      if (input$qcPca) {
-        if (!is.null(data))
-        {
-          p <- drawPCA(data, qc_label)
-          ggplotly(p) %>% config(displaylogo = F)
-        }
-      }
-    })
-    #################################
-    # T-sne
-    #################################
-    output$Qtsnetable <- renderRHandsontable({
-      if (input$qctsne) {
-        if (!is.null(data))
-        {
-          rhandsontable(head(data, n = 20L))
-        }
-      }
-    })
-    output$Qtsneplot <- renderPlotly({
-      if (input$qctsne) {
-        if (!is.null(data))
-        {
-          p <- drawTSNE(data, qc_label)
-          ggplotly(p) %>% config(displaylogo = F)
-        }
-      }
-      
-    })
-    
-    #################################
-    # umap
-    #################################
-    output$Qumaptable <- renderRHandsontable({
-      if (input$qcUmap) {
-        if (!is.null(data))
-        {
-          rhandsontable(head(data, n = 20L))
-        }
-      }
-    })
-    output$Qumapplot <- renderPlotly({
-      if (input$qcUmap) {
-        if (!is.null(data))
-        {
-          p <- drawUMAP(data, qc_label)
-          ggplotly(p) %>% config(displaylogo = F)
-        }
-      }
-      
-    })
+
   })
   
   #################################
@@ -701,17 +638,63 @@ function(input, output, session) {
       )
     )
   })
+
+  ###############################################################
+  ##statistics
   output$STprot_anno_Ui <- renderUI({
     anno_name <<- colnames(getAnnoTable())
     tagList(
       selectInput(
         'STanno',
-        'Select Groups (Compare the two groups)',
+        'Select type',
         anno_name,
         multiple = F,
         selectize = TRUE
-      )
+      ),
+      checkboxInput("Volcano_check", "Volcano Plot", TRUE),
+      checkboxInput("Violin_check", "Violin Plot", TRUE),
+      checkboxInput("radarmap", "RadarMap", TRUE),
+      hr(),
+      tags$h5("Click to process:"),
+      actionButton("stat_do", "Submit", class = "btn-primary")
     )
+  })
+  
+  get_stat_prot_anno<-eventReactive(input$stat_do, {
+    stat_label <- input$STanno
+    if (!is.null(stat_label) & stat_label != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+    } else{
+      return()
+    }
+    
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    return(list(label=stat_label,data=prot_data))
+  })
+  #################################
+  # Radar
+  #################################
+  # output$DMradartable <- renderRHandsontable({
+  #   if (input$radarmap) {
+  #     if (!is.null(readProteinM()))
+  #     {
+  #       rhandsontable(head(trainData, n = 20L))
+  #     }
+  #   }
+  # })
+  output$DMradarparameters <- renderCanvasXpress({
+    if (input$radarmap) {
+      if (!is.null(get_stat_prot_anno()))        {
+        drawradar(get_stat_prot_anno()$data)
+      }
+    }
   })
   
   ####################################################
@@ -732,7 +715,6 @@ function(input, output, session) {
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
-    print(dim(data))
     trainData <- data[,-1]
     colnames(trainData) <- col_name[2:length(col_name)]
     row.names(trainData) <- row_name
@@ -742,14 +724,6 @@ function(input, output, session) {
     #################################
     # Heatmap
     #################################
-    # output$DMheatmaptable <- renderRHandsontable({
-    #   if (input$dmheatmap) {
-    #     if (!is.null(readProteinM()))
-    #     {
-    #       rhandsontable(head(trainData, n = 20L))
-    #     }
-    #   }
-    # })
     output$DMheatmapparameters <- renderPlot({
       if (input$dmheatmap) {
         if (!is.null(readProteinM()))
@@ -759,24 +733,71 @@ function(input, output, session) {
       }
       
     })
+
     #################################
-    # Radar
+    # PCA
     #################################
-    output$DMradartable <- renderRHandsontable({
-      if (input$radarmap) {
-        if (!is.null(readProteinM()))
+    # output$Qpcatable <- renderRHandsontable({
+    #   if (input$qcPca) {
+    #     if (!is.null(trainData))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
+    output$Qpcaplot <- renderPlotly({
+      if (input$qcPca) {
+        if (!is.null(trainData))
         {
-          rhandsontable(head(trainData, n = 20L))
+          p <- drawPCA(trainData, qc_label)
+          ggplotly(p) %>% config(displaylogo = F)
         }
       }
     })
-    output$DMradarparameters <- renderCanvasXpress({
-      if (input$radarmap) {
-        if (!is.null(readProteinM()))        {
-          drawradar(trainData)
+    #################################
+    # T-sne
+    #################################
+    # output$Qtsnetable <- renderRHandsontable({
+    #   if (input$qctsne) {
+    #     if (!is.null(trainData))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
+    output$Qtsneplot <- renderPlotly({
+      if (input$qctsne) {
+        if (!is.null(trainData))
+        {
+          p <- drawTSNE(trainData, qc_label)
+          ggplotly(p) %>% config(displaylogo = F)
         }
       }
+      
     })
+    
+    #################################
+    # umap
+    #################################
+    # output$Qumaptable <- renderRHandsontable({
+    #   if (input$qcUmap) {
+    #     if (!is.null(trainData))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
+    output$Qumapplot <- renderPlotly({
+      if (input$qcUmap) {
+        if (!is.null(trainData))
+        {
+          p <- drawUMAP(trainData, qc_label)
+          ggplotly(p) %>% config(displaylogo = F)
+        }
+      }
+      
+    })
+    
   })
 
     #################################
@@ -814,8 +835,6 @@ function(input, output, session) {
       }
       data <- as.data.frame(t(trainData))
       colnames(data)<-readProteinM()[,1]
-      print("ML")
-      print(qc_label)
       data$Label <- qc_label
       #print(head(data))
       #################################
