@@ -784,13 +784,9 @@ function(input, output, session) {
     #################################
   xgboost_classfier <- NULL
   observeEvent(input$mlsubmitTrain, {
-    trainData <- NULL
-    qc_label <- NULL
     qc_label1 <- input$DManno
     if (!is.null(qc_label1) & qc_label1 != "None") {
       sample_names <- colnames(readProteinM())[-1]
-      print("qc_label")
-      print(getAnnoTable())
       qc_label <- as.vector(getAnnoTable()[sample_names, qc_label1])
     } else{
       return()
@@ -801,7 +797,7 @@ function(input, output, session) {
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
     data <- data.matrix(data)
-    trainData <<- data[,-1]
+    trainData <- data[,-1]
     colnames(trainData) <- col_name[2:length(col_name)]
     row.names(trainData) <- row_name
     
