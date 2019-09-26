@@ -530,7 +530,7 @@ navbarPage(
       h5(
         "Please note: protein matrix and annotation file shoule be upload in data console first."
       ),
-      uiOutput("DMprot_anno_Ui"),
+      uiOutput("DMprot_anno_Ui_fs"),
       hr()
 
     ),
@@ -594,7 +594,7 @@ navbarPage(
       #checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
       #checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
       checkboxInput("radarmap", "RadarMap", TRUE),
-      actionButton("dm", "Submit", class = "btn-primary")
+      actionButton("dmClustering", "Submit", class = "btn-primary")
     ),
     
     mainPanel(tabsetPanel(
@@ -636,10 +636,8 @@ navbarPage(
       h5(
         "Please note: protein matrix and annotation file shoule be upload in data console first."
       ),
-      uiOutput("DMprot_anno_Ui"),
-      hr(),
-      
-      actionButton("dm", "Submit", class = "btn-primary")
+      uiOutput("DMprot_anno_Ui_class"),
+      hr()
     ),
     
     mainPanel(tabsetPanel(
