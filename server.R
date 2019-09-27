@@ -639,7 +639,11 @@ function(input, output, session) {
     row.names(prot_data) <- row_name
     prot_data[is.na(prot_data)] <- 0
     get_stat_prot_anno<-list(label=stat_label,data=prot_data)
-    
+    ###########################
+    #t-test
+    output$ttest_download_ui<-renderUI({
+      downloadButton("downloadttest", label = "Download", class = "btn-primary")
+    })
     ###########################
     #violin
     if(input$Violin_check){

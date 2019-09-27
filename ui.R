@@ -443,6 +443,51 @@ navbarPage(
       hr()
     ),
     mainPanel(tabsetPanel(
+      # t-test
+      #################################
+      tabPanel(
+        "t-test",
+        h4("Summary"),
+        h5("Description:"),
+        HTML(
+          "<p>A t-test is any statistical hypothesis test in which the test statistic follows a Student's t-distribution under the null hypothesis.</p>"
+        ),
+        hr(),
+        h5("Set parameters:"),
+        radioButtons(
+          "t_test_alter",
+          NULL,
+          choices = c(
+            two.sided = "two.sided",
+            less = "less",
+            greater = "greater"
+          ),
+          inline = TRUE,
+          selected = "two.sided"
+        ),
+        checkboxInput("paried","Paired samples",FALSE),
+        checkboxInput("var.equal","Equal varience",FALSE),
+        numericInput("conf.level", "Confidence level", 0.95,
+                     0.01, 1, 0.01),
+        radioButtons(
+          "adjP",
+          "Adjust P value method", 
+          choices = c(
+            none = "none",
+            bonferroni = "bonferroni",
+            hochberg = "hochberg",
+            hommel = "hommel",
+            holm = "holm",
+            BH = "BH",
+            BY = "BY",
+            fdr = "fdr"
+          ),
+          inline = TRUE,
+          selected = "none"
+        ),
+        column(6, rHandsontableOutput("ttest_out")),
+        uiOutput("ttest_download_ui")
+      ),
       #################################
       # Vocano Plot
       #################################
