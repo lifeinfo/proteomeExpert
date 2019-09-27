@@ -599,6 +599,87 @@ function(input, output, session) {
     getAnnoTable()
   }))
   
+
+
+  ###############################################################
+  ##statistics
+  output$STprot_anno_Ui <- renderUI({
+    anno_name <<- colnames(getAnnoTable())
+    tagList(
+      selectInput(
+        'STanno',
+        'Select type',
+        anno_name,
+        multiple = F,
+        selectize = TRUE
+      ),
+      checkboxInput("Volcano_check", "Volcano Plot", TRUE),
+      checkboxInput("Violin_check", "Violin Plot", TRUE),
+      checkboxInput("radarmap", "Radar Map", TRUE),
+      hr(),
+      tags$h5("Click to process:"),
+      actionButton("stat_do", "Submit", class = "btn-primary")
+    )
+  })
+  
+  observeEvent(input$stat_do, {
+    stat_label <- input$STanno
+    if (!is.null(stat_label) & stat_label != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+    } else{
+      return()
+    }
+    
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    get_stat_prot_anno<-list(label=stat_label,data=prot_data)
+    
+    ###########################
+    #violin
+    if(input$Violin_check){
+      output$DMviolin<-renderPlotly({
+        ggplotly(drawviolin_cv(get_stat_prot_anno))
+      }) 
+    }
+    else {
+      output$DMviolin<-renderPlotly({
+        NULL
+      })
+    }
+    #################################
+    # Radar
+    #################################
+    # output$DMradartable <- renderRHandsontable({
+    #   if (input$radarmap) {
+    #     if (!is.null(readProteinM()))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
+    if (input$radarmap) {
+       output$DMradarparameters <- renderCanvasXpress({
+     
+         if (!is.null(get_stat_prot_anno))        {
+          drawradar(get_stat_prot_anno$data)
+        }
+     
+       })
+    }
+    else  {output$DMradarparameters <- renderCanvasXpress({NULL})}
+
+
+  }, ignoreNULL = TRUE, ignoreInit = T)
+  
+  ####################################################
+  #data mining
+  ####################################################
   output$DMprot_anno_Ui <- renderUI({
     anno_name <<- colnames(getAnnoTable())
     tagList(
@@ -638,69 +719,7 @@ function(input, output, session) {
       )
     )
   })
-
-  ###############################################################
-  ##statistics
-  output$STprot_anno_Ui <- renderUI({
-    anno_name <<- colnames(getAnnoTable())
-    tagList(
-      selectInput(
-        'STanno',
-        'Select type',
-        anno_name,
-        multiple = F,
-        selectize = TRUE
-      ),
-      checkboxInput("Volcano_check", "Volcano Plot", TRUE),
-      checkboxInput("Violin_check", "Violin Plot", TRUE),
-      checkboxInput("radarmap", "RadarMap", TRUE),
-      hr(),
-      tags$h5("Click to process:"),
-      actionButton("stat_do", "Submit", class = "btn-primary")
-    )
-  })
-  
-  get_stat_prot_anno<-eventReactive(input$stat_do, {
-    stat_label <- input$STanno
-    if (!is.null(stat_label) & stat_label != "None") {
-      sample_names <- colnames(readProteinM())[-1]
-      stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
-    } else{
-      return()
-    }
-    
-    prot_data <- readProteinM()
-    col_name <- colnames(prot_data)
-    row_name <- prot_data[, 1]
-    prot_data <- prot_data[,-1]
-    colnames(prot_data) <- col_name[2:length(col_name)]
-    row.names(prot_data) <- row_name
-    prot_data[is.na(prot_data)] <- 0
-    return(list(label=stat_label,data=prot_data))
-  })
-  #################################
-  # Radar
-  #################################
-  # output$DMradartable <- renderRHandsontable({
-  #   if (input$radarmap) {
-  #     if (!is.null(readProteinM()))
-  #     {
-  #       rhandsontable(head(trainData, n = 20L))
-  #     }
-  #   }
-  # })
-  output$DMradarparameters <- renderCanvasXpress({
-    if (input$radarmap) {
-      if (!is.null(get_stat_prot_anno()))        {
-        drawradar(get_stat_prot_anno()$data)
-      }
-    }
-  })
-  
-  ####################################################
-  #data mining
-  ####################################################
-
+  ##
   observeEvent(input$dmClustering, {
     qc_label1 <- input$DManno
     if (!is.null(qc_label1) & qc_label1 != "None") {

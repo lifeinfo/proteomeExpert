@@ -465,8 +465,7 @@ navbarPage(
           "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel densy plot on each side. The violin plot is similar to box plots, except that they also show the probility density of the data at different values (in the simplest case this could be a histogram).</p>"
         ),
         hr(),
-        column(6, plotOutput("DMviolinparameters")),
-        column(6, rHandsontableOutput("DMviolintable"))
+        plotlyOutput("DMviolin")
       ),
       tabPanel(
         "RadarMap",
@@ -476,8 +475,8 @@ navbarPage(
           "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
         ),
         hr(),
-        column(6, canvasXpressOutput("DMradarparameters")),
-        column(6, rHandsontableOutput("DMradartable"))
+        column(8, canvasXpressOutput("DMradarparameters"))
+        #,column(6, rHandsontableOutput("DMradartable"))
       )
     ))
   ),
