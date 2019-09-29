@@ -18,8 +18,17 @@ function(input, output, session) {
                       "QCLabel",
                       choices = c("None", anno_name),
                       selected = NULL)
-    
+
   })
+  ####statistics t_test
+  # observeEvent(input$stat_do,{
+  #   anno_vector<-unique(getAnnoTable()[,input$STanno])
+  #   
+  #   updateSelectInput(session,
+  #                       "label_vector",
+  #                       choices = c(anno_vector),
+  #                       selected = NULL)
+  # })
   #################################
   # batch Design
   #################################
@@ -641,9 +650,29 @@ function(input, output, session) {
     get_stat_prot_anno<-list(label=stat_label,data=prot_data)
     ###########################
     #t-test
-    output$ttest_download_ui<-renderUI({
-      downloadButton("downloadttest", label = "Download", class = "btn-primary")
+    label_vector<-unique(stat_label)
+    output$ttest_groups_ui<-renderUI({
+      tagList(
+      selectInput(
+        'ttest_group1',
+        'select the first group',
+        label_vector,
+        multiple = F,
+        selectize = TRUE
+      ),
+      selectInput(
+        'ttest_group2',
+        'select the second group',
+        label_vector,
+        multiple = F,
+        selectize = TRUE
+      )
+      )
     })
+    output$ttest_do_ui<-renderUI({
+      actionButton("ttest_do", "Submit", class = "btn-primary")
+    })
+
     ###########################
     #violin
     if(input$Violin_check){
@@ -680,7 +709,22 @@ function(input, output, session) {
 
 
   }, ignoreNULL = TRUE, ignoreInit = T)
-  
+  ##ttest
+  observeEvent(input$ttest_do,{
+    sample_names <- colnames(readProteinM())[-1]
+    stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    group1<-input$ttest_group1
+    group2<-input$ttest_group2
+    g1.data<-prot_data[]
+    get_stat_prot_anno<-list(label=stat_label,data=prot_data)
+  })
   ####################################################
   #data mining
   ####################################################

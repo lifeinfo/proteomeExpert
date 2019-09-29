@@ -236,7 +236,7 @@ navbarPage(
       actionButton("DoAnnoTable", "Merge", class = "btn-primary"),
       hr(),
       h4("Result"),
-      fluidRow(column(width = 8, wellPanel(
+      fluidRow(column(width = 4, wellPanel(
         # This outputs the dynamic UI component
         DT::dataTableOutput("annoTable")
         
@@ -485,6 +485,7 @@ navbarPage(
           inline = TRUE,
           selected = "none"
         ),
+        uiOutput("ttest_groups_ui"),
         column(6, rHandsontableOutput("ttest_out")),
         uiOutput("ttest_download_ui")
       ),

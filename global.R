@@ -98,6 +98,8 @@ protM_name<-c("uploadedProtMatrix","comming soon")
 anno_name<-"Please upload your annotation file in data console first"
 #batch design use
 BDcol_name<-"Please upload your file first"
+#label vector
+label_vector<-"Please upload your annotation file in data console first"
 #################################
 # ML
 #################################
