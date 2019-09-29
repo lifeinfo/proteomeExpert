@@ -868,38 +868,7 @@ navbarPage(
       )
     )
   ),
-  #################################
-  # Resources
-  #################################
-  navbarMenu(
-    "Resources",
-    tabPanel("Tutorials",
-             mainPanel(
-               tabsetPanel(tabPanel("Test"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    "----",
-    tabPanel("Docs",
-             mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    tabPanel("Q&A",
-             mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    tabPanel("GitHub",
-             mainPanel(
-               h4("Github"),
-               HTML(
-                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
-               )
-             ))
-  ),
+ 
   ################################
   ### other tools
   #################################
@@ -908,7 +877,7 @@ navbarPage(
      tabPanel(
       "Peptide2Protein",
       h5("Description:"),
-      HTML("<p>Peptide2Protein is ... to be continued.</p>"),
+      HTML("<p>Peptide2Protein provide protein inference function, details are in help page.</p>"),
       sidebarPanel(
         fileInput(
           "PeptideMatrix",
@@ -1029,5 +998,37 @@ navbarPage(
         uiOutput("ui")
       )
     )
+  ),
+  #################################
+  # Resources
+  #################################
+  navbarMenu(
+    "Resources",
+    tabPanel("Tutorials",
+             mainPanel(
+               tabsetPanel(tabPanel("Test"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    "----",
+    tabPanel("Docs",
+             mainPanel(
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    tabPanel("Q&A",
+             mainPanel(
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    tabPanel("GitHub",
+             mainPanel(
+               h4("Github"),
+               HTML(
+                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
+               )
+             ))
   )
 )
