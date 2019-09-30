@@ -454,6 +454,7 @@ navbarPage(
         ),
         hr(),
         h5("Set parameters:"),
+        #checkboxInput("isLog","Alread Log2 transformed",TRUE),
         radioButtons(
           "t_test_alter",
           NULL,
@@ -486,7 +487,8 @@ navbarPage(
           selected = "none"
         ),
         uiOutput("ttest_groups_ui"),
-        column(6, rHandsontableOutput("ttest_out")),
+        rHandsontableOutput("ttest_out"),
+        uiOutput("ttest_do_ui"),
         uiOutput("ttest_download_ui")
       ),
       #################################

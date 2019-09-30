@@ -622,9 +622,10 @@ function(input, output, session) {
         multiple = F,
         selectize = TRUE
       ),
-      checkboxInput("Volcano_check", "Volcano Plot", TRUE),
+      checkboxInput("ttest_check", "t test", TRUE),
+      checkboxInput("Volcano_check", "Volcano Plot", FALSE),
       checkboxInput("Violin_check", "Violin Plot", TRUE),
-      checkboxInput("radarmap", "Radar Map", TRUE),
+      checkboxInput("radarmap", "Radar Map", FALSE),
       hr(),
       tags$h5("Click to process:"),
       actionButton("stat_do", "Submit", class = "btn-primary")
@@ -650,16 +651,17 @@ function(input, output, session) {
     get_stat_prot_anno<-list(label=stat_label,data=prot_data)
     ###########################
     #t-test
-    label_vector<-unique(stat_label)
-    output$ttest_groups_ui<-renderUI({
-      tagList(
-      selectInput(
+    if(input$ttest_check){
+      label_vector<-unique(stat_label)
+      output$ttest_groups_ui<-renderUI({
+       tagList(
+       selectInput(
         'ttest_group1',
         'select the first group',
         label_vector,
         multiple = F,
         selectize = TRUE
-      ),
+       ),
       selectInput(
         'ttest_group2',
         'select the second group',
@@ -668,10 +670,12 @@ function(input, output, session) {
         selectize = TRUE
       )
       )
+     })
+     output$ttest_do_ui<-renderUI({
+       actionButton("ttest_do", "Submit", class = "btn-primary")
     })
-    output$ttest_do_ui<-renderUI({
-      actionButton("ttest_do", "Submit", class = "btn-primary")
-    })
+    }
+
 
     ###########################
     #violin
@@ -711,8 +715,10 @@ function(input, output, session) {
   }, ignoreNULL = TRUE, ignoreInit = T)
   ##ttest
   observeEvent(input$ttest_do,{
+    stat_label <- input$STanno
     sample_names <- colnames(readProteinM())[-1]
-    stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+    anno<-getAnnoTable()
+    stat_label <- as.vector(anno[sample_names, stat_label])
     prot_data <- readProteinM()
     col_name <- colnames(prot_data)
     row_name <- prot_data[, 1]
@@ -722,8 +728,32 @@ function(input, output, session) {
     prot_data[is.na(prot_data)] <- 0
     group1<-input$ttest_group1
     group2<-input$ttest_group2
-    g1.data<-prot_data[]
-    get_stat_prot_anno<-list(label=stat_label,data=prot_data)
+    g1.data<-prot_data[,(stat_label==group1)]
+    g2.data<-prot_data[,(stat_label==group2)]
+    ttest_res<-apply_test(g1.data,g2.data,adj_method=input$adjP,alternative=input$t_test_alter,
+                          paired=input$paried,var.equal=input$var.equal,conf.level=input$conf.level)
+    ttest_res<-ttest_res[,-1]
+    output$ttest_out <- renderRHandsontable({
+          rhandsontable(ttest_res,height = 300,width = 100)
+    })
+    
+    output$ttest_download_ui<-renderUI({
+      downloadButton("downloadttest", label = "Download", class = "btn-primary")
+    })
+    output$downloadttest <- downloadHandler(
+      filename = function() {
+        paste("t_test_result", Sys.Date(), ".csv", sep = "")
+      },
+      content = function(file) {
+        write.csv(
+          ttest_res,
+          file,
+          row.names = T,
+          quote = F,
+          na = ""
+        )
+      }
+    )
   })
   ####################################################
   #data mining
