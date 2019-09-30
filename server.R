@@ -675,8 +675,32 @@ function(input, output, session) {
        actionButton("ttest_do", "Submit", class = "btn-primary")
     })
     }
-
-
+   
+    #volcano plot
+    if(input$Volcano_check){
+      label_vector<-unique(stat_label)
+      output$volcano_ttest_groups_ui<-renderUI({
+        tagList(
+          selectInput(
+            'volcano_ttest_group1',
+            'select the first group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          ),
+          selectInput(
+            'volcano_ttest_group2',
+            'select the second group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          )
+        )
+      })
+      output$volcano_ttest_do_ui<-renderUI({
+        actionButton("volcano_ttest_do", "Submit", class = "btn-primary")
+      })
+    }
     ###########################
     #violin
     if(input$Violin_check){
@@ -734,7 +758,7 @@ function(input, output, session) {
                           paired=input$paried,var.equal=input$var.equal,conf.level=input$conf.level)
     ttest_res<-ttest_res[,-1]
     output$ttest_out <- renderRHandsontable({
-          rhandsontable(ttest_res,height = 300,width = 100)
+          rhandsontable(ttest_res,height = 300,width = 300)
     })
     
     output$ttest_download_ui<-renderUI({
@@ -755,6 +779,54 @@ function(input, output, session) {
       }
     )
   })
+  ##vocano plot
+  observeEvent(input$volcano_ttest_do,{
+    stat_label <- input$STanno
+    sample_names <- colnames(readProteinM())[-1]
+    anno<-getAnnoTable()
+    stat_label <- as.vector(anno[sample_names, stat_label])
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    group1<-input$volcano_ttest_group1
+    group2<-input$volcano_ttest_group2
+    g1.data<-prot_data[,(stat_label==group1)]
+    g2.data<-prot_data[,(stat_label==group2)]
+    ttest_res<-apply_test(g1.data,g2.data,adj_method=input$volcano_adjP,isLog = input$volcano_isLog,alternative=input$volcano_t_test_alter,
+                          paired=input$volcano_paried,var.equal=input$volcano_var.equal,conf.level=input$volcano_conf.level)
+    
+    output$volcano_plot<-renderPlot({
+      myVolcano(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
+    })
+    volcano_data<-myVolcanoData(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
+    print(volcano_data)
+    output$volcano_ttest_out <- renderRHandsontable({
+      rhandsontable(volcano_data,height = 300,width = 300)
+    })
+    
+    output$volcano_ttest_download_ui<-renderUI({
+      downloadButton("volcano_downloadttest", label = "Download", class = "btn-primary")
+    })
+    output$volcano_downloadttest <- downloadHandler(
+      filename = function() {
+        paste("volcano_t_test_result", Sys.Date(), ".csv", sep = "")
+      },
+      content = function(file) {
+        write.csv(
+          volcano_data,
+          file,
+          row.names = T,
+          quote = F,
+          na = ""
+        )
+      }
+    )
+  })
+  
   ####################################################
   #data mining
   ####################################################

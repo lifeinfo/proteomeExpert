@@ -454,7 +454,7 @@ navbarPage(
         ),
         hr(),
         h5("Set parameters:"),
-        #checkboxInput("isLog","Alread Log2 transformed",TRUE),
+        #checkboxInput("isLog","Already Log2 transformed",TRUE),
         radioButtons(
           "t_test_alter",
           NULL,
@@ -487,8 +487,8 @@ navbarPage(
           selected = "none"
         ),
         uiOutput("ttest_groups_ui"),
-        rHandsontableOutput("ttest_out"),
         uiOutput("ttest_do_ui"),
+        rHandsontableOutput("ttest_out"),
         uiOutput("ttest_download_ui")
       ),
       #################################
@@ -502,8 +502,50 @@ navbarPage(
           "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify chans in large datasets composed of replicate data. It plots significance versus fold-change on the y-and-axes, respectively.</p>"
         ),
         hr(),
-        column(6, plotOutput("DMvocanoparameters")),
-        column(6, rHandsontableOutput("DMvocanotable"))
+        h5("Set parameters for volcano plot"),
+        checkboxInput("volcano_isLog","Already Log2 transformed protein matrix",TRUE),
+        numericInput("volcano_adjp_threshold", "Adjust P value threshold", 0.05,
+                     0.01, 1, 0.01),
+        numericInput("volcano_fc", "Fold change threshold", 2,
+                     1, 10, 0.5),
+        hr(),
+        h5("Set parameters for t test:"),
+        radioButtons(
+          "volcano_t_test_alter",
+          NULL,
+          choices = c(
+            two.sided = "two.sided",
+            less = "less",
+            greater = "greater"
+          ),
+          inline = TRUE,
+          selected = "two.sided"
+        ),
+        checkboxInput("volcano_paried","Paired samples",FALSE),
+        checkboxInput("volcano_var.equal","Equal varience",FALSE),
+        numericInput("volcano_conf.level", "Confidence level", 0.95,
+                     0.01, 1, 0.01),
+        radioButtons(
+          "volcano_adjP",
+          "Adjust P value method", 
+          choices = c(
+            none = "none",
+            bonferroni = "bonferroni",
+            hochberg = "hochberg",
+            hommel = "hommel",
+            holm = "holm",
+            BH = "BH",
+            BY = "BY",
+            fdr = "fdr"
+          ),
+          inline = TRUE,
+          selected = "none"
+        ),
+        uiOutput("volcano_ttest_groups_ui"),
+        uiOutput("volcano_ttest_do_ui"),
+        plotOutput("volcano_plot"),
+        rHandsontableOutput("volcano_ttest_out"),
+        uiOutput("volcano_ttest_download_ui")
       ),
       tabPanel(
         "ViolinPlot",

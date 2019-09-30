@@ -11,8 +11,8 @@ apply_test<-function(d1,d2,adj_method,isLog=T,alternative,paired,var.equal,conf.
 mytest<-function(v,a,isLog,alternative,paired,var.equal,conf.level){
   x<-v[1:a]
   y<-v[(a+1):length(v)]
-  t<-t.test(x,y)
+  t<-t.test(x,y,alternative=alternative,paired=paired,var.equal=var.equal,conf.level=conf.level)
   if(isLog)
-    return(c(log2fc=(mean(x,na.rm = T)-mean(y,na.rm = T)),p=t$p.value))
-  else return(c(log2fc=log2(0.001+mean(x,na.rm = T))/log2(0.001+mean(y,na.rm = T)),p=t$p.value))
+    return(c(log2fc=(mean(y,na.rm = T)-mean(x,na.rm = T)),p=t$p.value))
+  else return(c(log2fc=log2(mean(y,na.rm = T)/(mean(x,na.rm = T))),p=t$p.value))
 }
