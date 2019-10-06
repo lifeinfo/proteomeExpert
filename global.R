@@ -75,7 +75,7 @@ library(rhandsontable)
 source("expert/lr_2prot.R")
 source("expert/data_preprocess.R")
 source("expert/combat.R")
-source("expert/test.R")
+source("expert/t_test.R")
 source("expert/preprocess.R")
 source("expert/featureSelection.R")
 source("expert/pca.R")
@@ -98,6 +98,8 @@ protM_name<-c("uploadedProtMatrix","comming soon")
 anno_name<-"Please upload your annotation file in data console first"
 #batch design use
 BDcol_name<-"Please upload your file first"
+#label vector
+label_vector<-"Please upload your annotation file in data console first"
 #################################
 # ML
 #################################

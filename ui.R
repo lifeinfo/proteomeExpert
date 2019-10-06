@@ -236,7 +236,7 @@ navbarPage(
       actionButton("DoAnnoTable", "Merge", class = "btn-primary"),
       hr(),
       h4("Result"),
-      fluidRow(column(width = 8, wellPanel(
+      fluidRow(column(width = 4, wellPanel(
         # This outputs the dynamic UI component
         DT::dataTableOutput("annoTable")
         
@@ -454,6 +454,7 @@ navbarPage(
         ),
         hr(),
         h5("Set parameters:"),
+        #checkboxInput("isLog","Already Log2 transformed",TRUE),
         radioButtons(
           "t_test_alter",
           NULL,
@@ -485,7 +486,9 @@ navbarPage(
           inline = TRUE,
           selected = "none"
         ),
-        column(6, rHandsontableOutput("ttest_out")),
+        uiOutput("ttest_groups_ui"),
+        uiOutput("ttest_do_ui"),
+        rHandsontableOutput("ttest_out"),
         uiOutput("ttest_download_ui")
       ),
       #################################
@@ -499,8 +502,50 @@ navbarPage(
           "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify chans in large datasets composed of replicate data. It plots significance versus fold-change on the y-and-axes, respectively.</p>"
         ),
         hr(),
-        column(6, plotOutput("DMvocanoparameters")),
-        column(6, rHandsontableOutput("DMvocanotable"))
+        h5("Set parameters for volcano plot"),
+        checkboxInput("volcano_isLog","Already Log2 transformed protein matrix",TRUE),
+        numericInput("volcano_adjp_threshold", "Adjust P value threshold", 0.05,
+                     0.01, 1, 0.01),
+        numericInput("volcano_fc", "Fold change threshold", 2,
+                     1, 10, 0.5),
+        hr(),
+        h5("Set parameters for t test:"),
+        radioButtons(
+          "volcano_t_test_alter",
+          NULL,
+          choices = c(
+            two.sided = "two.sided",
+            less = "less",
+            greater = "greater"
+          ),
+          inline = TRUE,
+          selected = "two.sided"
+        ),
+        checkboxInput("volcano_paried","Paired samples",FALSE),
+        checkboxInput("volcano_var.equal","Equal varience",FALSE),
+        numericInput("volcano_conf.level", "Confidence level", 0.95,
+                     0.01, 1, 0.01),
+        radioButtons(
+          "volcano_adjP",
+          "Adjust P value method", 
+          choices = c(
+            none = "none",
+            bonferroni = "bonferroni",
+            hochberg = "hochberg",
+            hommel = "hommel",
+            holm = "holm",
+            BH = "BH",
+            BY = "BY",
+            fdr = "fdr"
+          ),
+          inline = TRUE,
+          selected = "none"
+        ),
+        uiOutput("volcano_ttest_groups_ui"),
+        uiOutput("volcano_ttest_do_ui"),
+        plotOutput("volcano_plot"),
+        rHandsontableOutput("volcano_ttest_out"),
+        uiOutput("volcano_ttest_download_ui")
       ),
       tabPanel(
         "ViolinPlot",
@@ -868,38 +913,7 @@ navbarPage(
       )
     )
   ),
-  #################################
-  # Resources
-  #################################
-  navbarMenu(
-    "Resources",
-    tabPanel("Tutorials",
-             mainPanel(
-               tabsetPanel(tabPanel("Test"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    "----",
-    tabPanel("Docs",
-             mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    tabPanel("Q&A",
-             mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
-    tabPanel("GitHub",
-             mainPanel(
-               h4("Github"),
-               HTML(
-                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
-               )
-             ))
-  ),
+ 
   ################################
   ### other tools
   #################################
@@ -908,7 +922,7 @@ navbarPage(
      tabPanel(
       "Peptide2Protein",
       h5("Description:"),
-      HTML("<p>Peptide2Protein is ... to be continued.</p>"),
+      HTML("<p>Peptide2Protein provide protein inference function, details are in help page.</p>"),
       sidebarPanel(
         fileInput(
           "PeptideMatrix",
@@ -1029,5 +1043,37 @@ navbarPage(
         uiOutput("ui")
       )
     )
+  ),
+  #################################
+  # Resources
+  #################################
+  navbarMenu(
+    "Resources",
+    tabPanel("Tutorials",
+             mainPanel(
+               tabsetPanel(tabPanel("Test"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    "----",
+    tabPanel("Docs",
+             mainPanel(
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    tabPanel("Q&A",
+             mainPanel(
+               tabsetPanel(tabPanel("Plot"),
+                           tabPanel("Summary"),
+                           tabPanel("Table"))
+             )),
+    tabPanel("GitHub",
+             mainPanel(
+               h4("Github"),
+               HTML(
+                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
+               )
+             ))
   )
 )

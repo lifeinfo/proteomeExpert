@@ -18,8 +18,17 @@ function(input, output, session) {
                       "QCLabel",
                       choices = c("None", anno_name),
                       selected = NULL)
-    
+
   })
+  ####statistics t_test
+  # observeEvent(input$stat_do,{
+  #   anno_vector<-unique(getAnnoTable()[,input$STanno])
+  #   
+  #   updateSelectInput(session,
+  #                       "label_vector",
+  #                       choices = c(anno_vector),
+  #                       selected = NULL)
+  # })
   #################################
   # batch Design
   #################################
@@ -733,7 +742,221 @@ function(input, output, session) {
                },
                ignoreNULL = TRUE,
                ignoreInit = T)
+  output$STprot_anno_Ui <- renderUI({
+    anno_name <<- colnames(getAnnoTable())
+    tagList(
+      selectInput(
+        'STanno',
+        'Select type',
+        anno_name,
+        multiple = F,
+        selectize = TRUE
+      ),
+      checkboxInput("ttest_check", "t test", TRUE),
+      checkboxInput("Volcano_check", "Volcano Plot", FALSE),
+      checkboxInput("Violin_check", "Violin Plot", TRUE),
+      checkboxInput("radarmap", "Radar Map", FALSE),
+      hr(),
+      tags$h5("Click to process:"),
+      actionButton("stat_do", "Submit", class = "btn-primary")
+    )
+  })
   
+  observeEvent(input$stat_do, {
+    stat_label <- input$STanno
+    if (!is.null(stat_label) & stat_label != "None") {
+      sample_names <- colnames(readProteinM())[-1]
+      stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+    } else{
+      return()
+    }
+    
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    get_stat_prot_anno<-list(label=stat_label,data=prot_data)
+    ###########################
+    #t-test
+    if(input$ttest_check){
+      label_vector<-unique(stat_label)
+      output$ttest_groups_ui<-renderUI({
+       tagList(
+       selectInput(
+        'ttest_group1',
+        'select the first group',
+        label_vector,
+        multiple = F,
+        selectize = TRUE
+       ),
+      selectInput(
+        'ttest_group2',
+        'select the second group',
+        label_vector,
+        multiple = F,
+        selectize = TRUE
+      )
+      )
+     })
+     output$ttest_do_ui<-renderUI({
+       actionButton("ttest_do", "Submit", class = "btn-primary")
+    })
+    }
+   
+    #volcano plot
+    if(input$Volcano_check){
+      label_vector<-unique(stat_label)
+      output$volcano_ttest_groups_ui<-renderUI({
+        tagList(
+          selectInput(
+            'volcano_ttest_group1',
+            'select the first group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          ),
+          selectInput(
+            'volcano_ttest_group2',
+            'select the second group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          )
+        )
+      })
+      output$volcano_ttest_do_ui<-renderUI({
+        actionButton("volcano_ttest_do", "Submit", class = "btn-primary")
+      })
+    }
+    ###########################
+    #violin
+    if(input$Violin_check){
+      output$DMviolin<-renderPlotly({
+        ggplotly(drawviolin_cv(get_stat_prot_anno))
+      }) 
+    }
+    else {
+      output$DMviolin<-renderPlotly({
+        NULL
+      })
+    }
+    #################################
+    # Radar
+    #################################
+    # output$DMradartable <- renderRHandsontable({
+    #   if (input$radarmap) {
+    #     if (!is.null(readProteinM()))
+    #     {
+    #       rhandsontable(head(trainData, n = 20L))
+    #     }
+    #   }
+    # })
+    if (input$radarmap) {
+       output$DMradarparameters <- renderCanvasXpress({
+     
+         if (!is.null(get_stat_prot_anno))        {
+          drawradar(get_stat_prot_anno$data)
+        }
+     
+       })
+    }
+    else  {output$DMradarparameters <- renderCanvasXpress({NULL})}
+
+
+  }, ignoreNULL = TRUE, ignoreInit = T)
+  ##ttest
+  observeEvent(input$ttest_do,{
+    stat_label <- input$STanno
+    sample_names <- colnames(readProteinM())[-1]
+    anno<-getAnnoTable()
+    stat_label <- as.vector(anno[sample_names, stat_label])
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    group1<-input$ttest_group1
+    group2<-input$ttest_group2
+    g1.data<-prot_data[,(stat_label==group1)]
+    g2.data<-prot_data[,(stat_label==group2)]
+    ttest_res<-apply_test(g1.data,g2.data,adj_method=input$adjP,alternative=input$t_test_alter,
+                          paired=input$paried,var.equal=input$var.equal,conf.level=input$conf.level)
+    ttest_res<-ttest_res[,-1]
+    output$ttest_out <- renderRHandsontable({
+          rhandsontable(ttest_res,height = 300,width = 300)
+    })
+    
+    output$ttest_download_ui<-renderUI({
+      downloadButton("downloadttest", label = "Download", class = "btn-primary")
+    })
+    output$downloadttest <- downloadHandler(
+      filename = function() {
+        paste("t_test_result", Sys.Date(), ".csv", sep = "")
+      },
+      content = function(file) {
+        write.csv(
+          ttest_res,
+          file,
+          row.names = T,
+          quote = F,
+          na = ""
+        )
+      }
+    )
+  })
+  ##vocano plot
+  observeEvent(input$volcano_ttest_do,{
+    stat_label <- input$STanno
+    sample_names <- colnames(readProteinM())[-1]
+    anno<-getAnnoTable()
+    stat_label <- as.vector(anno[sample_names, stat_label])
+    prot_data <- readProteinM()
+    col_name <- colnames(prot_data)
+    row_name <- prot_data[, 1]
+    prot_data <- prot_data[,-1]
+    colnames(prot_data) <- col_name[2:length(col_name)]
+    row.names(prot_data) <- row_name
+    prot_data[is.na(prot_data)] <- 0
+    group1<-input$volcano_ttest_group1
+    group2<-input$volcano_ttest_group2
+    g1.data<-prot_data[,(stat_label==group1)]
+    g2.data<-prot_data[,(stat_label==group2)]
+    ttest_res<-apply_test(g1.data,g2.data,adj_method=input$volcano_adjP,isLog = input$volcano_isLog,alternative=input$volcano_t_test_alter,
+                          paired=input$volcano_paried,var.equal=input$volcano_var.equal,conf.level=input$volcano_conf.level)
+    
+    output$volcano_plot<-renderPlot({
+      myVolcano(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
+    })
+    volcano_data<-myVolcanoData(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
+    print(volcano_data)
+    output$volcano_ttest_out <- renderRHandsontable({
+      rhandsontable(volcano_data,height = 300,width = 300)
+    })
+    
+    output$volcano_ttest_download_ui<-renderUI({
+      downloadButton("volcano_downloadttest", label = "Download", class = "btn-primary")
+    })
+    output$volcano_downloadttest <- downloadHandler(
+      filename = function() {
+        paste("volcano_t_test_result", Sys.Date(), ".csv", sep = "")
+      },
+      content = function(file) {
+        write.csv(
+          volcano_data,
+          file,
+          row.names = T,
+          quote = F,
+          na = ""
+        )
+      }
+    )
+  })
+
   ####################################################
   #data mining
   ####################################################
