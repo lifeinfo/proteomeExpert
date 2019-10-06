@@ -725,7 +725,7 @@ navbarPage(
               ,
               numericInput("xgb_nrounds",
                            label = "The number of rounds for boosting:",
-                           value = 2)
+                           value = 5)
               ,
               #################################
               #  parameter for gbtree
