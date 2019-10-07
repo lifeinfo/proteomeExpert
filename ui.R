@@ -826,6 +826,17 @@ navbarPage(
                            ".csv"),
                 placeholder = "*.csv or *.TXT required!"
               ),
+              radioButtons(
+                "testDataSep",
+                "Separator for your file",
+                choices = c(
+                  "Comma(,)" = ",",
+                  "Semicolon(;)" = ";",
+                  "Tab(\\t)" = "\t"
+                ),
+                inline = TRUE,
+                selected = "\t"
+              ),
               fluidRow(
                 shinyBS::bsButton("mlsubmitPredict", label = "Predicting", style = "primary",  disabled = TRUE)
                 ,shinyBS::bsTooltip(id = "mlsubmitPredict", title = "click me to predict", placement = "right", trigger = "hover")

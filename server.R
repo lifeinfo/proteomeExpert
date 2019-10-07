@@ -1327,17 +1327,16 @@ function(input, output, session) {
   })
   observeEvent(input$mlsubmitPredict, {
     result <-
-      xgboost_classfier_predict(xgboost_classfier, input$mlTestFile$datapath)
+      xgboost_classfier_predict(xgboost_classfier, input$mlTestFile$datapath, input$testDataSep)
     nclass <- length(levels(trainYy))
     if( nclass > 2){
-      result2 <- matrix(result, ncol = nclass, nrow = length(result)/nclass, dimnames = list(NULL, levels(trainYy)))
+      result <- matrix(result, ncol = nclass, nrow = length(result)/nclass, dimnames = list(NULL, levels(trainYy)))
     }
     #print(result)
     output$DMmloutputText <-
       renderPrint({
         cat("predict result:\n")
-        #print(result)
-        print(result2)
+        print(result)
       })
     
   })
