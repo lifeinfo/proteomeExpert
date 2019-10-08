@@ -1326,17 +1326,25 @@ function(input, output, session) {
     )
   })
   observeEvent(input$mlsubmitPredict, {
-    result <-
-      xgboost_classfier_predict(xgboost_classfier, input$mlTestFile$datapath, input$testDataSep)
-    nclass <- length(levels(trainYy))
-    if( nclass > 2){
-      result <- matrix(result, ncol = nclass, nrow = length(result)/nclass, dimnames = list(NULL, levels(trainYy)))
-    }
+    
+    testdata <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
+                         header = FALSE,stringsAsFactors = FALSE)
+    sampleNames <- testdata[1,]
+    sampleNames <- sampleNames[-1]
+    testdata <- testdata[-1,]
+    testdata <- t(testdata)
+    attrNames <- testdata[1,]
+    testdata <- testdata[-1,]
+    colnames(testdata) <- attrNames
+    testdata <-as.data.frame(testdata)
+    
+    result <- xgboost_classfier_predict(xgboost_classfier, testdata)
+    result <- formatResult(result, trainYy, sampleNames)
     #print(result)
     output$DMmloutputText <-
       renderPrint({
         cat("predict result:\n")
-        print(result)
+        print(as.table(result), digits = 3)
       })
     
   })
