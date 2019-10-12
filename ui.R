@@ -752,6 +752,22 @@ navbarPage(
                 <span style="font-size: 14px;"></span>
                 </p>'
           ),
+          #####################################################
+          # Random Forest parameters
+          #####################################################
+          conditionalPanel(
+            condition = "input.mlmethod == \"Random Forest\"",
+            div(
+              id = "rf_Parameters_container",
+              numericInput("rf_ntree", label = "ntree",value = 500,min = 1)
+              ,shinyBS::bsTooltip(id = "rf_ntree", title = "Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times.",
+                                  placement = "top", trigger = "hover")
+              ,numericInput("rf_mtry",label = "mtry( value 0 means default)", value = 0, min = 0)
+              ,shinyBS::bsTooltip(id = "rf_mtry", title = "Number of variables randomly sampled as candidates at each split. Note that the default values are different for classification (sqrt(p) where p is number of variables in x) and regression (p/3)",
+                                  placement = "top", trigger = "hover")
+              
+            )
+          ),
           ################################################################
           # xgboost parameters
           ################################################################
@@ -856,6 +872,7 @@ navbarPage(
           verbatimTextOutput("DMmlText"),
           plotOutput("DMmlPlot"),
           verbatimTextOutput("DMmloutputText"),
+          plotOutput("DMmlPlotforest"),
           rHandsontableOutput("DMmltables")
         )
       )

@@ -1120,9 +1120,25 @@ function(input, output, session) {
   #################################
   # ML
   #################################
-  xgboost_classfier <- NULL
+  observeEvent(input$mlmethod,{
+    shinyjs::hide(id = "mlPredictDiv")
+  })
+  model.decisionTree_classifier <- NULL
+  model.randomForest_classifier <- NULL
+  model.xgboost_classifier      <- NULL
+  
   trainYy <- NULL
   observeEvent(input$mlsubmitTrain, {
+    
+    if (is.null(input$protein_matrix)) {
+      #hint to upload train data
+      output$DMmlText <-
+        renderPrint({
+          print("Please upload your training data from data console")
+        })
+      return()
+    }
+    
     qc_label1 <- input$DManno
     if (!is.null(qc_label1) &  qc_label1 != "None") {
       sample_names <- colnames(readProteinM())[-1]
@@ -1131,16 +1147,16 @@ function(input, output, session) {
       return()
     }
     
-    data <- readProteinM()
-    col_name <- colnames(data)
-    row_name <- as.matrix(data[, 1])
-    row_name <- as.vector(row_name[, 1])
-    data <-  data.matrix(data)
-    trainData <-  data[, -1]
-    colnames(trainData) <-  col_name[2:length(col_name)]
-    row.names(trainData) <- row_name
-    
-    trainData[is.na(trainData)] <- 0
+    # data <- readProteinM()
+    # col_name <- colnames(data)
+    # row_name <- as.matrix(data[, 1])
+    # row_name <- as.vector(row_name[, 1])
+    # data <-  data.matrix(data)
+    # trainData <-  data[, -1]
+    # colnames(trainData) <-  col_name[2:length(col_name)]
+    # row.names(trainData) <- row_name
+    # 
+    # trainData[is.na(trainData)] <- 0
     
     output$DMmlText <-
       renderPrint({
@@ -1152,9 +1168,19 @@ function(input, output, session) {
     {
       return()
     }
-    data <- as.data.frame(t(trainData))
-    colnames(data) <- readProteinM()[, 1]
-    data$Label <- qc_label
+    if (is.null(input$protein_matrix)) {
+      #hint to upload train data
+      output$DMmlText <-
+        renderPrint({
+          print("Please upload your training data from data console")
+        })
+      return()
+    }
+    #data <- as.data.frame(t(trainData))
+    #colnames(data) <- readProteinM()[, 1]
+    proteinData <- readProteinM()
+    data <- formatProteinMatrix(proteinData)
+    #data$Label <- qc_label
     #print(head(data))
     #################################
     # Decision Tree
@@ -1164,10 +1190,10 @@ function(input, output, session) {
       print("Decision tree starting")
       if (!is.null(readProteinM()))
       {
+        data$Label <- qc_label
         dtree <- rpart(Label ~ ., data = data, method = "class")
         #tree <- prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
-        tree <-
-          dtree
+        tree <- dtree
         output$DMmlPlot <-
           renderImage({
             outfile <- tempfile(fileext = '.png')
@@ -1189,7 +1215,7 @@ function(input, output, session) {
           renderPrint({
             printcp(tree)
           })
-        output$DMmltables <-
+          output$DMmltables <-
           renderRHandsontable({
             rhandsontable(head(data, n = 20L))
           })
@@ -1204,46 +1230,71 @@ function(input, output, session) {
         #print(dim(data))
         #print(class(data))
         #print(head(data))
-        data$Label <-
-          as.factor(data$Label)
-        model.forest <-
-          randomForest(Label ~ ., data = data)
-        pre.forest <-
-          predict(model.forest, data)
-        
-        if (pre.forest)
-        {
-          ran_roc <-
-            roc(data$Label, as.numeric(pre.forest))
+        # data$Label <- as.factor(data$Label)
+        # model.forest <-
+        #   randomForest(Label ~ ., data = data)
+        # pre.forest <-
+        #   predict(model.forest, data)
+        # 
+        # if (pre.forest)
+        # {
+        #   ran_roc <-
+        #     roc(data$Label, as.numeric(pre.forest))
+        # }
+        targetLabel <- as.factor(qc_label)
+        rf_mtry <- input$rf_mtry
+        if(rf_mtry == 0){
+          model.randomForest_classifier <<- randomForest(x = data, y = targetLabel, prox=TRUE, 
+                                                         importance=TRUE, ntree = input$rf_ntree)
+        }else{
+          model.randomForest_classifier <<- randomForest(x = data, y = targetLabel, prox=TRUE, 
+                                                         importance=TRUE, ntree = input$rf_ntree,
+                                                         mtry = rf_mtry)
         }
         
-        
+        model.forest <- model.randomForest_classifier
+        output$DMmlPlotforest <- renderPlot({
+          plot(model.forest)
+        })
         output$DMmlPlot <-
           renderPlot({
-            layout(matrix(c(1, 2, 3, 0), 2, 2),
-                   widths = c(1, 1),
-                   heights = c(1, 1),
-                   F)
-            varImpPlot(model.forest, main = "variable importance")
-            plot(model.forest)
-            plot(
-              ran_roc,
-              print.auc = TRUE,
-              auc.polygon = TRUE,
-              grid = c(0.1, 0.2),
-              grid.col = c("green", "red"),
-              max.auc.polygon = TRUE,
-              auc.polygon.col = "skyblue",
-              print.thres = TRUE,
-              main = 'RF ROC'
-            )
+            # layout(matrix(c(1, 2, 3, 0), 2, 2),
+            #        widths = c(1, 1),
+            #        heights = c(1, 1),
+            #        F)
+            # layout(matrix(c(1,1), nrow = 2, ncol=1),
+            #        respect = FALSE)
+            # layout.show(n=2)
+              varImpPlot(model.forest, main = "variable importance")
+              #plot(model.forest)
+            # plot(
+            #   ran_roc,
+            #   print.auc = TRUE,
+            #   auc.polygon = TRUE,
+            #   grid = c(0.1, 0.2),
+            #   grid.col = c("green", "red"),
+            #   max.auc.polygon = TRUE,
+            #   auc.polygon.col = "skyblue",
+            #   print.thres = TRUE,
+            #   main = 'RF ROC'
+            # )
           })
         
         output$DMmloutputText <-
           renderPrint({
-            model.forest$importance
+                  # imp <- importance(model.forest)
+                  # imp <- round(imp, digits = 3)
+                  # imp <- imp[, 1:3]
+                  # impvar <- imp[order(imp[, 3], decreasing=TRUE),]
+                  # if(length(impvar > 50)){
+                  #   print(head(impvar, n=50L))
+                  # }else{
+                  #   print(impvar)
+                  # }
+            print(model.forest)
             #
-            table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
+            #Verification
+            #table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
             
           })
         
@@ -1255,14 +1306,7 @@ function(input, output, session) {
     else if (input$mlmethod == "XGBoost")
     {
       print("xgboost starting")
-      if (is.null(input$protein_matrix)) {
-        #hint to upload train data
-        output$DMmlText <-
-          renderPrint({
-            print("Please upload your training data from data console")
-          })
-        return()
-      }
+      
       #xgboost parameters
       #https://xgboost.readthedocs.io/en/latest/parameter.html
       params <- list( "booster" = input$xgb_xgbooster_type,
@@ -1278,12 +1322,12 @@ function(input, output, session) {
       buffer <<- vector('character')
       con    <<- textConnection('buffer', 'wr', local = TRUE)
       sink(con)
-      trainXx <- data[, which(colnames(data) != "Label")]
-      trainYy <<- data$Label
+      trainXx <- data
+      trainYy <<- qc_label
       if( !is.factor(trainYy)){
         trainYy <<- as.factor(trainYy)
       }
-      xgboost_classfier <<-
+      model.xgboost_classifier <<-
         xgboost_classfier_training(
           trainX = trainXx,
           trainY = trainYy,
@@ -1292,10 +1336,12 @@ function(input, output, session) {
         )
       sink()
       close(con)
-      
+      output$DMmlPlotforest <- renderPlot({
+        model.xgboost_classifier
+      })
       output$DMmlPlot <-
         renderPlot({
-          importance_matrix <- xgb.importance(model = xgboost_classfier)
+          importance_matrix <- xgb.importance(model = model.xgboost_classifier)
           imp_num <- nrow(importance_matrix)
           if (imp_num > 50)
             imp_num <- 50
@@ -1327,25 +1373,44 @@ function(input, output, session) {
   })
   observeEvent(input$mlsubmitPredict, {
     
-    testdata <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
-                         header = FALSE,stringsAsFactors = FALSE)
-    sampleNames <- testdata[1,]
-    sampleNames <- sampleNames[-1]
-    testdata <- testdata[-1,]
-    testdata <- t(testdata)
-    attrNames <- testdata[1,]
-    testdata <- testdata[-1,]
-    colnames(testdata) <- attrNames
-    testdata <-as.data.frame(testdata)
+    # testdata <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
+    #                      header = FALSE,stringsAsFactors = FALSE)
+    # sampleNames <- testdata[1,]
+    # sampleNames <- sampleNames[-1]
+    # testdata <- testdata[-1,]
+    # testdata <- t(testdata)
+    # attrNames <- testdata[1,]
+    # testdata <- testdata[-1,]
+    # colnames(testdata) <- attrNames
+    # testdata <-as.data.frame(testdata)
     
-    result <- xgboost_classfier_predict(xgboost_classfier, testdata)
-    result <- formatResult(result, trainYy, sampleNames)
-    #print(result)
-    output$DMmloutputText <-
-      renderPrint({
-        cat("predict result:\n")
-        print(as.table(result), digits = 3)
-      })
+    testdata2 <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
+                         header = TRUE,stringsAsFactors = FALSE)
+    testdata2 <- formatProteinMatrix(testdata2)
+    sampleNames2 <- row.names(testdata2)
+    if(input$mlmethod == "Decision Tree"){
+      print("todo Decision Tree")
+    }else if(input$mlmethod == "Random Forest"){
+      print("to do Random Forest")
+      #pre.forest <- predict(model.randomForest_classifier, testdata2, nodes=TRUE, type = "prob")
+      pre.forest <- predict(model.randomForest_classifier, testdata2, type = "prob")
+      output$DMmloutputText <-
+        renderPrint({
+          cat("predict result:\n")
+          print(pre.forest)
+        })
+        
+    }else if(input$mlmethod == "XGBoost"){
+      result <- xgboost_classfier_predict(model.xgboost_classifier, testdata2)
+      result <- formatXgbResult(result, trainYy, sampleNames2)
+      #print(result)
+      output$DMmloutputText <-
+        renderPrint({
+          cat("predict result:\n")
+          print(as.table(result), digits = 3)
+        })
+    }
+    
     
   })
   #################################
