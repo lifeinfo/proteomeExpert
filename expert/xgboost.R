@@ -26,13 +26,11 @@ xgboost_classfier_predict <-function(xgb_model, testdata)
   
   dtestset <- data.matrix(testdata)
   dtest <- xgb.DMatrix(dtestset)
-  #在测试集上预测
   pred <- predict(xgb_model, dtest)
   # cat(pred, file = "/home/stucse/result.txt")
   return(pred)
 }
 #
-#xgboost中的result还原为原始的字符串值
 formatResult <- function(result, factoredLabel, sampleNames)
 {
   result <- round(result, digits = 3)
