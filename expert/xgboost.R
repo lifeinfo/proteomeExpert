@@ -26,11 +26,12 @@ xgboost_classfier_predict <-function(xgb_model, testdata)
   
   dtestset <- data.matrix(testdata)
   dtest <- xgb.DMatrix(dtestset)
-  #在测试集上预测
+
   pred <- predict(xgb_model, dtest)
   # cat(pred, file = "/home/stucse/result.txt")
   return(pred)
 }
+
 #format input protein matrix
 formatProteinMatrix <- function(proteinData)
 {

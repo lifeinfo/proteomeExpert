@@ -4,7 +4,7 @@ navbarPage(
   "ProteomeExpert |",
   theme = shinytheme("cerulean"),
   windowTitle = "ProteomeExpert",
-  useShinyjs(),
+  #useShinyjs(),
   #################################
   # Home
   #################################
