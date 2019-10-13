@@ -1112,9 +1112,7 @@ function(input, output, session) {
             ggplotly(p) %>% config(displaylogo = F)
           }
         }
-        
       })
-    
   })
   
   #################################
@@ -1191,15 +1189,17 @@ function(input, output, session) {
       if (!is.null(readProteinM()))
       {
         data$Label <- qc_label
-        dtree <- rpart(Label ~ ., data = data, method = "class")
+        model.decisionTree_classifier <<- rpart(Label ~ ., data = data, method = "class",
+                                                minsplit = input$dt_minsplit, minbucket = input$dt_minbucket)
         #tree <- prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
-        tree <- dtree
+        #tree <- dtree
+        
         output$DMmlPlot <-
           renderImage({
             outfile <- tempfile(fileext = '.png')
             png(outfile, width = 400, height = 400)
             rpart.plot(
-              tree,
+              model.decisionTree_classifier,
               box.palette = "auto",
               branch = 0,
               type = 0,
@@ -1213,12 +1213,12 @@ function(input, output, session) {
           }, deleteFile = TRUE)
         output$DMmloutputText <-
           renderPrint({
-            printcp(tree)
+            printcp(model.decisionTree_classifier)
           })
-          output$DMmltables <-
-          renderRHandsontable({
-            rhandsontable(head(data, n = 20L))
-          })
+          # output$DMmltables <-
+          # renderRHandsontable({
+          #   rhandsontable(head(data, n = 20L))
+          # })
       }
     } else if (input$mlmethod == "Random Forest")
     {
@@ -1390,6 +1390,13 @@ function(input, output, session) {
     sampleNames2 <- row.names(testdata2)
     if(input$mlmethod == "Decision Tree"){
       print("todo Decision Tree")
+      #
+      dt.pre <- predict(model.decisionTree_classifier, testdata2, type = "class")
+      output$DMmloutputText <-
+        renderPrint({
+          cat("predict result:\n")
+          print(as.data.frame(dt.pre))
+        })
     }else if(input$mlmethod == "Random Forest"){
       print("to do Random Forest")
       #pre.forest <- predict(model.randomForest_classifier, testdata2, nodes=TRUE, type = "prob")

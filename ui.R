@@ -752,6 +752,19 @@ navbarPage(
                 <span style="font-size: 14px;"></span>
                 </p>'
           ),
+          conditionalPanel(
+            condition = "input.mlmethod == \"Decision Tree\"",
+            div(
+              id = "dtree_Parameters_container",
+              numericInput("dt_minsplit", label = "minsplit",value = 2,min = 1)
+              ,shinyBS::bsTooltip(id = "dt_minsplit", title = "the minimum number of observations that must exist in a node in order for a split to be attempted.",
+                                  placement = "top", trigger = "hover")
+              ,numericInput("dt_minbucket",label = "minbucket", value = 1, min = 1)
+              ,shinyBS::bsTooltip(id = "dt_minbucket", title = "the minimum number of observations in any terminal <leaf> node. If only one of minbucket or minsplit is specified, the code either sets minsplit to minbucket*3 or minbucket to minsplit/3, as appropriate.",
+                                  placement = "top", trigger = "hover")
+              
+            )
+          ),
           #####################################################
           # Random Forest parameters
           #####################################################
@@ -860,10 +873,6 @@ navbarPage(
               )
             )
           )
-          
-          
-          
-          
         ),
         column(
           8,
