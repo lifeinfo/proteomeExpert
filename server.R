@@ -1593,5 +1593,39 @@ function(input, output, session) {
         hot_col(1:3, renderer = htmlwidgets::JS("safeHtmlRenderer")) %>%
         hot_cols(fixedColumnsLeft = 1, columnSorting = TRUE)
     })
-  
+  ####################################
+  ###Help
+  ####################################
+  output$downlaod_test_pep <- downloadHandler(
+    filename ="test_pep.txt",
+    content = function(file) {file.copy("demo/peptides.txt",file)}
+  )
+  output$downlaod_test_technical <- downloadHandler(
+    filename ="test_technial_replica.txt",
+    content = function(file) {file.copy("demo/technical_replicas.txt",file)}
+  )
+  output$downlaod_test_batch <- downloadHandler(
+    filename ="test_batch.txt",
+    content = function(file) {file.copy("demo/batch_file.txt",file)}
+  )
+  output$downlaod_test_prot <- downloadHandler(
+    filename ="test_prot.txt",
+    content = function(file) {file.copy("demo/prot.txt",file)}
+  )
+  output$downlaod_test_sample <- downloadHandler(
+    filename ="test_sampleInfo.csv",
+    content = function(file) {file.copy("demo/sampleInfo.csv",file)}
+  )
+  output$downlaod_test_individual <- downloadHandler(
+    filename ="test_individual.csv",
+    content = function(file) {file.copy("demo/IndividualInfo.csv",file)}
+  )
+  output$downlaod_test_batchDesign <- downloadHandler(
+    filename ="test_batchDesign.csv",
+    content = function(file) {file.copy("demo/batch_design.csv",file)}
+  )
+  output$downlaod_test_pulseDIA <- downloadHandler(
+    filename ="test_pulseDIA.txt",
+    content = function(file) {file.copy("demo/pulse_dia.txt",file)}
+  )
 }

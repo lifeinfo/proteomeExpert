@@ -1082,15 +1082,38 @@ navbarPage(
     )
   ),
   #################################
-  # Resources
+  # help
   #################################
   navbarMenu(
-    "Resources",
-    tabPanel("Tutorials",
+    "Online Help",
+    tabPanel("Test Data",
              mainPanel(
-               tabsetPanel(tabPanel("Test"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
+               tabsetPanel(tabPanel("Test Data")),
+               h4("Test data files used for peptide to protein inference"),
+               hr(),
+               h5("The test peptide matrix contains 24 DIA runs."),
+               downloadButton("downlaod_test_pep", label = "Get", class = "btn-primary"),
+               h5("The test technical replicas file"),
+               downloadButton("downlaod_test_techincal", label = "Get", class = "btn-primary"),
+               h5("The test batch name file"),
+               downloadButton("downlaod_test_batch", label = "Get", class = "btn-primary"),
+               hr(),
+               h4("Test data files used for data console"),
+               hr(),
+               h5("The test protein matrix contains 24 DIA runs."),
+               downloadButton("downlaod_test_prot", label = "Get", class = "btn-primary"),
+               h5("The test sample information file contains 24 DIA samples."),
+               downloadButton("downlaod_test_sample", label = "Get", class = "btn-primary"),
+               h5("The test individual file contains 21 individuals."),
+               downloadButton("downlaod_test_individual", label = "Get", class = "btn-primary"),
+               hr(),
+               h4("Test data files used for batch design"),
+               hr(),
+               downloadButton("downlaod_test_batchDesign", label = "Get", class = "btn-primary"),
+               hr(),
+               h4("Test data files used for pulseDIA"),
+               hr(),
+               downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary")
              )),
     "----",
     tabPanel("Docs",
