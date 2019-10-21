@@ -382,25 +382,16 @@ function(input, output, session) {
   observeEvent(input$QC, {
     qc_label <- input$QCLabel
     
-    data <-
-      readProteinM()
-    col_name <-
-      colnames(data)
-    row_name <-
-      as.matrix(data[, 1])
-    row_name <-
-      as.vector(row_name[, 1])
-    data <-
-      data.matrix(data)
-    data <-
-      data[, -1]
-    colnames(data) <-
-      col_name[2:length(col_name)]
-    row.names(data) <-
-      row_name
-    
-    data[is.na(data)] <-
-      0
+    data <- readProteinM()
+    col_name <- colnames(data)
+    row_name <- as.matrix(data[, 1])
+    row_name <- as.vector(row_name[, 1])
+    data <- data.matrix(data)
+    data <- data[, -1]
+    colnames(data) <- col_name[2:length(col_name)]
+    row.names(data) <-row_name
+    data.ori<-data
+    data[is.na(data)] <-0
     
     
     if (!is.null(qc_label) &
@@ -436,13 +427,16 @@ function(input, output, session) {
         }
         
       })
-    
+    output$QCMissingTable <-
+      renderRHandsontable({
+        rhandsontable(countNa(data.ori,qc_label))
+      })
   })
   
   #################################
   # missing value explore
   #################################
-  
+
   output$missingPlot <-
     renderPlot({
       if (input$MissingValueExplore_check & input$QC) {

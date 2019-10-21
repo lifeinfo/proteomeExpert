@@ -402,6 +402,8 @@ navbarPage(
           verbatimTextOutput("QMparameters"),
           conditionalPanel(
             "output.QMparameters == 'Results are showed below:'",
+            rHandsontableOutput("QCMissingTable"),
+            hr(),
             downloadButton('downloadMissingPlot')
           ),
           
