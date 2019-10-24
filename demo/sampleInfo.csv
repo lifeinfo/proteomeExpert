@@ -1,25 +1,25 @@
-SampleName,Individual_ID,TissueType
-PCZA_1_23,PCZA6,Prostate cancer
-PCZA_1_23_repA,PCZA6,Prostate cancer
-PCZA_2_11,PCZA158,Prostate cancer
-PCZA_2_13,PCZA136,Benign prostatic hyperplasia tissue
-PCZA_2_21,PCZA65,Benign prostatic hyperplasia tissue
-PCZA_2_6,PCZA130,Benign prostatic hyperplasia tissue
-PCZA_3_12,PCZA195,Benign prostatic hyperplasia tissue
-PCZA_3_15,PCZA64,Benign prostatic hyperplasia tissue
-PCZA_3_2,PCZA143,Prostate cancer
-PCZA_3_22,PCZA51,Prostate cancer
-PCZA_4_11,PCZA202,Benign prostatic hyperplasia tissue
-PCZA_5_13,PCZA187,Prostate cancer
-PCZA_5_13_repA,PCZA187,Prostate cancer
-PCZA_5_9,PCZA154,Prostate cancer
-PCZA_6_16,PCZA62,Benign prostatic hyperplasia tissue
-PCZA_6_22,PCZA197,Benign prostatic hyperplasia tissue
-PCZA_6_22_repA,PCZA197,Benign prostatic hyperplasia tissue
-PCZA_6_23,PCZA38,Prostate cancer
-PCZA_6_5,PCZA196,Benign prostatic hyperplasia tissue
-PCZA_6_5_repA,PCZA196,Benign prostatic hyperplasia tissue
-PCZA_7_21,PCZA185,Prostate cancer
-PCZA_7_28,PCZA7,Prostate cancer
-PCZA_7_3,PCZA199,Benign prostatic hyperplasia tissue
-PCZA_7_6,PCZA123,Prostate cancer
+SampleName,Individual_ID,TissueType,BatchNum,TechRep
+PCZA_1_23,PCZA6,Prostate cancer,1,1
+PCZA_1_23_repA,PCZA6,Prostate cancer,1,1
+PCZA_2_11,PCZA158,Prostate cancer,1,3
+PCZA_2_13,PCZA136,Benign prostatic hyperplasia tissue,1,4
+PCZA_2_21,PCZA65,Benign prostatic hyperplasia tissue,1,5
+PCZA_2_6,PCZA130,Benign prostatic hyperplasia tissue,1,6
+PCZA_3_12,PCZA195,Benign prostatic hyperplasia tissue,1,7
+PCZA_3_15,PCZA64,Benign prostatic hyperplasia tissue,1,8
+PCZA_3_2,PCZA143,Prostate cancer,1,9
+PCZA_3_22,PCZA51,Prostate cancer,1,10
+PCZA_4_11,PCZA202,Benign prostatic hyperplasia tissue,1,11
+PCZA_5_13,PCZA187,Prostate cancer,1,12
+PCZA_5_13_repA,PCZA187,Prostate cancer,1,12
+PCZA_5_9,PCZA154,Prostate cancer,1,14
+PCZA_6_16,PCZA62,Benign prostatic hyperplasia tissue,2,15
+PCZA_6_22,PCZA197,Benign prostatic hyperplasia tissue,2,16
+PCZA_6_22_repA,PCZA197,Benign prostatic hyperplasia tissue,2,16
+PCZA_6_23,PCZA38,Prostate cancer,2,18
+PCZA_6_5,PCZA196,Benign prostatic hyperplasia tissue,2,19
+PCZA_6_5_repA,PCZA196,Benign prostatic hyperplasia tissue,2,19
+PCZA_7_21,PCZA185,Prostate cancer,2,21
+PCZA_7_28,PCZA7,Prostate cancer,2,22
+PCZA_7_3,PCZA199,Benign prostatic hyperplasia tissue,2,23
+PCZA_7_6,PCZA123,Prostate cancer,2,24
