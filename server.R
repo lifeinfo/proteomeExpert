@@ -998,6 +998,11 @@ function(input, output, session) {
     })
   ##
   observeEvent(input$dmClustering, {
+    withProgress(message = 'Data prepare in progress',
+                 detail = 'This may take a while...',
+                 value = 1/10,
+                 {
+          incProgress(2 / 10)
     qc_label1 <- input$DManno
     if (!is.null(qc_label1) &
         qc_label1 != "None") {
@@ -1022,16 +1027,21 @@ function(input, output, session) {
       data[, -1]
     colnames(trainData) <-
       col_name[2:length(col_name)]
-    row.names(trainData) <-
-      row_name
+    row.names(trainData) <- row_name
     if(input$DMclusertingLog!="none" & !is.null(input$DMclusertingLog)){
       trainData<-log(trainData,as.numeric(input$DMclusertingLog))
     }
     trainData[is.na(trainData)] <-0
-    
+    incProgress(9 / 10, message = "Ready to finish!")
+                 })
     #################################
     # Heatmap
     #################################
+    withProgress(message = 'Calculation heatmap',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   incProgress(1 / 10)
     output$DMheatmapparameters <-
       renderPlot({
         if (input$dmheatmap) {
@@ -1042,7 +1052,8 @@ function(input, output, session) {
         }
         
       })
-    
+    incProgress(9 / 10, message = "Heatmap ready to finish!")
+                 })
     #################################
     # PCA
     #################################
@@ -1054,6 +1065,11 @@ function(input, output, session) {
     #     }
     #   }
     # })
+    withProgress(message = 'Calculation PCA',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   incProgress(1 / 10)
     output$Qpcaplot <-
       renderPlotly({
         if (input$qcPca) {
@@ -1064,6 +1080,8 @@ function(input, output, session) {
           }
         }
       })
+    incProgress(9 / 10, message = "PCA ready to finish!")
+  })
     #################################
     # T-sne
     #################################
@@ -1075,6 +1093,11 @@ function(input, output, session) {
     #     }
     #   }
     # })
+    withProgress(message = 'Calculation t-sne',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   incProgress(1 / 10)
     output$Qtsneplot <-
       renderPlotly({
         if (input$qctsne) {
@@ -1086,7 +1109,8 @@ function(input, output, session) {
         }
         
       })
-    
+    incProgress(9 / 10, message = "t-sne ready to finish!")
+                 })
     #################################
     # umap
     #################################
@@ -1098,6 +1122,11 @@ function(input, output, session) {
     #     }
     #   }
     # })
+    withProgress(message = 'Calculation umap',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   incProgress(1 / 10)
     output$Qumapplot <-
       renderPlotly({
         if (input$qcUmap) {
@@ -1108,8 +1137,10 @@ function(input, output, session) {
           }
         }
       })
+    incProgress(9 / 10, message = "umap ready to finish!")
+    
   })
-  
+})
   #################################
   # ML
   #################################
