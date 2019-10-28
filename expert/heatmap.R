@@ -3,14 +3,12 @@ drawheatmap <-
            Label,
            strTitle = "Heatmap",
            cluster_row = T,
-           cluster_col = F) {
+           cluster_col = T) {
     df11 <- as.data.frame(data)
     df11[is.na(df11)] <- 0
     ann_col <- data.frame(type = Label, row.names = colnames(df11))
     ann_col$type <- factor(ann_col$type)
 
-    print(ann_col)
-    
     p <- pheatmap(
       df11,
       color = brewer.pal(11, "RdYlBu")[11:1],

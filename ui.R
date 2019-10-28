@@ -581,7 +581,7 @@ navbarPage(
     "Feature Selection",
     "",
     sidebarPanel(
-      h3("Data section:"),
+      h3("Set parameters:"),
       h5(
         "Please note: protein matrix and annotation file shoule be upload in data console first."
       ),
@@ -637,12 +637,24 @@ navbarPage(
     "Clustering",
     "",
     sidebarPanel(
-      h3("Data section:"),
+      h3("Set parameters:"),
       h5(
         "Please note: protein matrix and annotation file shoule be upload in data console first."
       ),
       uiOutput("DMprot_anno_Ui"),
       hr(),
+      tags$h5("Log Transform:"),
+      radioButtons(
+        "DMclusertingLog",
+        "",
+        choices = c(
+          "None" = "none",
+          "Log2" = '2',
+          'Log10' = "10"
+        ),
+        inline = TRUE,
+        selected = NULL
+      ),
       tags$h5("Module section:"),
       checkboxInput("dmheatmap", "HeatMap", TRUE),
       #checkboxInput("test", "t-test", TRUE),
@@ -667,8 +679,8 @@ navbarPage(
           "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
         ),
         hr(),
-        column(6, plotOutput("DMheatmapparameters")),
-        column(6, rHandsontableOutput("DMheatmaptable"))
+        column(8, plotOutput("DMheatmapparameters"))
+        #,column(6, rHandsontableOutput("DMheatmaptable"))
       ),
 
       tabPanel(

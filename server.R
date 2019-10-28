@@ -963,7 +963,7 @@ function(input, output, session) {
           'DManno',
           'select types',
           anno_name,
-          multiple = TRUE,
+          multiple = FALSE,
           selectize = TRUE
         )
       )
@@ -977,7 +977,7 @@ function(input, output, session) {
           'DManno',
           'select types',
           anno_name,
-          multiple = TRUE,
+          multiple = FALSE,
           selectize = TRUE
         )
       )
@@ -991,7 +991,7 @@ function(input, output, session) {
           'DManno',
           'select types',
           anno_name,
-          multiple = TRUE,
+          multiple = FALSE,
           selectize = TRUE
         )
       )
@@ -1024,9 +1024,10 @@ function(input, output, session) {
       col_name[2:length(col_name)]
     row.names(trainData) <-
       row_name
-    
-    trainData[is.na(trainData)] <-
-      0
+    if(input$DMclusertingLog!="none" & !is.null(input$DMclusertingLog)){
+      trainData<-log(trainData,as.numeric(input$DMclusertingLog))
+    }
+    trainData[is.na(trainData)] <-0
     
     #################################
     # Heatmap
@@ -1036,7 +1037,7 @@ function(input, output, session) {
         if (input$dmheatmap) {
           if (!is.null(readProteinM()))
           {
-            drawheatmap(trainData, qc_label)
+            print(drawheatmap(trainData, qc_label))
           }
         }
         
