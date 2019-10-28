@@ -138,12 +138,14 @@ navbarPage(
       
       fileInput(
         "protein_matrix",
-        "Select your protein file (optional):",
+        "Select your protein file( if file is xlsx format ,protein data sheet must be the first sheet):",
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
+                   ".csv",
+                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                   ".xlsx"),
+        placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
         "DCprotmSep",
@@ -160,12 +162,14 @@ navbarPage(
       
       fileInput(
         "sample_info",
-        "Select your sample file (optional):",
+        "Select your sample file (if file is xlsx format ,sample data sheet must be the first sheet):",
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
+                   ".csv",
+                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                   ".xlsx"),
+        placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
         "DCsampleSep",
@@ -183,12 +187,14 @@ navbarPage(
       
       fileInput(
         "individual_info",
-        "Select your individual file (optional):",
+        "Select your individual file (if file is xlsx format ,individual data sheet must be the first sheet):",
         multiple = F,
         accept = c("text/csv",
                    "text/comma-separated-values,text/plain",
-                   ".csv"),
-        placeholder = "*.csv or *.TXT required!"
+                   ".csv",
+                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                   ".xlsx"),
+        placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
         "DCindividualSep",
@@ -854,8 +860,10 @@ navbarPage(
                 multiple = FALSE,
                 accept = c("text/csv",
                            "text/comma-separated-values,text/plain",
-                           ".csv"),
-                placeholder = "*.csv or *.TXT required!"
+                           ".csv",
+                           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                           ".xlsx"),
+                placeholder = "*.csv/*.TXT or *.xlsx required!"
               ),
               radioButtons(
                 "testDataSep",

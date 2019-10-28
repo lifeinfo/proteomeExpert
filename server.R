@@ -487,16 +487,27 @@ function(input, output, session) {
   #for read protein matrix
   readProteinM <-
     reactive({
-      if (!is.null(input$protein_matrix))
-        prot <-
-          read.table(
-            input$protein_matrix$datapath,
-            header = T,
-            sep = input$DCprotmSep,
-            check.names = F,
-            encoding = "UTF-8",
-            stringsAsFactors = F
-          )
+      if (!is.null(input$protein_matrix)){
+        #prot <- getSampleInfo(input$protein_matrix$datapath,input$DCprotmSep)
+        fileName = input$protein_matrix$datapath
+        len <- nchar(as.vector(fileName))
+        last <- substring(fileName,len-3, len)
+        if(identical(last, "xlsx") || identical(last, ".xls")){
+          prot <- openxlsx::read.xlsx(fileName)
+        }else{
+          prot <-
+            read.table(
+              input$protein_matrix$datapath,
+              header = T,
+              sep = input$DCprotmSep,
+              check.names = F,
+              encoding = "UTF-8",
+              stringsAsFactors = F
+            )
+        }
+        
+      }
+        
     })
   ### for column annotation
   output$sampleUi <-
@@ -505,15 +516,7 @@ function(input, output, session) {
         "Please upload your files!"
       else{
         #print(input$sample_info)
-        sample_info <-
-          read.csv(
-            input$sample_info$datapath,
-            header = T,
-            sep = input$DCsampleSep,
-            nrow = 1,
-            check.names = F,
-            encoding = "UTF-8"
-          )
+        sample_info <- getSampleInfo(input$sample_info$datapath,input$DCsampleSep)
         sample_header <<-
           colnames(sample_info)
         tagList(
@@ -541,17 +544,8 @@ function(input, output, session) {
         "Please upload your files!"
       else{
         #print(input$sample_info)
-        individual_info <-
-          read.csv(
-            input$individual_info$datapath,
-            header = T,
-            sep = input$DCindividualSep,
-            nrow = 1,
-            check.names = F,
-            encoding = "UTF-8"
-          )
-        individual_header <-
-          colnames(individual_info)
+        individual_info <- getSampleInfo(input$individual_info$datapath,input$DCindividualSep, 1)
+        individual_header <- colnames(individual_info)
         tagList(
           selectInput(
             "individual_info_id",
@@ -566,16 +560,8 @@ function(input, output, session) {
     })
   sampleInfoInput <-
     eventReactive(input$sample_info_annotation, {
-      sampleInfo <-
-        read.csv(
-          input$sample_info$datapath,
-          header = T,
-          sep = input$DCsampleSep,
-          check.names = F,
-          encoding = "UTF-8"
-        )
-      sample_header <-
-        colnames(sampleInfo)
+      sampleInfo <- getSampleInfo(input$sample_info$datapath,input$DCsampleSep)
+      sample_header <- colnames(sampleInfo)
       colnames(sampleInfo)[which(sample_header == input$sample_info_id)] <-
         "sampleId"
       if (input$sample_info_individual_id != 'select...')
@@ -597,14 +583,7 @@ function(input, output, session) {
     })
   individualInfoInput <-
     eventReactive(input$individual_info_annotation, {
-      individualInfo <-
-        read.csv(
-          input$individual_info$datapath,
-          header = T,
-          sep = input$DCindividualSep,
-          check.names = F,
-          encoding = "UTF-8"
-        )
+      individualInfo <- getSampleInfo(input$individual_info$datapath,input$DCindividualSep)
       individual_header <-
         colnames(individualInfo)
       colnames(individualInfo)[which(individual_header == input$individual_info_id)] <-
@@ -1008,14 +987,10 @@ function(input, output, session) {
       return()
     }
     
-    data <-
-      readProteinM()
-    col_name <-
-      colnames(data)
-    row_name <-
-      as.matrix(data[, 1])
-    row_name <-
-      as.vector(row_name[, 1])
+    data <- readProteinM()
+    col_name <- colnames(data)
+    row_name <- as.matrix(data[, 1])
+    row_name <- as.vector(row_name[, 1])
     data <-
       data.matrix(data)
     trainData <-
@@ -1182,12 +1157,26 @@ function(input, output, session) {
       print("Decision tree starting")
       if (!is.null(readProteinM()))
       {
-        data$Label <- qc_label
-        model.decisionTree_classifier <<- rpart(Label ~ ., data = data, method = "class",
+        data$Label <- as.factor(qc_label)
+        ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.8, 0.2))
+        trainData <- data[ind == 1,]
+        handoutValidationData <- data[ind == 2,]
+        model.decisionTree_classifier <<- rpart(Label ~ ., data = trainData, method = "class",
                                                 minsplit = input$dt_minsplit, minbucket = input$dt_minbucket)
         #tree <- prune(dtree, cp = dtree$cptable[which.min(dtree$cptable[, "xerror"]), "CP"])
         #tree <- dtree
         
+        #handout validation 
+        #print((handoutValidationData$Label))
+        dt.validation <- predict(model.decisionTree_classifier, handoutValidationData, type = "class")
+        # print((dt.validation))
+        aaa <- (as.data.frame(dt.validation))
+        aaa$handoutValidationData.Label <-handoutValidationData$Label
+        nrows <- nrow(aaa)
+        ndiff <- 0
+        for (curRow in 1:nrows) {
+          if(aaa[curRow,1] != aaa[curRow,2]) ndiff <- ndiff + 1
+        }
         output$DMmlPlot <-
           renderImage({
             outfile <- tempfile(fileext = '.png')
@@ -1208,6 +1197,11 @@ function(input, output, session) {
         output$DMmloutputText <-
           renderPrint({
             printcp(model.decisionTree_classifier)
+            
+            cat("\nhandout validation result:\n")
+            print(aaa)
+            cat("\n error rate: " , ndiff, "/",
+                nrows, " = ", ndiff/nrows, sep = "")
           })
           # output$DMmltables <-
           # renderRHandsontable({
@@ -1236,9 +1230,14 @@ function(input, output, session) {
         #     roc(data$Label, as.numeric(pre.forest))
         # }
         targetLabel <- as.factor(qc_label)
+        ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.8, 0.2))
+        trainData <- data[ind == 1,]
+        trainDataLabel <-targetLabel[ind == 1]
+        handoutValidationData <- data[ind == 2,]
+        handoutValidationDataLabel <- targetLabel[ind == 2]
         rf_mtry <- input$rf_mtry
         if(rf_mtry == 0){
-          model.randomForest_classifier <<- randomForest(x = data, y = targetLabel, prox=TRUE, 
+          model.randomForest_classifier <<- randomForest(x = trainData, y = trainDataLabel, prox=TRUE, 
                                                          importance=TRUE, ntree = input$rf_ntree)
         }else{
           model.randomForest_classifier <<- randomForest(x = data, y = targetLabel, prox=TRUE, 
@@ -1246,6 +1245,7 @@ function(input, output, session) {
                                                          mtry = rf_mtry)
         }
         
+        forest.validtateion <- predict(model.randomForest_classifier, handoutValidationData)
         model.forest <- model.randomForest_classifier
         output$DMmlPlotforest <- renderPlot({
           plot(model.forest)
@@ -1288,7 +1288,8 @@ function(input, output, session) {
             print(model.forest)
             #
             #Verification
-            #table(data$Label, pre.forest, dnn = c("Obs", "Pre"))
+            cat("\nhandout validationt:\n")
+            table(observed = handoutValidationDataLabel, predict = forest.validtateion)
             
           })
         
@@ -1313,14 +1314,19 @@ function(input, output, session) {
       } else if (params$booster == "dart") {
         #add
       }
+      
+      targetLabel <- as.factor(qc_label)
+      ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.8, 0.2))
+      trainData <- data[ind == 1,]
+      trainDataLabel <-targetLabel[ind == 1]
+      handoutValidationData <- data[ind == 2,]
+      handoutValidationDataLabel <- targetLabel[ind == 2]
+      
       buffer <<- vector('character')
       con    <<- textConnection('buffer', 'wr', local = TRUE)
       sink(con)
-      trainXx <- data
-      trainYy <<- qc_label
-      if( !is.factor(trainYy)){
-        trainYy <<- as.factor(trainYy)
-      }
+      trainXx <- trainData
+      trainYy <<- trainDataLabel
       model.xgboost_classifier <<-
         xgboost_classfier_training(
           trainX = trainXx,
@@ -1330,6 +1336,18 @@ function(input, output, session) {
         )
       sink()
       close(con)
+      
+      xgboost.validation <- xgboost_classfier_predict(model.xgboost_classifier, handoutValidationData)
+      xgboost.validation <- formatXgbResult(xgboost.validation, handoutValidationDataLabel, row.names(handoutValidationData))
+      
+      xgboost.validation <- as.data.frame(xgboost.validation)
+      xgboost.validation$observed <- handoutValidationDataLabel
+      nrows <- nrow(xgboost.validation)
+      nerror <- 0
+      for (curRow in 1:nrows) {
+        if(xgboost.validation[curRow, "predicted"] != xgboost.validation[curRow, "observed"] ) 
+          nerror <- nerror +1
+      }
       output$DMmlPlotforest <- renderPlot({
         model.xgboost_classifier
       })
@@ -1345,6 +1363,10 @@ function(input, output, session) {
         renderPrint({
           cat("train error\n")
           cat(buffer, sep = "\n")
+          
+          cat("\n handout validation:\n")
+          print(xgboost.validation, digits = 3)
+          cat("\nerror rate: ", nerror , "/", nrows, " = ", nerror/nrows , sep = "")
         })
       
       # output$DMmltables <- renderRHandsontable({
@@ -1378,8 +1400,9 @@ function(input, output, session) {
     # colnames(testdata) <- attrNames
     # testdata <-as.data.frame(testdata)
     
-    testdata2 <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
-                         header = TRUE,stringsAsFactors = FALSE)
+    # testdata2 <- read.csv(file = input$mlTestFile$datapath, sep = input$testDataSep,
+    #                      header = TRUE,stringsAsFactors = FALSE)
+    testdata2 <- getSampleInfo(input$mlTestFile$datapath, sep = input$testDataSep)
     testdata2 <- formatProteinMatrix(testdata2)
     sampleNames2 <- row.names(testdata2)
     if(input$mlmethod == "Decision Tree"){
@@ -1621,5 +1644,4 @@ function(input, output, session) {
   output$downlaod_test_pulseDIA <- downloadHandler(
     filename ="test_pulseDIA.txt",
     content = function(file) {file.copy("demo/pulse_dia.txt",file)}
-  )
-}
+  )}
