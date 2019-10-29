@@ -22,9 +22,12 @@ weights<-normWeights(weights)
 samples <- read.csv(fpath,stringsAsFactors=F,header = T,encoding = "UTF-8",check.names=F,sep=sep)
 steps = nrow(samples)*100
 samples_ori<-samples
-for(h in numeric_headers){
+if(numeric_headers!="None" & !is.null(numeric_headers)){
+  for(h in numeric_headers){
   samples[h]<-continue2discrete(unlist(samples[h]))
 }
+}
+
 #samples$Age <- as.numeric(samples$Age)
 # colnames(samples)[1] <- "sampleId"
 rownames(samples)<-samples[,1]
