@@ -21,14 +21,9 @@ xgboost_classfier_training<-function(trainX,trainY,parameters, numRounds){
 
 xgboost_classfier_predict <-function(xgb_model, testdata)
 {
-  
-  #convert dataframe test to sparse matrix
-  
   dtestset <- data.matrix(testdata)
-  dtest <- xgb.DMatrix(dtestset)
-
-  pred <- predict(xgb_model, dtest)
-  # cat(pred, file = "/home/stucse/result.txt")
+  dtest<- xgb.DMatrix(dtestset)
+  pred <- predict(xgb_model,dtest)
   return(pred)
 }
 
@@ -83,36 +78,4 @@ formatXgbResult <- function(result, factoredLabel, sampleNames)
   result <- cbind(result, predicted )
   print(result)
   return( result)
-}
-getSampleInfo <- function(sampleFileName, sepC=",", nrows = NULL)
-{
-  len = nchar(as.vector(sampleFileName))
-  last <- substring(sampleFileName,len-3, len)
-  sampleInfo <- NULL
-  if(identical(last, "xlsx") || identical(last, ".xls")){
-    sampleInfo <- openxlsx::read.xlsx(sampleFileName, rows = nrows)
-  }else{
-    if(is.null(nrows)){
-      sampleInfo <-
-        read.csv(
-          sampleFileName,
-          header = T,
-          sep = sepC,
-          check.names = F,
-          encoding = "UTF-8"
-        )
-    }else{
-      sampleInfo <-
-        read.csv(
-          sampleFileName,
-          header = T,
-          sep = sepC,
-          check.names = F,
-          nrows = nrows,
-          encoding = "UTF-8"
-        )
-    }
-    
-  }
-  return(sampleInfo)
 }

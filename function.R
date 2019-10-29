@@ -45,3 +45,36 @@ drawsmooth <- function(data1, data2, strTitle = "smoothScatter plot") {
 drawdensity <- function(data) {
   plot(density(na.omit(unlist(data))), main = "density default")
 }
+
+getSampleInfo <- function(sampleFileName, sepC=",", nrows = NULL)
+{
+  len = nchar(as.vector(sampleFileName))
+  last <- substring(sampleFileName,len-3, len)
+  sampleInfo <- NULL
+  if(identical(last, "xlsx") || identical(last, ".xls")){
+    sampleInfo <- openxlsx::read.xlsx(sampleFileName, rows = nrows)
+  }else{
+    if(is.null(nrows)){
+      sampleInfo <-
+        read.csv(
+          sampleFileName,
+          header = T,
+          sep = sepC,
+          check.names = F,
+          encoding = "UTF-8"
+        )
+    }else{
+      sampleInfo <-
+        read.csv(
+          sampleFileName,
+          header = T,
+          sep = sepC,
+          check.names = F,
+          nrows = nrows,
+          encoding = "UTF-8"
+        )
+    }
+    
+  }
+  return(sampleInfo)
+}
