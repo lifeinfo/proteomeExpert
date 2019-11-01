@@ -100,18 +100,19 @@ navbarPage(
           multiple = T,
           selectize = TRUE
         ),
+        selectInput(
+          'BDnumeric_headers',
+          'Among above selected columns which are numeric:',
+          BDcol_name,
+          multiple = T,
+          selectize = TRUE
+        ),
         textInput(
           "BDweight",
           "Weights for columns (using ',' to separate mutilplue columns.)"
         ),
         numericInput("BDsize", "Number of samples in each batch:", 15),
-        selectInput(
-          'BDnumeric_headers',
-          'Select numeric columns for balanced batch design:',
-          BDcol_name,
-          multiple = T,
-          selectize = TRUE
-        ),
+
         tags$h5("Click to design:"),
         actionButton("BDdo", "Submit", class = "btn-primary")
       ),
@@ -401,7 +402,7 @@ navbarPage(
           "Missing value",
           h5("Description:"),
           HTML(
-            "<p>This module will explore missing data in Stata, focusing on numeric missing data.</p>"
+            "<p>This module design to explore missing data distributions, focusing on numeric missing data.</p>"
           ),
           tags$hr(),
           #h3(textOutput("caption")),
