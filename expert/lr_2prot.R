@@ -16,7 +16,7 @@ mylm <- function(x, y) {
   )
 }
 
-pep2prot <- function(top3) {
+pep2prot <- cmpfun(function(top3) {
   #f<-"\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\2018-09-05pep.top3.txt"
   #top3<-read.table(f,sep="\t",header = T)
   prot.group <- split(top3, top3$prot)
@@ -59,4 +59,4 @@ pep2prot <- function(top3) {
   
   prot.matrix <- do.call(rbind, prot.matrix)
   return(prot.matrix)
-}
+})

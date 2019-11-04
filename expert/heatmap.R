@@ -1,5 +1,5 @@
 drawheatmap <-
-  function(data,
+  cmpfun(function(data,
            Label,
            strTitle = "Heatmap",
            cluster_row = T,
@@ -22,4 +22,4 @@ drawheatmap <-
       main = strTitle
     )
     return(p)
-  }
+  })

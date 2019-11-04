@@ -1,6 +1,6 @@
 
 ####for two class
-custom_fitness <- function(vars, data_x, data_y, p_sampling)
+custom_fitness <- cmpfun(function(vars, data_x, data_y, p_sampling)
 {
   # speeding up things with sampling
   ix=get_sample(data_x, percentage_tr_rows = p_sampling)
@@ -23,9 +23,9 @@ custom_fitness <- function(vars, data_x, data_y, p_sampling)
   fitness_value=roc_value/q_vars
   
   return(fitness_value)
-}
+})
 
-get_roc_metric <- function(data_tr_sample, target, best_vars) 
+get_roc_metric <- cmpfun(function(data_tr_sample, target, best_vars) 
 {
   # data_tr_sample=data_sol
   # target = target_var_s
@@ -52,10 +52,10 @@ get_roc_metric <- function(data_tr_sample, target, best_vars)
   metric=fit_model_1$results["ROC"][1,1]
   
   return(metric)
-}
+})
 
 
-custom_fitness_multi <- function(vars, data_x, data_y, p_sampling)
+custom_fitness_multi <- cmpfun(function(vars, data_x, data_y, p_sampling)
 {
   # speeding up things with sampling
   ix=get_sample(data_x, percentage_tr_rows = p_sampling)
@@ -78,9 +78,9 @@ custom_fitness_multi <- function(vars, data_x, data_y, p_sampling)
   fitness_value=acc_value/q_vars
   
   return(fitness_value)
-}
+})
 
-get_acc_metric_multi <- function(data_tr_sample, target, best_vars) 
+get_acc_metric_multi <- cmpfun(function(data_tr_sample, target, best_vars) 
 {
   # data_tr_sample=data_sol
   # target = target_var_s
@@ -107,10 +107,10 @@ get_acc_metric_multi <- function(data_tr_sample, target, best_vars)
   metric=fit_model_1$results["Accuracy"][1,1]
   
   return(metric)
-}
+})
 
 
-get_accuracy_metric <- function(data_tr_sample, target, best_vars) 
+get_accuracy_metric <- cmpfun(function(data_tr_sample, target, best_vars) 
 {
   data_model=select(data_tr_sample, one_of(best_vars))
   
@@ -132,4 +132,4 @@ get_accuracy_metric <- function(data_tr_sample, target, best_vars)
   
   metric=fit_model_1$results["Accuracy"][1,1]
   return(metric)
-}  
+})

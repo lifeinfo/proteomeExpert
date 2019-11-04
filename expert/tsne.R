@@ -1,4 +1,4 @@
-drawTSNE <- function(data,label,rowNormalization=F,colNormalization=F,perplexity=10,strTitle='tSNE'){
+drawTSNE <- cmpfun(function(data,label,rowNormalization=F,colNormalization=F,perplexity=10,strTitle='tSNE'){
   DF <- data.frame(t(data))
   DF$label <- label
   M <- DF[,colnames(DF)!='label']
@@ -23,5 +23,5 @@ drawTSNE <- function(data,label,rowNormalization=F,colNormalization=F,perplexity
   p <-  p +  labs(title=strTitle)
   #p <- p +   scale_colour_manual(values=ptColors)
   return(p)
-}
+})
 

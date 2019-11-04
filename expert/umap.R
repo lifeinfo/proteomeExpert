@@ -1,4 +1,4 @@
-drawUMAP <- function(data,label, strTitle="UMAP",rowNormalization=F,colNormalization=F){
+drawUMAP <- cmpfun(function(data,label, strTitle="UMAP",rowNormalization=F,colNormalization=F){
   DF <- data.frame(t(data))
   DF$label <- label
   M1 <- DF
@@ -32,4 +32,4 @@ drawUMAP <- function(data,label, strTitle="UMAP",rowNormalization=F,colNormaliza
   p <- p +  labs(title =strTitle)
   #p <- p +   scale_colour_manual(values=ptColors)
   return(p)
-}
+})

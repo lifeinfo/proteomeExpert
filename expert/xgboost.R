@@ -1,4 +1,4 @@
-xgboost_classfier_training<-function(trainX,trainY,parameters, numRounds){
+xgboost_classfier_training<-cmpfun(function(trainX,trainY,parameters, numRounds){
   
   num <- length(levels(trainY))
   if(num > 2){
@@ -17,18 +17,18 @@ xgboost_classfier_training<-function(trainX,trainY,parameters, numRounds){
   return(bst)
 
   
-}
+})
 
-xgboost_classfier_predict <-function(xgb_model, testdata)
+xgboost_classfier_predict <-cmpfun(function(xgb_model, testdata)
 {
   dtestset <- data.matrix(testdata)
   dtest<- xgb.DMatrix(dtestset)
   pred <- predict(xgb_model,dtest)
   return(pred)
-}
+})
 
 #format input protein matrix
-formatProteinMatrix <- function(proteinData)
+formatProteinMatrix <- cmpfun(function(proteinData)
 {
   sampleNames <- colnames(proteinData)
   sampleNames <- sampleNames[-1]
@@ -42,9 +42,10 @@ formatProteinMatrix <- function(proteinData)
   proteinData[is.na(proteinData)] <- 0
   return(proteinData)
   
-}
+})
+
 #xgboost中的result还原为原始的字符串值
-formatXgbResult <- function(result, factoredLabel, sampleNames)
+formatXgbResult <- cmpfun(function(result, factoredLabel, sampleNames)
 {
   result <- round(result, digits = 2)
   nclass <- length(levels(factoredLabel))
@@ -78,4 +79,4 @@ formatXgbResult <- function(result, factoredLabel, sampleNames)
   result <- cbind(result, predicted )
   print(result)
   return( result)
-}
+})

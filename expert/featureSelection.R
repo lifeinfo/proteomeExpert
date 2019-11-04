@@ -1,5 +1,5 @@
 ####feature filter
-featureFilter<-function(label_protM,methods,fs_missing_ratio){
+featureFilter<-cmpfun(function(label_protM,methods,fs_missing_ratio){
   
   print(methods)
   variance=methods[1]
@@ -43,17 +43,17 @@ featureFilter<-function(label_protM,methods,fs_missing_ratio){
   # label_protM2<-cbind(label=label_protM[,"label"],protM)
   # return(label_protM2) 
   return(colnames(protM))
-}
+})
 
 ##########################################
 ################ feature selection #######################
-splitLabelMatrix<-function(label_protM){
+splitLabelMatrix<-cmpfun(function(label_protM){
   label<-label_protM[,"label"]
   #label<-as.factor(label)
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   return(list(label=lable,protM=protM))
-}
-featureSel<-function(label_protM,featureSel_algorithm,nfeatures=50){
+})
+featureSel<-cmpfun(function(label_protM,featureSel_algorithm,nfeatures=50){
   #print(myhead(label_protM))
 
   switch (featureSel_algorithm,
@@ -61,9 +61,9 @@ featureSel<-function(label_protM,featureSel_algorithm,nfeatures=50){
           lasso = fsLasso(label_protM),
           GA = fsga(label_protM)
   )
-}
+})
 ############################## random froest ####################
-fsRf<-function(label_protM,nfeatures){
+fsRf<-cmpfun(function(label_protM,nfeatures){
     label<-label_protM[,"label"]
     label<-as.factor(label)
     protM<-label_protM[,-which(colnames(label_protM)=="label")]
@@ -93,9 +93,9 @@ fsRf<-function(label_protM,nfeatures){
     #print(colnames(label_protM))
     return(list(features=features,mod=profile))
     #return(label_protM[,c("label",features)])
-  }
+  })
 ################################# lasso
-fsLasso<-function(label_protM){
+fsLasso<-cmpfun(function(label_protM){
   label<-label_protM[,"label"]
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   protM[is.na(protM)]<-0
@@ -108,9 +108,9 @@ fsLasso<-function(label_protM){
     features<-c(features,names(glm_multi_coef)[glm_multi_coef!=0])
   }
   return(list(features=unique(features),mod=cvglm))
-}
+})
 ##################################################  GA
-fsga<-function(label_protM){
+fsga<-cmpfun(function(label_protM){
   label<-label_protM[,"label"]
   protM<-label_protM[,-which(colnames(label_protM)=="label")]
   protM[is.na(protM)]<-0
@@ -161,4 +161,4 @@ fsga<-function(label_protM){
   features=colnames(protM)[ga_fs@solution[1,]==1]
   
   return(list(features=features,mod=ga_fs))
-}
+})

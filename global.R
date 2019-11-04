@@ -13,6 +13,7 @@ library(randomForest)
 library(funModeling)
 library(tidyverse)
 library(GA)
+library(compiler)
 source("expert/lib_ga.R")
 #################################
 # loading model

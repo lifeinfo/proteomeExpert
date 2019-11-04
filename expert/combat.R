@@ -1,5 +1,5 @@
 #mycombat<-function(peptide,batchf,psep="\t",pheader=T,bheader=T,bsep="\t"){
-mycombat<-function(peptide,batch){
+mycombat<-cmpfun(function(peptide,batch){
   
   options(stringsAsFactors = F)
   #peptide<-read.table(peptidef,header = pheader,sep = psep)
@@ -14,4 +14,4 @@ mycombat<-function(peptide,batch){
   combat.peptide[is.na(peptide[,-c(1:2)])]<-NA
   combat.peptide<-cbind(peptide[,1:2],combat.peptide)
   return(combat.peptide)
-}
+})

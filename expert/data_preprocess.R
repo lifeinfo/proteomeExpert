@@ -1,4 +1,4 @@
-dataPreprocess<-function(d,replace_value,log_base,normaliztion,batch,DPTR,DPTechnicalRepMethod,DPBR,DPBiologicalRep){
+dataPreprocess<-cmpfun(function(d,replace_value,log_base,normaliztion,batch,DPTR,DPTechnicalRepMethod,DPBR,DPBiologicalRep){
   rownames(d)<-d[,1]
   d<-d[,-1]
   d<-data.matrix(d)
@@ -77,19 +77,19 @@ dataPreprocess<-function(d,replace_value,log_base,normaliztion,batch,DPTR,DPTech
   print(dim(d))
   d<-round(d,2)
   return(d)
-}
-myqn<-function(d){
+})
+myqn<-cmpfun(function(d){
   
   d2<-normalize.quantiles(d)
   colnames(d2)<-colnames(d)
   rownames(d2)<-rownames(d)
   return(d2)
-}
-maxmin<-function(d){
+})
+maxmin<-cmpfun(function(d){
   d <- data.matrix(d)
   center <- sweep(d, 2, apply(d, 2, min),'-')
   R <- apply(d, 2, max) - apply(d,2,min)
   d<- sweep(center, 2, R, "/")
   d <- data.frame(d)
   return(d)
-}
+})

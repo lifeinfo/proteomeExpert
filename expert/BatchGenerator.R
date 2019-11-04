@@ -1,8 +1,8 @@
-normWeights<-function(weights){
+normWeights<-cmpfun(function(weights){
   s<-sum(weights)
   return(round(weights/s,2))
-}
-continue2discrete<-function(a){
+})
+continue2discrete<-cmpfun(function(a){
   a<-as.numeric(a)
   q<-summary(a)
   a[a<=q[2]]<-1
@@ -10,9 +10,9 @@ continue2discrete<-function(a){
   a[a<=q[5] & a>q[3]]<-3
   a[a>q[5]]<-4
   return(a)
-}
+})
 
-batchGenerator<-function(fpath,headers,numeric_headers,weights,batchSize,sep){
+batchGenerator<-cmpfun(function(fpath,headers,numeric_headers,weights,batchSize,sep){
 # print(fpath)
 # print(headers)
 # print(numeric_headers)
@@ -112,5 +112,5 @@ for(h in numeric_headers){
   result[h]<-samples_ori[unlist(result[1]),h]
 }
 return(result)
-}
+})
 

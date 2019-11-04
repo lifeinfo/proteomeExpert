@@ -1,4 +1,4 @@
-drawcorrplot <- function(data) {
+drawcorrplot <- cmpfun(function(data) {
   df_cor <- data
   mycor = cor(df_cor, use = "pairwise.complete.obs")
   p <-
@@ -12,4 +12,4 @@ drawcorrplot <- function(data) {
       cl.cex = 0.5
     )
   return(p)
-}
+})
