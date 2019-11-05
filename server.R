@@ -230,9 +230,16 @@ function(input, output, session) {
   )
   ###pep2prot
   DdatasetInput <- eventReactive(input$process, {
+    
     if (is.null(input$PeptideMatrix))
       "Please upload your files!"
     else{
+      errors<-protein_file_check(input$PeptideMatrix$datapath,input$Dpsep,input$Dpheader)
+      if(!is.null(errors)){
+        showModal(modalDialog(
+          title = "Important message",errors))
+        q()
+      }
       withProgress(message = 'Calculation in progress',
                    detail = 'This may take a while...',
                    value = 0,

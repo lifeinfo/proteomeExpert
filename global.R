@@ -92,6 +92,7 @@ source("expert/missingValueExplore_zts.R")
 source("function.R")
 source("expert/BatchGenerator.R")
 source("expert/missingRatio.R")
+source("expert/DataInputCheck.R")
 
 #################################
 # global variable
