@@ -238,7 +238,7 @@ function(input, output, session) {
       if(!is.null(errors)){
         showModal(modalDialog(
           title = "Important message",errors))
-        q()
+        stop()
       }
       withProgress(message = 'Calculation in progress',
                    detail = 'This may take a while...',
