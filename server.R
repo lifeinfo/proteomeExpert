@@ -65,6 +65,12 @@ function(input, output, session) {
                  value = 0,
                  {
                    incProgress(1 / 15)
+                   errors<-batch_design_check(input$BDfile$datapath,input$BDsep,T)
+                   if(!is.null(errors)){
+                     showModal(modalDialog(
+                       title = "Important message",errors))
+                     stop()
+                   }
                    col_weights <- strsplit(input$BDweight, ",")
                    col_weights <- as.numeric(unlist(col_weights))
                    result <-
