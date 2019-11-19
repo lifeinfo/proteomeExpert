@@ -6,7 +6,7 @@ protein_file_check<-function(file,sep,header){
   else if (nrow(d)!=length(unique(d[,1]))){
     errors<-"Duplicated values in first column is not allowed "
   }
-  else if (!is.numeric(d[,-2])){
+  else if (!is.numeric(as.vector(unlist(d[,-c(1,2)])))){
     errors<-"Non numeric value is not allowed"
   }
   return(errors)

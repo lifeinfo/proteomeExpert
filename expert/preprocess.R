@@ -46,7 +46,23 @@ auto_preprocess <-
     pep.data.log2 <- pep.data.log2[, -1]
     pep.data.log2[, 2:ncol(pep.data.log2)] <-
       log2(as.matrix(pep.data.log2[, 2:ncol(pep.data.log2)]))
-    
+    if(ncol(pep.data.log2)==2){
+      pep.data.log2.group<-split(pep.data.log2,pep.data.log2[,1])
+      prot.t<-lapply(pep.data.log2.group, function(x){
+        x<-x[order(x[,2],decreasing = T),]
+        y<-0
+        if(nrow(x)>3){
+          y<-mean(x[1:3,2],na.rm = T)
+        }else{
+          y<-mean(x[1:nrow(x),2],na.rm = T) 
+        }
+        return(y)
+      })
+      prot.t.d<-do.call(rbind,prot.t)
+      prot.d<-data.frame(prot=rownames(prot.t.d),intensity=prot.t.d[,1])
+      colnames(prot.d)[2]<-colnames(pep.data)[3]
+      return(prot.d)
+    }
     #R preprocessCore normalize.quantiles()
     
     pep.data.log2.qn = normalize.quantiles(as.matrix(pep.data.log2[, 2:ncol(pep.data.log2)]))
