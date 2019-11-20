@@ -633,7 +633,8 @@ navbarPage(
         h5("Summary:"),
         verbatimTextOutput("fs_summary"),
         #plotOutput("fs_parameter"),
-        DTOutput("featureSelected"),
+        #DTOutput("featureSelected"),
+        dataTableOutput("featureSelected"),
         downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
         
       )

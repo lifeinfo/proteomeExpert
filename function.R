@@ -16,6 +16,24 @@ myhead <- function(d) {
 }
 
 # smoothScatter plot
+linkUniprot <- function(val) {
+  sprintf('<a href="https://www.uniprot.org/uniprot/%s" target="_blank" class="btn">%s</a>',val,val)
+}
+getAnnoFromUniprot <- function(acc){
+  kk <- read.table(sprintf('https://www.uniprot.org/uniprot/%s.fasta',acc),sep="\n",stringsAsFactors=F,header=F)
+  
+  if(length(kk)<1)
+    return(c(gene='NA',desc='NA'))
+  desc<-kk[1,]
+  
+  a <- strsplit(kk[1,]," ")[[1]]
+  b <- a[grepl("GN=",a)]
+  if(length(b)<1)
+    return(c(gene='NA',desc=desc))
+  
+  gene<-strsplit(b,"=")[[1]][2]
+  return(c(gene=gene,desc=desc))
+}
 
 drawsmooth <- function(data1, data2, strTitle = "smoothScatter plot") {
   r <- cor(data1, data2, use = "pairwise.complete.obs")

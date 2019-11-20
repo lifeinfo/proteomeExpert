@@ -1551,10 +1551,21 @@ function(input, output, session) {
   #     plot(feature_sel_prot()$mod)
   #   })
   output$featureSelected <-
-    DT::renderDataTable(DT::datatable({
-      
-      data.frame(feature_sel_prot()$features)
-    }))
+    DT::renderDataTable({
+      #DT::datatable({
+      print("Feature sel print")
+      features<-feature_sel_prot()$features
+      gene<-c()
+      desctription<-c()
+      for(f in features){
+        gene_desc<-getAnnoFromUniprot(f)
+        gene<-c(gene,gene_desc[1])
+        desctription<-c(desctription,gene_desc[2])
+      }
+      features<-linkUniprot(features)
+      data.frame(Proteins=features,Gene=gene,Desctription=desctription)
+    #})
+    }, escape = FALSE)
   #####download
   output$downloadfeatureSelData <-
     downloadHandler(
