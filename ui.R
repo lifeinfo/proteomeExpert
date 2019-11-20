@@ -36,7 +36,7 @@ navbarPage(
     tabPanel(
       "Power Analysis",
       sidebarPanel(
-        tags$h4("Power analysis by direct set parameters:"),
+        tags$h4("Power analysis"),
         hr(),
         textInput("Pm", "Number of Proteins (estimated):", 5000, width = "60%"),
         textInput("Pmu", "Mean abundance:", 13, width = "60%"),
@@ -59,7 +59,7 @@ navbarPage(
           ),
           h5("Reference:"),
           HTML(
-            "<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis ofQuantitative Traits. Sunderland, Mass.: Sinauer Assoc</p>"
+            "<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis of Quantitative Traits.</p>"
           ),
           h4("Sample size"),
           column(8, verbatimTextOutput("powerSize")),
@@ -376,7 +376,7 @@ navbarPage(
       
       selectInput(
         'QCLabel',
-        "Select your intresting column name, is't usally tissue/disease type.",
+        "Select your intresting column name, is't usually tissue/disease type.",
         anno_name,
         multiple = FALSE,
         selectize = TRUE
@@ -632,7 +632,7 @@ navbarPage(
         actionButton("feature_do", "Submit", class = "btn-primary"),
         h5("Summary:"),
         verbatimTextOutput("fs_summary"),
-        plotOutput("fs_parameter"),
+        #plotOutput("fs_parameter"),
         DTOutput("featureSelected"),
         downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
         
@@ -856,7 +856,7 @@ navbarPage(
           )
           ,
           fluidRow(
-            shinyBS::bsButton("mlsubmitTrain", label = "Trainning ", style = "primary")
+            shinyBS::bsButton("mlsubmitTrain", label = "Training ", style = "primary")
             ,shinyBS::bsTooltip(id = "mlsubmitTrain", title = "click me to trainning", placement = "right", trigger = "hover")
             
           )
@@ -935,19 +935,12 @@ navbarPage(
           HTML("<p><strong>Input:</strong></p>"),
           verbatimTextOutput("anno_parameters1")
         ),
-        fluidRow(column(12, "Uniport"),
-                 hr(),
-                 column(8,
-                        uiOutput("annouiuniport"))),
+
         fluidRow(column(12, "String"),
                  hr(),
                  column(8,
                         uiOutput("annouistring"))),
-        fluidRow(column(12, "KEGG"),
                  hr(),
-                 column(8, "")),
-        fluidRow(column(12, "GO"),
-                 hr()),
         fluidRow(column(12, "Reactome"),
                  hr(),
                  column(

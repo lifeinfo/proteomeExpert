@@ -1546,12 +1546,13 @@ function(input, output, session) {
       )
     })
   
-  output$fs_parameter <-
-    renderPlot({
-      plot(feature_sel_prot()$mod)
-    })
+  # output$fs_parameter <-
+  #   renderPlot({
+  #     plot(feature_sel_prot()$mod)
+  #   })
   output$featureSelected <-
     DT::renderDataTable(DT::datatable({
+      
       data.frame(feature_sel_prot()$features)
     }))
   #####download
