@@ -38,7 +38,9 @@ pep2prot <- cmpfun(function(top3) {
           next
         }
         lr.results <- mylm(unlist(x[xy.index]), unlist(y[xy.index]))
-        if (lr.results$rSqured > 0.36 &
+        if(is.na(lr.results$p)|is.na(lr.results$rSqured)){
+          next
+        }else if(lr.results$rSqured > 0.36 &
             lr.results$p < 0.05 & length(xy0.index) > 0 & length(xy.index) > 2) {
           tryCatch(
             y.predict <-

@@ -1488,6 +1488,11 @@ function(input, output, session) {
   feature_sel_prot <-
     eventReactive(input$feature_do,
                   {
+                    withProgress(message = 'Calculation in progress',
+                                 detail = 'This may take a while...',
+                                 value = 0,
+                                 {
+                                   incProgress(1 / 15)
                     if (!is.null(isolate(input$DMprotM))) {
                       if (isolate(input$DMprotM) == "uploadedProtMatrix") {
                         protM <- isolate(readProteinM())
@@ -1522,12 +1527,15 @@ function(input, output, session) {
                       #   use_lasso = TRUE
                       #nfeatures<-input$feature_num
                       print(input$featureSel_algorithm)
+                      incProgress(2 / 15, message = "Initial feature selection!")
                       if (!is.null(input$featureSel_algorithm))
                         fs_features <-
                         featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
                       
                       return(fs_features)
                     }
+                    incProgress(14 / 15, message = "Ready to finish!")
+                                 })
                   },
                   ignoreNULL = T,
                   ignoreInit = T)
@@ -1552,17 +1560,26 @@ function(input, output, session) {
   #   })
   output$featureSelected <-
     DT::renderDataTable({
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...',
+                   value = 0,
+                   {
+                     incProgress(1 / 15)
       #DT::datatable({
       print("Feature sel print")
       features<-feature_sel_prot()$features
       gene<-c()
       desctription<-c()
-      for(f in features){
+      i=0
+      for(f in features){i=i+1
+        incProgress(1/15+(11/15)*(i/length(features)), message = "Ready to finish!")
         gene_desc<-getAnnoFromUniprot(f)
         gene<-c(gene,gene_desc[1])
         desctription<-c(desctription,gene_desc[2])
       }
       features<-linkUniprot(features)
+      incProgress(14 / 15, message = "Ready to finish!")
+                   })
       data.frame(Proteins=features,Gene=gene,Desctription=desctription)
     #})
     }, escape = FALSE)
