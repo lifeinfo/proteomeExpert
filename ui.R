@@ -600,7 +600,7 @@ navbarPage(
     mainPanel(tabsetPanel(
      
       tabPanel(
-        "FeatureSel",
+        "FeatureSelection",
         h5(
           "Please note that feature selection including two parts: filter rules and feature selection algorithm"
         ),
@@ -612,7 +612,7 @@ navbarPage(
         checkboxGroupInput(
           "featureSel_filter",
           "Please select filter rules" ,
-          c("nearZeoVar" = "nearZeoVar", "high correlation" = "high_correlation"),
+          c("nearZeroVar" = "nearZeoVar", "high correlation" = "high_correlation"),
           selected = c("nearZeoVar", "high_correlation"),
           inline = T,
           width = NULL
@@ -1134,11 +1134,31 @@ navbarPage(
              )),
     "----",
     tabPanel("Docs",
-             mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
-             )),
+             navlistPanel(
+               tabPanel("Experimental Design",
+                        includeMarkdown("help/ExperimentalDesign.md")
+               ),
+               tabPanel("Data Console",
+                        includeMarkdown("help/Dataconsole.md")
+               ),
+               tabPanel("Data Preprocessing",
+                        includeMarkdown("help/DataPreprocessing.md")
+               ),
+               tabPanel("QC",
+                        includeMarkdown("help/ProteomeExpert-QC.md")
+               ),
+               tabPanel("Statistics",
+                        includeMarkdown("help/ProteomeExpert-Statistics.md")
+               ),
+               tabPanel("Data Mining",
+                        "Coming Soon"
+               ),
+               tabPanel("Other Tools",
+                        "Coming Soon"
+               ),
+               fluid = TRUE, widths = c(2,8)
+             )
+             ),
     tabPanel("Q&A",
              mainPanel(
                tabsetPanel(tabPanel("Plot"),
