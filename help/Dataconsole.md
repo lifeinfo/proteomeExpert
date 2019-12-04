@@ -9,15 +9,15 @@ Upload your files (`protein`, `sample`, `individual`) .txt or .csv format with t
 ## Tutorial
 
 1. Download the prot, sample and individual test data<br/>Download _test_prot.txt_, _test_sample.csv_ and _test_individual.csv_ files from "Online Help - Test data files used for batch design - Get", _test_individual.csv_ files comprise 21 individual information, _test_sample.csv _contain individual and sample information. All of the test data are from Delayed post-hypoxic leukoencephalopathy (DPHL) dataset.<br/>
-  
-  2. Select your protein file: click on the  `Browse..` to upload the _test_prot.txt_ file, choose `Tab` as separator.
+2. Select your protein file: click on the  `Browse..` to upload the _test_prot.txt_ file, choose `Tab` as separator.
 3. Select your sample file: click on the  `Browse..` to upload the _sample_individual.csv_, choose `Comma` as separator.
 4. Select your individual file click on the  `Browse..` to upload the _individual_prot.txt_ file, choose `Comma` as separator.
 5. Annotate sample columns: select `SampleName` as sample id; select `Individual_ID` as individual id/name, click on `Submit` .
 6. Annotate individual columns: select `Individual_ID` as individual id/name, click on `Submit` .
 
-![image.png](dataconsole-1.png)
+	![image.png](dataconsole-1.png)
 
 7. Click on `Merge` , result would be shown on the bottom on the page. After merge, all the data uploaded would save in the sever for further analysis.
 
-![image.png](dataconsole-2.png)
+	![image.png](dataconsole-2.png)
+
