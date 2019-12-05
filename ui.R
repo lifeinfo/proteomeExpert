@@ -61,7 +61,7 @@ navbarPage(
           HTML(
             "<p>Lynch Michael, Walsh Bruce. 1998. Genetics and Analysis of Quantitative Traits.</p>"
           ),
-          h4("Sample size"),
+          h5("Results:"),
           column(8, verbatimTextOutput("powerSize")),
           column(8, plotlyOutput("powerPlot"))
         )

@@ -238,7 +238,7 @@ function(input, output, session) {
   DdatasetInput <- eventReactive(input$process, {
     
     if (is.null(input$PeptideMatrix))
-      "Please upload your files!"
+      "Please upload your files"
     else{
       errors<-protein_file_check(input$PeptideMatrix$datapath,input$Dpsep,input$Dpheader)
       if(!is.null(errors)){
@@ -526,7 +526,7 @@ function(input, output, session) {
   output$sampleUi <-
     renderUI({
       if (is.null(input$sample_info))
-        "Please upload your files!"
+        "Please upload your files"
       else{
         #print(input$sample_info)
         sample_info <- getSampleInfo(input$sample_info$datapath,input$DCsampleSep)
@@ -554,7 +554,7 @@ function(input, output, session) {
   output$individualUi <-
     renderUI({
       if (is.null(input$individual_info))
-        "Please upload your files!"
+        "Please upload your files"
       else{
         #print(input$sample_info)
         individual_info <- getSampleInfo(input$individual_info$datapath,input$DCindividualSep, 1)
