@@ -110,7 +110,7 @@ navbarPage(
           "Weights for columns (using ',' to separate mutilplue columns.)"
         ),
         numericInput("BDsize", "Number of samples in each batch:", 15),
-
+        
         tags$h5("Click to design:"),
         actionButton("BDdo", "Submit", class = "btn-primary")
       ),
@@ -139,11 +139,13 @@ navbarPage(
         "protein_matrix",
         "Select your protein file( if file is xlsx format ,protein data sheet must be the first sheet):",
         multiple = F,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv",
-                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                   ".xlsx"),
+        accept = c(
+          "text/csv",
+          "text/comma-separated-values,text/plain",
+          ".csv",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          ".xlsx"
+        ),
         placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
@@ -163,11 +165,13 @@ navbarPage(
         "sample_info",
         "Select your sample file (if file is xlsx format ,sample data sheet must be the first sheet):",
         multiple = F,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv",
-                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                   ".xlsx"),
+        accept = c(
+          "text/csv",
+          "text/comma-separated-values,text/plain",
+          ".csv",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          ".xlsx"
+        ),
         placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
@@ -188,11 +192,13 @@ navbarPage(
         "individual_info",
         "Select your individual file (if file is xlsx format ,individual data sheet must be the first sheet):",
         multiple = F,
-        accept = c("text/csv",
-                   "text/comma-separated-values,text/plain",
-                   ".csv",
-                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                   ".xlsx"),
+        accept = c(
+          "text/csv",
+          "text/comma-separated-values,text/plain",
+          ".csv",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          ".xlsx"
+        ),
         placeholder = "*.csv/*.TXT or *.xlsx file required!"
       ),
       radioButtons(
@@ -386,7 +392,7 @@ navbarPage(
       hr(),
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
       checkboxInput("reproducibility", "Reproducibility", TRUE),
-
+      
       hr(),
       
       tags$h5("Click to process:"),
@@ -394,48 +400,46 @@ navbarPage(
       
     ),
     
-    mainPanel(
-      tabsetPanel(
-        tabPanel(
-          "Missing value",
-          h5("Description:"),
-          HTML(
-            "<p>This module design to explore missing data distributions, focusing on numeric missing data.</p>"
-          ),
-          tags$hr(),
-          #h3(textOutput("caption")),
-          verbatimTextOutput("QMparameters"),
-          conditionalPanel(
-            "output.QMparameters == 'Results are showed below:'",
-            rHandsontableOutput("QCMissingTable"),
-            hr(),
-            downloadButton('downloadMissingPlot')
-          ),
-          
-          plotOutput("missingPlot"),
-          
-          column(4, plotOutput("densityPlot")),
-          hr(),
-          br()
-          
+    mainPanel(tabsetPanel(
+      tabPanel(
+        "Missing value",
+        h5("Description:"),
+        HTML(
+          "<p>This module design to explore missing data distributions, focusing on numeric missing data.</p>"
         ),
-        tabPanel(
-          "Pearson Correlation",
-          h4("Summary"),
-          h5("Description:"),
-          HTML("<p>None</p>"),
+        tags$hr(),
+        #h3(textOutput("caption")),
+        verbatimTextOutput("QMparameters"),
+        conditionalPanel(
+          "output.QMparameters == 'Results are showed below:'",
+          rHandsontableOutput("QCMissingTable"),
           hr(),
-          plotOutput("Qpccplot", height = "800px"),
-          #column(6, plotOutput("Qpccplot")),
-          #column(6, plotOutput("Qsmoothplot")),
-          hr(),
-          h4("Data:"),
-          column(12, rHandsontableOutput("Qpcctable")),
-          br(),
-          h4("Note:")
-        )
+          downloadButton('downloadMissingPlot')
+        ),
+        
+        plotOutput("missingPlot"),
+        
+        column(4, plotOutput("densityPlot")),
+        hr(),
+        br()
+        
+      ),
+      tabPanel(
+        "Pearson Correlation",
+        h4("Summary"),
+        h5("Description:"),
+        HTML("<p>None</p>"),
+        hr(),
+        plotOutput("Qpccplot", height = "800px"),
+        #column(6, plotOutput("Qpccplot")),
+        #column(6, plotOutput("Qsmoothplot")),
+        hr(),
+        h4("Data:"),
+        column(12, rHandsontableOutput("Qpcctable")),
+        br(),
+        h4("Note:")
       )
-    )
+    ))
   ),
   #################################
   #   Statistics
@@ -473,13 +477,13 @@ navbarPage(
           inline = TRUE,
           selected = "two.sided"
         ),
-        checkboxInput("paried","Paired samples",FALSE),
-        checkboxInput("var.equal","Equal varience",FALSE),
+        checkboxInput("paried", "Paired samples", FALSE),
+        checkboxInput("var.equal", "Equal varience", FALSE),
         numericInput("conf.level", "Confidence level", 0.95,
                      0.01, 1, 0.01),
         radioButtons(
           "adjP",
-          "Adjust P value method", 
+          "Adjust P value method",
           choices = c(
             none = "none",
             bonferroni = "bonferroni",
@@ -510,9 +514,15 @@ navbarPage(
         ),
         hr(),
         h5("Set parameters for volcano plot"),
-        checkboxInput("volcano_isLog","Already Log2 transformed protein matrix",TRUE),
-        numericInput("volcano_adjp_threshold", "Adjust P value threshold", 0.05,
-                     0.01, 1, 0.01),
+        checkboxInput("volcano_isLog", "Already Log2 transformed protein matrix", TRUE),
+        numericInput(
+          "volcano_adjp_threshold",
+          "Adjust P value threshold",
+          0.05,
+          0.01,
+          1,
+          0.01
+        ),
         numericInput("volcano_fc", "Fold change threshold", 2,
                      1, 10, 0.5),
         hr(),
@@ -528,13 +538,13 @@ navbarPage(
           inline = TRUE,
           selected = "two.sided"
         ),
-        checkboxInput("volcano_paried","Paired samples",FALSE),
-        checkboxInput("volcano_var.equal","Equal varience",FALSE),
+        checkboxInput("volcano_paried", "Paired samples", FALSE),
+        checkboxInput("volcano_var.equal", "Equal varience", FALSE),
         numericInput("volcano_conf.level", "Confidence level", 0.95,
                      0.01, 1, 0.01),
         radioButtons(
           "volcano_adjP",
-          "Adjust P value method", 
+          "Adjust P value method",
           choices = c(
             none = "none",
             bonferroni = "bonferroni",
@@ -582,176 +592,173 @@ navbarPage(
   #################################
   navbarMenu(
     "Data Mining",
-  tabPanel(
-    "Feature Selection",
-    "",
-    sidebarPanel(
-      h3("Set parameters:"),
-      h5(
-        "Please note: protein matrix and annotation file shoule be upload in data console first."
-      ),
-      uiOutput("DMprot_anno_Ui_fs"),
-      hr()
-
-    ),
-    
-    mainPanel(tabsetPanel(
-     
-      tabPanel(
-        "FeatureSelection",
+    tabPanel(
+      "Feature Selection",
+      "",
+      sidebarPanel(
+        h3("Set parameters:"),
         h5(
-          "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+          "Please note: protein matrix and annotation file shoule be upload in data console first."
         ),
-        textInput(
-          inputId = "fs_missing_ratio",
-          label = "Allowable missing ratio",
-          value = 0.8
+        uiOutput("DMprot_anno_Ui_fs"),
+        hr()
+        
+      ),
+      
+      mainPanel(tabsetPanel(
+        tabPanel(
+          "FeatureSelection",
+          h5(
+            "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+          ),
+          textInput(
+            inputId = "fs_missing_ratio",
+            label = "Allowable missing ratio",
+            value = 0.8
+          ),
+          checkboxGroupInput(
+            "featureSel_filter",
+            "Please select filter rules" ,
+            c("nearZeroVar" = "nearZeoVar", "high correlation" = "high_correlation"),
+            selected = c("nearZeoVar", "high_correlation"),
+            inline = T,
+            width = NULL
+          ),
+          radioButtons(
+            "featureSel_algorithm",
+            "Please select feature selection algorithm",
+            choices = c(
+              "Random Forest" = 'random_forest',
+              'LASSO' = "lasso",
+              'Genetic Algorithm' = "GA"
+            ),
+            inline = TRUE,
+            selected = NULL
+          ),
+          hr(),
+          actionButton("feature_do", "Submit", class = "btn-primary"),
+          h5("Summary:"),
+          verbatimTextOutput("fs_summary"),
+          #plotOutput("fs_parameter"),
+          #DTOutput("featureSelected"),
+          dataTableOutput("featureSelected"),
+          downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
+          
+        )
+      ))
+    ),
+    #####clustering
+    tabPanel(
+      "Clustering",
+      "",
+      sidebarPanel(
+        h3("Set parameters:"),
+        h5(
+          "Please note: protein matrix and annotation file shoule be upload in data console first."
         ),
-        checkboxGroupInput(
-          "featureSel_filter",
-          "Please select filter rules" ,
-          c("nearZeroVar" = "nearZeoVar", "high correlation" = "high_correlation"),
-          selected = c("nearZeoVar", "high_correlation"),
-          inline = T,
-          width = NULL
-        ),
+        uiOutput("DMprot_anno_Ui"),
+        hr(),
+        tags$h5("Log Transform:"),
         radioButtons(
-          "featureSel_algorithm",
-          "Please select feature selection algorithm",
+          "DMclusertingLog",
+          "",
           choices = c(
-            "Random Forest" = 'random_forest',
-            'LASSO' = "lasso",
-            'Genetic Algorithm' = "GA"
+            "None" = "none",
+            "Log2" = '2',
+            'Log10' = "10"
           ),
           inline = TRUE,
           selected = NULL
         ),
-        hr(),
-        actionButton("feature_do", "Submit", class = "btn-primary"),
-        h5("Summary:"),
-        verbatimTextOutput("fs_summary"),
-        #plotOutput("fs_parameter"),
-        #DTOutput("featureSelected"),
-        dataTableOutput("featureSelected"),
-        downloadButton("downloadfeatureSelData", "Download", class = "btn-primary")
+        tags$h5("Module section:"),
+        checkboxInput("dmheatmap", "HeatMap", TRUE),
+        #checkboxInput("test", "t-test", TRUE),
+        #checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
+        #checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
+        checkboxInput("qcPca", "PCA", TRUE),
+        checkboxInput("qctsne", "t-SNE", TRUE),
+        checkboxInput("qcUmap", "UMAP", FALSE),
         
-      )
-    )
-    )),
-  #####clustering
-  tabPanel(
-    "Clustering",
-    "",
-    sidebarPanel(
-      h3("Set parameters:"),
-      h5(
-        "Please note: protein matrix and annotation file shoule be upload in data console first."
+        actionButton("dmClustering", "Submit", class = "btn-primary")
       ),
-      uiOutput("DMprot_anno_Ui"),
-      hr(),
-      tags$h5("Log Transform:"),
-      radioButtons(
-        "DMclusertingLog",
-        "",
-        choices = c(
-          "None" = "none",
-          "Log2" = '2',
-          'Log10' = "10"
-        ),
-        inline = TRUE,
-        selected = NULL
-      ),
-      tags$h5("Module section:"),
-      checkboxInput("dmheatmap", "HeatMap", TRUE),
-      #checkboxInput("test", "t-test", TRUE),
-      #checkboxInput("vocanoPlot", "ViocanoPlot", TRUE),
-      #checkboxInput("ViolinPlot", "ViolinPlot", TRUE),
-      checkboxInput("qcPca", "PCA", TRUE),
-      checkboxInput("qctsne", "t-SNE", TRUE),
-      checkboxInput("qcUmap", "UMAP", FALSE),
       
-      actionButton("dmClustering", "Submit", class = "btn-primary")
+      mainPanel(tabsetPanel(
+        #################################
+        # HeatMap
+        #################################
+        tabPanel(
+          "HeatMap",
+          h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
+          ),
+          hr(),
+          column(8, plotOutput("DMheatmapparameters"))
+          #,column(6, rHandsontableOutput("DMheatmaptable"))
+        ),
+        
+        tabPanel(
+          "PCA",
+          h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
+            <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
+            <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
+          ),
+          hr(),
+          column(6, plotlyOutput("Qpcaplot")),
+          column(6, rHandsontableOutput("Qpcatable"))
+          ),
+        tabPanel(
+          "T-SNE",
+          h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
+          ),
+          h5("Reference:"),
+          HTML(
+            "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
+          ),
+          hr(),
+          column(6, plotlyOutput("Qtsneplot")),
+          column(6, rHandsontableOutput("Qtsnetable"))
+        ),
+        tabPanel(
+          "Umap",
+          h4("Summary"),
+          h5("Description:"),
+          HTML(
+            "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
+          ),
+          h5("Reference:"),
+          HTML(
+            "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
+          ),
+          hr(),
+          column(6, plotlyOutput("Qumapplot")),
+          column(6, rHandsontableOutput("Qumaptable"))
+        )
+        ))
     ),
-    
-    mainPanel(tabsetPanel(
-      #################################
-      # HeatMap
-      #################################
-      tabPanel(
-        "HeatMap",
-        h4("Summary"),
-        h5("Description:"),
-        HTML(
-          "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
-        ),
-        hr(),
-        column(8, plotOutput("DMheatmapparameters"))
-        #,column(6, rHandsontableOutput("DMheatmaptable"))
-      ),
-
-      tabPanel(
-        "PCA",
-        h4("Summary"),
-        h5("Description:"),
-        HTML(
-          "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
-                <p>Mark 1: In proteomic data matrix, missing data (often more missing values for control samples) plays a role in determining the outcome of PCA.</p>
-                <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
-        ),
-        hr(),
-        column(6, plotlyOutput("Qpcaplot")),
-        column(6, rHandsontableOutput("Qpcatable"))
-      ),
-      tabPanel(
-        "T-SNE",
-        h4("Summary"),
-        h5("Description:"),
-        HTML(
-          "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
-        ),
-        h5("Reference:"),
-        HTML(
-          "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
-        ),
-        hr(),
-        column(6, plotlyOutput("Qtsneplot")),
-        column(6, rHandsontableOutput("Qtsnetable"))
-      ),
-      tabPanel(
-        "Umap",
-        h4("Summary"),
-        h5("Description:"),
-        HTML(
-          "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
-        ),
-        h5("Reference:"),
-        HTML(
-          "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
-        ),
-        hr(),
-        column(6, plotlyOutput("Qumapplot")),
-        column(6, rHandsontableOutput("Qumaptable"))
-      )
-    )
-    )),
     #################################
     # Machine Learning
     #################################
-  tabPanel(
-    "Classification",
-    "",
-    sidebarPanel(
-      h3("Data section:"),
-      h5(
-        "Please note: protein matrix and annotation file shoule be upload in data console first."
+    tabPanel(
+      "Classification",
+      "",
+      sidebarPanel(
+        h3("Data section:"),
+        h5(
+          "Please note: protein matrix and annotation file shoule be upload in data console first."
+        ),
+        uiOutput("DMprot_anno_Ui_class"),
+        hr()
       ),
-      uiOutput("DMprot_anno_Ui_class"),
-      hr()
-    ),
-    
-    mainPanel(tabsetPanel(
       
-      tabPanel(
+      mainPanel(tabsetPanel(tabPanel(
         "ML",
         column(
           4,
@@ -766,22 +773,43 @@ navbarPage(
           ),
           HTML(
             '<p>
-                (*Note:<em>If you have a large matrix, the system may be slow, please be patient.</em>)
-                </p>
-                <p>
-                <span style="font-size: 14px;"></span>
-                </p>'
+            (*Note:<em>If you have a large matrix, the system may be slow, please be patient.</em>)
+            </p>
+            <p>
+            <span style="font-size: 14px;"></span>
+            </p>'
           ),
           conditionalPanel(
             condition = "input.mlmethod == \"Decision Tree\"",
             div(
               id = "dtree_Parameters_container",
-              numericInput("dt_minsplit", label = "minsplit",value = 2,min = 1)
-              ,shinyBS::bsTooltip(id = "dt_minsplit", title = "the minimum number of observations that must exist in a node in order for a split to be attempted.",
-                                  placement = "top", trigger = "hover")
-              ,numericInput("dt_minbucket",label = "minbucket", value = 1, min = 1)
-              ,shinyBS::bsTooltip(id = "dt_minbucket", title = "the minimum number of observations in any terminal <leaf> node. If only one of minbucket or minsplit is specified, the code either sets minsplit to minbucket*3 or minbucket to minsplit/3, as appropriate.",
-                                  placement = "top", trigger = "hover")
+              numericInput(
+                "dt_minsplit",
+                label = "minsplit",
+                value = 2,
+                min = 1
+              )
+              ,
+              shinyBS::bsTooltip(
+                id = "dt_minsplit",
+                title = "the minimum number of observations that must exist in a node in order for a split to be attempted.",
+                placement = "top",
+                trigger = "hover"
+              )
+              ,
+              numericInput(
+                "dt_minbucket",
+                label = "minbucket",
+                value = 1,
+                min = 1
+              )
+              ,
+              shinyBS::bsTooltip(
+                id = "dt_minbucket",
+                title = "the minimum number of observations in any terminal <leaf> node. If only one of minbucket or minsplit is specified, the code either sets minsplit to minbucket*3 or minbucket to minsplit/3, as appropriate.",
+                placement = "top",
+                trigger = "hover"
+              )
               
             )
           ),
@@ -792,12 +820,33 @@ navbarPage(
             condition = "input.mlmethod == \"Random Forest\"",
             div(
               id = "rf_Parameters_container",
-              numericInput("rf_ntree", label = "ntree",value = 500,min = 1)
-              ,shinyBS::bsTooltip(id = "rf_ntree", title = "Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times.",
-                                  placement = "top", trigger = "hover")
-              ,numericInput("rf_mtry",label = "mtry( value 0 means default)", value = 0, min = 0)
-              ,shinyBS::bsTooltip(id = "rf_mtry", title = "Number of variables randomly sampled as candidates at each split. Note that the default values are different for classification (sqrt(p) where p is number of variables in x) and regression (p/3)",
-                                  placement = "top", trigger = "hover")
+              numericInput(
+                "rf_ntree",
+                label = "ntree",
+                value = 500,
+                min = 1
+              )
+              ,
+              shinyBS::bsTooltip(
+                id = "rf_ntree",
+                title = "Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times.",
+                placement = "top",
+                trigger = "hover"
+              )
+              ,
+              numericInput(
+                "rf_mtry",
+                label = "mtry( value 0 means default)",
+                value = 0,
+                min = 0
+              )
+              ,
+              shinyBS::bsTooltip(
+                id = "rf_mtry",
+                title = "Number of variables randomly sampled as candidates at each split. Note that the default values are different for classification (sqrt(p) where p is number of variables in x) and regression (p/3)",
+                placement = "top",
+                trigger = "hover"
+              )
               
             )
           ),
@@ -856,46 +905,63 @@ navbarPage(
           ,
           fluidRow(
             shinyBS::bsButton("mlsubmitTrain", label = "Training ", style = "primary")
-            ,shinyBS::bsTooltip(id = "mlsubmitTrain", title = "click me to trainning", placement = "right", trigger = "hover")
+            ,
+            shinyBS::bsTooltip(
+              id = "mlsubmitTrain",
+              title = "click me to trainning",
+              placement = "right",
+              trigger = "hover"
+            )
             
           )
           ,
           #############################################
           # ui for upload test file
           #############################################
-          shinyjs::hidden(
-            div(
-              id = "mlPredictDiv",
-              fileInput(
-                "mlTestFile",
-                "Select your test data file (required):",
-                multiple = FALSE,
-                accept = c("text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv",
-                           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           ".xlsx"),
-                placeholder = "*.csv/*.TXT or *.xlsx required!"
+          shinyjs::hidden(div(
+            id = "mlPredictDiv",
+            fileInput(
+              "mlTestFile",
+              "Select your test data file (required):",
+              multiple = FALSE,
+              accept = c(
+                "text/csv",
+                "text/comma-separated-values,text/plain",
+                ".csv",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ".xlsx"
               ),
-              radioButtons(
-                "testDataSep",
-                "Separator for your file",
-                choices = c(
-                  "Comma(,)" = ",",
-                  "Semicolon(;)" = ";",
-                  "Tab(\\t)" = "\t"
-                ),
-                inline = TRUE,
-                selected = "\t"
+              placeholder = "*.csv/*.TXT or *.xlsx required!"
+            ),
+            radioButtons(
+              "testDataSep",
+              "Separator for your file",
+              choices = c(
+                "Comma(,)" = ",",
+                "Semicolon(;)" = ";",
+                "Tab(\\t)" = "\t"
               ),
-              fluidRow(
-                shinyBS::bsButton("mlsubmitPredict", label = "Predicting", style = "primary",  disabled = TRUE)
-                ,shinyBS::bsTooltip(id = "mlsubmitPredict", title = "click me to predict", placement = "right", trigger = "hover")
-                
+              inline = TRUE,
+              selected = "\t"
+            ),
+            fluidRow(
+              shinyBS::bsButton(
+                "mlsubmitPredict",
+                label = "Predicting",
+                style = "primary",
+                disabled = TRUE
               )
+              ,
+              shinyBS::bsTooltip(
+                id = "mlsubmitPredict",
+                title = "click me to predict",
+                placement = "right",
+                trigger = "hover"
+              )
+              
             )
-          )
-        ),
+          ))
+          ),
         column(
           8,
           h3("Result"),
@@ -906,190 +972,191 @@ navbarPage(
           plotOutput("DMmlPlotforest"),
           rHandsontableOutput("DMmltables")
         )
-      )
-    ))
-  )
+      )))
+    )
+),
+#################################
+# Annotation
+#################################
+tabPanel(
+  "Annotations",
+  "",
+  sidebarPanel(
+    textAreaInput(
+      "proteinlist",
+      "Protein list:",
+      height = 150,
+      placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
     ),
-  #################################
-  # Annotation
-  #################################
-  tabPanel(
-    "Annotations",
-    "",
-    sidebarPanel(
-      textAreaInput(
-        "proteinlist",
-        "Protein list:",
-        height = 150,
-          placeholder = "Example:Q9Y6B6,P35659,O43759,A0A0B4J1V6,E9PAV3"
-      ),
-      actionButton("annosubmit", "Search", class = "btn-primary")
-      #verbatimTextOutput("Annoparameters")
-    ),
-    mainPanel(
-      tabsetPanel(
-        tabPanel(
-          "Result",
-          h4("Summary"),
-          HTML("<p><strong>Input:</strong></p>"),
-          verbatimTextOutput("anno_parameters1")
-        ,fluidRow(column(12, "String"),
-                 hr(),
-                 column(8,
-                        uiOutput("annouistring"))),
-                 hr(),
-        h4('Database'),
-        fluidRow(column(
-          4,
-          HTML(
-            '<ul class=" list-paddingleft-2" style="list-style-type: disc;">
-                <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
-                <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
-                <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
-                <li><p>Go:The Gene Ontology (GO) knowledgebase is the world???s largest source of information on the functions of genes.</p></li>
-                <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
-                <br/></p>'
-          )
+    actionButton("annosubmit", "Search", class = "btn-primary")
+    #verbatimTextOutput("Annoparameters")
+  ),
+  mainPanel(tabsetPanel(
+    tabPanel(
+      "Result",
+      h4("Summary"),
+      HTML("<p><strong>Input:</strong></p>"),
+      verbatimTextOutput("anno_parameters1")
+      ,
+      fluidRow(column(12, "String"),
+               hr(),
+               column(8,
+                      uiOutput("annouistring"))),
+      hr(),
+      h4('Database'),
+      fluidRow(column(
+        4,
+        HTML(
+          '<ul class=" list-paddingleft-2" style="list-style-type: disc;">
+          <li><p>Uniport:The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information.</p></li>
+          <li><p>String-db:Protein-Protein Interaction Networks.</p></li>
+          <li><p>KEGG:KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.</p></li>
+          <li><p>Go:The Gene Ontology (GO) knowledgebase is the world largest source of information on the functions of genes.</p></li>
+          <li><p>Reactome:Reactome is a free, open-source, curated and peer-reviewed pathway database.</p></li></ul><p>
+          <br/></p>'
+        )
         ),
         column(8, rHandsontableOutput("anno_table")))
       )
-      )
-    )
-  ),
- 
-  ################################
-  ### other tools
-  #################################
-  navbarMenu(
-    "Other Tools",
-     tabPanel(
-      "Peptide2Protein",
-      h5("Description:"),
-      HTML("<p>Peptide2Protein provide protein inference function, details are in help page.</p>"),
-      sidebarPanel(
-        fileInput(
-          "PeptideMatrix",
-          "Select your peptide matrix (required):",
-          multiple = TRUE,
-          accept = c("text/csv",
-                     "text/comma-separated-values,text/plain",
-                     ".csv"),
-          placeholder = "*.csv or *.TXT required!"
-        ),
-        checkboxInput("Dpheader", "Header", TRUE),
-        radioButtons(
-          "Dpsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        hr(),
-        
-        fileInput(
-          "TechnicalReplicate",
-          "Select your technical replicate file (optional):",
-          placeholder = "*.csv or *.TXT required!"
-        ),
-        checkboxInput("Dtheader", "Header", FALSE),
-        radioButtons(
-          "Dtsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        
-        hr(),
-        
-        fileInput(
-          "BatchFile",
-          "Select your batch effect file (optional):",
-          placeholder = "*.csv or *.TXT required!"
-        ),
-        checkboxInput("Dbheader", "Header", TRUE),
-        radioButtons(
-          "Dbsep",
-          "Separator for your matrix",
-          choices = c(
-            Comma = ",",
-            Semicolon = ";",
-            Tab = "\t"
-          ),
-          inline = TRUE,
-          selected = "\t"
-        ),
-        
-        hr(),
-        
-        tags$h5("Click to process:"),
-        actionButton("process", "Submit", class = "btn-primary")
-        
-      ),
-      mainPanel(tabsetPanel(
-        tabPanel(
-          "Result",
-          h4("Summary"),
-          tableOutput("Dtable"),
-          h4("Download all protein matrix"),
-          downloadButton("downloadData", "Download", class = "btn-primary")
-          
-        )
-        
       ))
-    ),
-    
-    ########################################################
-    ###  PulseDIA preprocess
-    ########################################################
-    tabPanel(
-      "PulseDIA preprocess",
-      h5("Description:"),
-      HTML("<p>PulseDIA preprocess is ... to be continued.</p>")
-      ,
-      sidebarPanel(
-        
-        fileInput(
-          "pulseDiaFile",
-          "Select your pulseDIA file :",
-          multiple = FALSE,
-          accept = c("text/tsv",
-                     "text/comma-separated-values,text/plain",
-                     ".tsv"),
-          placeholder = "*.tsv or *.TXT required!"
-        ),
-        shinyjs::disabled(
-          actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
-        )
-        
       ),
-      mainPanel(
-        uiOutput("ui")
+
+################################
+### other tools
+#################################
+navbarMenu(
+  "Other Tools",
+  tabPanel(
+    "Peptide2Protein",
+    h5("Description:"),
+    HTML(
+      "<p>Peptide2Protein provide protein inference function, details are in help page.</p>"
+    ),
+    sidebarPanel(
+      fileInput(
+        "PeptideMatrix",
+        "Select your peptide matrix (required):",
+        multiple = TRUE,
+        accept = c("text/csv",
+                   "text/comma-separated-values,text/plain",
+                   ".csv"),
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dpheader", "Header", TRUE),
+      radioButtons(
+        "Dpsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      hr(),
+      
+      fileInput(
+        "TechnicalReplicate",
+        "Select your technical replicate file (optional):",
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dtheader", "Header", FALSE),
+      radioButtons(
+        "Dtsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      hr(),
+      
+      fileInput(
+        "BatchFile",
+        "Select your batch effect file (optional):",
+        placeholder = "*.csv or *.TXT required!"
+      ),
+      checkboxInput("Dbheader", "Header", TRUE),
+      radioButtons(
+        "Dbsep",
+        "Separator for your matrix",
+        choices = c(
+          Comma = ",",
+          Semicolon = ";",
+          Tab = "\t"
+        ),
+        inline = TRUE,
+        selected = "\t"
+      ),
+      
+      hr(),
+      
+      tags$h5("Click to process:"),
+      actionButton("process", "Submit", class = "btn-primary")
+      
+    ),
+    mainPanel(tabsetPanel(
+      tabPanel(
+        "Result",
+        h4("Summary"),
+        tableOutput("Dtable"),
+        h4("Download all protein matrix"),
+        downloadButton("downloadData", "Download", class = "btn-primary")
+        
       )
-    )
+      
+    ))
   ),
-  #################################
-  # help
-  #################################
-  navbarMenu(
-    "Online Help",
-    tabPanel("Test Data",
-             mainPanel(
-               tabsetPanel(tabPanel("Test Data")),
+  
+  ########################################################
+  ###  PulseDIA preprocess
+  ########################################################
+  tabPanel(
+    "PulseDIA preprocess",
+    h5("Description:"),
+    HTML("<p>PulseDIA preprocess is ... to be continued.</p>")
+    ,
+    sidebarPanel(
+      fileInput(
+        "pulseDiaFile",
+        "Select your pulseDIA file :",
+        multiple = FALSE,
+        accept = c("text/tsv",
+                   "text/comma-separated-values,text/plain",
+                   ".tsv"),
+        placeholder = "*.tsv or *.TXT required!"
+      ),
+      shinyjs::disabled(
+        actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
+      )
+      
+    ),
+    mainPanel(uiOutput("ui"))
+  )
+),
+#################################
+# help
+#################################
+tabPanel("Online Help",
+         mainPanel(
+           tabsetPanel(
+             tabPanel(
+               "Test Data",
                h4("Test data files used for peptide to protein inference"),
                hr(),
                h5("The test peptide matrix contains 24 DIA runs."),
                downloadButton("downlaod_test_pep", label = "Get", class = "btn-primary"),
                h5("The test technical replicas file"),
-               downloadButton("downlaod_test_techincal", label = "Get", class = "btn-primary"),
+               downloadButton(
+                 "downlaod_test_techincal",
+                 label = "Get",
+                 class = "btn-primary"
+               ),
                h5("The test batch name file"),
                downloadButton("downlaod_test_batch", label = "Get", class = "btn-primary"),
                hr(),
@@ -1100,52 +1167,58 @@ navbarPage(
                h5("The test sample information file contains 24 DIA samples."),
                downloadButton("downlaod_test_sample", label = "Get", class = "btn-primary"),
                h5("The test individual file contains 21 individuals."),
-               downloadButton("downlaod_test_individual", label = "Get", class = "btn-primary"),
+               downloadButton(
+                 "downlaod_test_individual",
+                 label = "Get",
+                 class = "btn-primary"
+               ),
                hr(),
                h4("Test data files used for batch design"),
                hr(),
-               downloadButton("downlaod_test_batchDesign", label = "Get", class = "btn-primary"),
+               downloadButton(
+                 "downlaod_test_batchDesign",
+                 label = "Get",
+                 class = "btn-primary"
+               ),
                hr(),
                h4("Test data files used for pulseDIA"),
                hr(),
-               downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary")
-             )),
-    tabPanel("Docs",
-             navlistPanel(
-               tabPanel("Experimental Design",
-                        includeMarkdown("help/ExperimentalDesign.md")
-               ),
-               tabPanel("Data Console",
-                        includeMarkdown("help/Dataconsole.md")
-               ),
-               tabPanel("Data Preprocessing",
-                        includeMarkdown("help/DataPreprocessing.md")
-               ),
-               tabPanel("QC",
-                        includeMarkdown("help/ProteomeExpert-QC.md")
-               ),
-               tabPanel("Statistics",
-                        includeMarkdown("help/ProteomeExpert-Statistics.md")
-               ),
-               tabPanel("Data Mining",
-                        "Coming Soon"
-               ),
-               tabPanel("Other Tools",
-                        "Coming Soon"
-               ),
-               fluid = TRUE, widths = c(2,8)
-             )
+               downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary"),
+               hr()
              ),
-    tabPanel("Q&A",
-             mainPanel(
-               tabsetPanel(tabPanel("Q&A"))
-             )),
-    tabPanel("GitHub",
-             mainPanel(
-               h4("Github"),
-               HTML(
-                 "<p><strong>https://github.com/lifeinfo/proteomeExpert</strong></p>"
+             tabPanel(
+               "Docs",
+               hr(),
+               navlistPanel(
+                 tabPanel(
+                   "Experimental Design",
+                   includeMarkdown("help/ExperimentalDesign.md")
+                 ),
+                 tabPanel("Data Console",
+                          includeMarkdown("help/Dataconsole.md")),
+                 tabPanel(
+                   "Data Preprocessing",
+                   includeMarkdown("help/DataPreprocessing.md")
+                 ),
+                 tabPanel("QC",
+                          includeMarkdown("help/ProteomeExpert-QC.md")),
+                 tabPanel(
+                   "Statistics",
+                   includeMarkdown("help/ProteomeExpert-Statistics.md")
+                 ),
+                 tabPanel("Data Mining",
+                          "Coming Soon"),
+                 tabPanel("Other Tools",
+                          "Coming Soon"),
+                 fluid = TRUE,
+                 widths = c(2, 8)
                )
-             ))
-  )
-)
+             ),
+             tabPanel("Q&A",
+                      hr(),
+                      h4("Comming")
+                      )
+           )
+           
+         ))
+      )
