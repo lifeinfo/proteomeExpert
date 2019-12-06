@@ -1,8 +1,6 @@
-#shinythemes::themeSelector(),
-
 navbarPage(
   "ProteomeExpert |",
-  theme = shinytheme("cerulean"),
+  theme = "yeti.min.css",
   windowTitle = "ProteomeExpert",
   #useShinyjs(),
   #################################
@@ -935,21 +933,11 @@ navbarPage(
           h4("Summary"),
           HTML("<p><strong>Input:</strong></p>"),
           verbatimTextOutput("anno_parameters1")
-        ),
-
-        fluidRow(column(12, "String"),
+        ,fluidRow(column(12, "String"),
                  hr(),
                  column(8,
                         uiOutput("annouistring"))),
                  hr(),
-        fluidRow(column(12, "Reactome"),
-                 hr(),
-                 column(
-                   8,
-                   HTML(
-                     "<iframe src=\"https://reactome.org/PathwayBrowser/\" width=\"1200\" height=\"700\"></iframe>"
-                   )
-                 )),
         h4('Database'),
         fluidRow(column(
           4,
@@ -964,6 +952,7 @@ navbarPage(
           )
         ),
         column(8, rHandsontableOutput("anno_table")))
+      )
       )
     )
   ),
@@ -1083,17 +1072,6 @@ navbarPage(
         
       ),
       mainPanel(
-        # conditionalPanel(
-        #   condition = "input.mlmethod == \"XGBoost\"",
-        #   downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary")
-        # ),
-        #dataTableOutput("tabPulseDIAcombined") %>% withSpinner(color="#0dc5c1")
-        # conditionalPanel(
-        #   condition = "input.mlmethod == \"XGBoost\"",
-        #   p("please wait while combining data!")
-        # ),
-        #tags$p("please wait while combining data!"),
-        #downloadButton("downloadPulseDIAResult", label = "Download", class = "btn-primary"),
         uiOutput("ui")
       )
     )
@@ -1132,7 +1110,6 @@ navbarPage(
                hr(),
                downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary")
              )),
-    "----",
     tabPanel("Docs",
              navlistPanel(
                tabPanel("Experimental Design",
@@ -1161,9 +1138,7 @@ navbarPage(
              ),
     tabPanel("Q&A",
              mainPanel(
-               tabsetPanel(tabPanel("Plot"),
-                           tabPanel("Summary"),
-                           tabPanel("Table"))
+               tabsetPanel(tabPanel("Q&A"))
              )),
     tabPanel("GitHub",
              mainPanel(
