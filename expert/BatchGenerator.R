@@ -96,7 +96,7 @@ for(i in 2:batchNumber){
 
 remainder <- dim(samples)[1] %% batchSize
 if(remainder !=0){
-   tmp <- samples[setdiff(samples[,1],rtBatch[,1]),]
+   tmp <- samples[as.character(setdiff(samples[,1],rtBatch[,1])),]
    tmp$batchId <- batchNumber+1
 	rtBatch <- rbind(rtBatch,tmp)
 }
@@ -109,7 +109,7 @@ if(remainder !=0){
 result <- sqldf("select * from rtBatch order by batchId ")
 rownames(samples_ori)<-unlist(samples_ori[1])
 for(h in numeric_headers){
-  result[h]<-samples_ori[unlist(result[1]),h]
+  result[h]<-samples_ori[as.character(result[,1]),h]
 }
 return(result)
 })
