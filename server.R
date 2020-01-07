@@ -101,7 +101,7 @@ function(input, output, session) {
       write.table(
         batch_design_result(),
         file,
-        row.names = T,
+        row.names = F,
         quote = F,
         na = "",
         sep = "\t"

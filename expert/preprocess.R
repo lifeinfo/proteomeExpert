@@ -36,6 +36,7 @@ auto_preprocess <-
       )
     incProgress(1/5,message = "Data read completed! Starting to do normalizaion and precursor selection...")
     pep.data[is.na(pep.data)]<-NA
+    pep.data<-pep.data[complete.cases(pep.data[,1]),]
     pep.data <- pep.data[!grepl("^1/CON", pep.data[, 2], fixed = F), ]
     
     pep.data[pep.data == 0] <- NA
