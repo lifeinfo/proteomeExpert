@@ -1,10 +1,10 @@
 options(stringsAsFactors = F)
 mylm <- function(x, y) {
-  mylr <- lm(y ~ x + 1)
+  mylr <- speedlm(y ~ x + 1, data = data.frame(y, x))
   mylr.summary <- summary(mylr)
   p=10
   if(nrow(mylr.summary$coefficients)>1)
-    p = mylr.summary$coefficients[2, "Pr(>|t|)"]
+    p = mylr.summary$coefficients[2, "p.value"]
   
   return(
     list(

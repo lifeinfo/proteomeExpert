@@ -37,7 +37,11 @@ library(sva)
 ###start featrue selection
 library(glmnet)
 library(doParallel)
+library(parallel)
 registerDoParallel(cores = 5)
+library(speedglm)
+library(biglm)
+
 library(foreach)
 library(pROC)
 library(pheatmap)
