@@ -426,9 +426,9 @@ navbarPage(
       ),
       tabPanel(
         "Pearson Correlation",
-        h4("Summary"),
-        h5("Description:"),
-        HTML("<p>None</p>"),
+        h5("Description"),
+        h5("The correlation between two variables reflects the degree to which the variables are related."),
+        #HTML("<p>None</p>"),
         hr(),
         plotOutput("Qpccplot", height = "800px"),
         #column(6, plotOutput("Qpccplot")),

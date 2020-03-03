@@ -112,7 +112,7 @@ function(input, output, session) {
   # Power Analysis
   #################################
   observeEvent(input$powerb, {
-    output$powerSize <- renderPrint({
+    output$powerSize <- renderText({
       mean_null = as.numeric(input$Pmu)
       mean_alt = as.numeric(input$Pmu0)
       sd = as.numeric(input$Psd)
@@ -121,13 +121,10 @@ function(input, output, session) {
       zb = qnorm(1 - as.numeric(input$Pbeta))
       proN = 2 * (sd * (z1 + zb) / (mean_null - mean_alt)) ^ 2
       
-      print(paste0("Number of proteins: ", input$Pm))
-      print(paste0("Alpha: ", input$Palpha))
-      print(paste0("Power: ", 1 - as.numeric(input$Pbeta)))
-      print(paste0(
-        "Sample size required for cases (controls) is: ",
-        ceiling(proN)
-      ))
+      pa.res<-paste0("Number of proteins: ", input$Pm,"\n","Alpha: ", input$Palpha,"\n","Power: ",
+                     1 - as.numeric(input$Pbeta),"\n","Sample size required for cases (controls) is: ",
+                     ceiling(proN))
+
     })
     
     output$powerPlot <- renderPlotly({
@@ -646,7 +643,17 @@ function(input, output, session) {
         ),
         checkboxInput("Volcano_check", "Volcano Plot", TRUE),
         checkboxInput("Violin_check", "Violin Plot", TRUE),
+        hr(),
         checkboxInput("radarmap", "Radar Map", TRUE),
+        conditionalPanel(
+          condition = "input.radarmap == true",
+          selectInput(
+            'rader_var',
+            'Select proteins for plot:',
+            colnames(readProteinM()),
+            multiple = T,
+            selectize = TRUE
+          )),
         hr(),
         tags$h5("Click to process:"),
         actionButton("stat_do", "Submit", class = "btn-primary")
@@ -699,30 +706,7 @@ function(input, output, session) {
                      NULL
                    })
                  }
-                 #################################
-                 # Radar
-                 #################################
-                 # output$DMradartable <- renderRHandsontable({
-                 #   if (input$radarmap) {
-                 #     if (!is.null(readProteinM()))
-                 #     {
-                 #       rhandsontable(head(trainData, n = 20L))
-                 #     }
-                 #   }
-                 # })
-                 if (input$radarmap) {
-                   output$DMradarparameters <- renderCanvasXpress({
-                     if (!is.null(get_stat_prot_anno))        {
-                       drawradar(get_stat_prot_anno$data)
-                     }
-                     
-                   })
-                 }
-                 else  {
-                   output$DMradarparameters <- renderCanvasXpress({
-                     NULL
-                   })
-                 }
+
                  
                  
                },
@@ -741,7 +725,17 @@ function(input, output, session) {
       checkboxInput("ttest_check", "t test", TRUE),
       checkboxInput("Volcano_check", "Volcano Plot", FALSE),
       checkboxInput("Violin_check", "Violin Plot", TRUE),
+      hr(),
       checkboxInput("radarmap", "Radar Map", FALSE),
+      conditionalPanel(
+        condition = "input.radarmap == true",
+        selectInput(
+          'rader_var',
+          'Select proteins:',
+          readProteinM()[,1],
+          multiple = T,
+          selectize = TRUE
+        )),
       hr(),
       tags$h5("Click to process:"),
       actionButton("stat_do", "Submit", class = "btn-primary")
@@ -829,27 +823,27 @@ function(input, output, session) {
         NULL
       })
     }
+
     #################################
     # Radar
     #################################
-    # output$DMradartable <- renderRHandsontable({
-    #   if (input$radarmap) {
-    #     if (!is.null(readProteinM()))
-    #     {
-    #       rhandsontable(head(trainData, n = 20L))
-    #     }
-    #   }
-    # })
+    
     if (input$radarmap) {
-       output$DMradarparameters <- renderCanvasXpress({
-     
-         if (!is.null(get_stat_prot_anno))        {
-          drawradar(get_stat_prot_anno$data)
+      output$DMradarparameters <- renderCanvasXpress({
+        if (!is.null(get_stat_prot_anno))        {
+          if(is.null(input$rader_var)){
+            drawradar(get_stat_prot_anno$data)
+          }
+          else {drawradar(get_stat_prot_anno$data[input$rader_var,])}
         }
-     
-       })
+        
+      })
     }
-    else  {output$DMradarparameters <- renderCanvasXpress({NULL})}
+    else  {
+      output$DMradarparameters <- renderCanvasXpress({
+        NULL
+      })
+    }
 
 
   }, ignoreNULL = TRUE, ignoreInit = T)
