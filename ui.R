@@ -561,6 +561,7 @@ navbarPage(
         uiOutput("volcano_ttest_groups_ui"),
         uiOutput("volcano_ttest_do_ui"),
         plotOutput("volcano_plot"),
+        #plotlyOutput("volcano_plot"),
         rHandsontableOutput("volcano_ttest_out"),
         uiOutput("volcano_ttest_download_ui")
       ),
@@ -712,7 +713,7 @@ navbarPage(
           column(6, rHandsontableOutput("Qpcatable"))
           ),
         tabPanel(
-          "T-SNE",
+          "t-SNE",
           h4("Summary"),
           h5("Description:"),
           HTML(
@@ -727,7 +728,7 @@ navbarPage(
           column(6, rHandsontableOutput("Qtsnetable"))
         ),
         tabPanel(
-          "Umap",
+          "UMAP",
           h4("Summary"),
           h5("Description:"),
           HTML(

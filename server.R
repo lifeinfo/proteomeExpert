@@ -630,36 +630,6 @@ function(input, output, session) {
   
   ###############################################################
   ##statistics
-  output$STprot_anno_Ui <-
-    renderUI({
-      anno_name <<- colnames(getAnnoTable())
-      tagList(
-        selectInput(
-          'STanno',
-          'Select type',
-          anno_name,
-          multiple = F,
-          selectize = TRUE
-        ),
-        checkboxInput("Volcano_check", "Volcano Plot", TRUE),
-        checkboxInput("Violin_check", "Violin Plot", TRUE),
-        hr(),
-        checkboxInput("radarmap", "Radar Map", TRUE),
-        conditionalPanel(
-          condition = "input.radarmap == true",
-          selectInput(
-            'rader_var',
-            'Select proteins for plot:',
-            colnames(readProteinM()),
-            multiple = T,
-            selectize = TRUE
-          )),
-        hr(),
-        tags$h5("Click to process:"),
-        actionButton("stat_do", "Submit", class = "btn-primary")
-      )
-    })
-  
   observeEvent(input$stat_do,
                {
                  stat_label <- input$STanno
@@ -695,17 +665,7 @@ function(input, output, session) {
                      downloadButton("downloadttest", label = "Download", class = "btn-primary")
                    })
                  ###########################
-                 #violin
-                 if (input$Violin_check) {
-                   output$DMviolin <- renderPlotly({
-                     ggplotly(drawviolin_cv(get_stat_prot_anno))
-                   })
-                 }
-                 else {
-                   output$DMviolin <- renderPlotly({
-                     NULL
-                   })
-                 }
+
 
                  
                  
@@ -912,6 +872,9 @@ function(input, output, session) {
     output$volcano_plot<-renderPlot({
       myVolcano(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
     })
+    # output$volcano_plot<-renderPlotly({
+    #   ggplotly(myVolcano(ttest_res,input$volcano_adjp_threshold,input$volcano_fc))
+    # })
     volcano_data<-myVolcanoData(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
     print(volcano_data)
     output$volcano_ttest_out <- renderRHandsontable({
@@ -995,10 +958,7 @@ function(input, output, session) {
       sample_names <- colnames(readProteinM())[-1]
       qc_label <-
         as.vector(getAnnoTable()[sample_names, qc_label1])
-    } else{
-      return()
     }
-    
     data <- readProteinM()
     col_name <- colnames(data)
     row_name <- as.matrix(data[, 1])
@@ -1019,6 +979,7 @@ function(input, output, session) {
     #################################
     # Heatmap
     #################################
+    #print(qc_label)
     withProgress(message = 'Calculation heatmap',
                  detail = 'This may take a while...',
                  value = 0,
