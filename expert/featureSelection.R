@@ -151,7 +151,7 @@ fsga<-cmpfun(function(label_protM){
                maxiter = 50, # total runs or generations
                monitor=FALSE, # plot the result at each iteration
                keepBest = TRUE, # keep the best solution at the end
-               parallel = T, # allow parallel procesing
+               parallel = F, # allow parallel procesing
                seed=1 # for reproducibility purposes
     )
   }
