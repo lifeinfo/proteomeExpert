@@ -18,7 +18,7 @@ function(input, output, session) {
                       "QCLabel",
                       choices = c("None", anno_name),
                       selected = NULL)
-
+    
   })
   ####statistics t_test
   # observeEvent(input$stat_do,{
@@ -124,7 +124,7 @@ function(input, output, session) {
       pa.res<-paste0("Number of proteins: ", input$Pm,"\n","Alpha: ", input$Palpha,"\n","Power: ",
                      1 - as.numeric(input$Pbeta),"\n","Sample size required for cases (controls) is: ",
                      ceiling(proN))
-
+      
     })
     
     output$powerPlot <- renderPlotly({
@@ -446,7 +446,7 @@ function(input, output, session) {
   #################################
   # missing value explore
   #################################
-
+  
   output$missingPlot <-
     renderPlot({
       if (input$MissingValueExplore_check & input$QC) {
@@ -517,7 +517,7 @@ function(input, output, session) {
         }
         
       }
-        
+      
     })
   ### for column annotation
   output$sampleUi <-
@@ -603,7 +603,7 @@ function(input, output, session) {
   
   individualResInput <-
     eventReactive(input$individual_info_annotation, {
-        individualInfoInput()
+      individualInfoInput()
     })
   output$individualRes <-
     renderText({
@@ -665,8 +665,8 @@ function(input, output, session) {
                      downloadButton("downloadttest", label = "Download", class = "btn-primary")
                    })
                  ###########################
-
-
+                 
+                 
                  
                  
                },
@@ -724,28 +724,28 @@ function(input, output, session) {
     if(input$ttest_check){
       label_vector<-unique(stat_label)
       output$ttest_groups_ui<-renderUI({
-       tagList(
-       selectInput(
-        'ttest_group1',
-        'select the first group',
-        label_vector,
-        multiple = F,
-        selectize = TRUE
-       ),
-      selectInput(
-        'ttest_group2',
-        'select the second group',
-        label_vector,
-        multiple = F,
-        selectize = TRUE
-      )
-      )
-     })
-     output$ttest_do_ui<-renderUI({
-       actionButton("ttest_do", "Submit", class = "btn-primary")
-    })
+        tagList(
+          selectInput(
+            'ttest_group1',
+            'select the first group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          ),
+          selectInput(
+            'ttest_group2',
+            'select the second group',
+            label_vector,
+            multiple = F,
+            selectize = TRUE
+          )
+        )
+      })
+      output$ttest_do_ui<-renderUI({
+        actionButton("ttest_do", "Submit", class = "btn-primary")
+      })
     }
-   
+    
     #volcano plot
     if(input$Volcano_check){
       label_vector<-unique(stat_label)
@@ -783,7 +783,7 @@ function(input, output, session) {
         NULL
       })
     }
-
+    
     #################################
     # Radar
     #################################
@@ -804,8 +804,8 @@ function(input, output, session) {
         NULL
       })
     }
-
-
+    
+    
   }, ignoreNULL = TRUE, ignoreInit = T)
   ##ttest
   observeEvent(input$ttest_do,{
@@ -828,7 +828,7 @@ function(input, output, session) {
                           paired=input$paried,var.equal=input$var.equal,conf.level=input$conf.level)
     ttest_res<-ttest_res[,-1]
     output$ttest_out <- renderRHandsontable({
-          rhandsontable(ttest_res,height = 300,width = 300)
+      rhandsontable(ttest_res,height = 300,width = 300)
     })
     
     output$ttest_download_ui<-renderUI({
@@ -899,7 +899,7 @@ function(input, output, session) {
       }
     )
   })
-
+  
   ####################################################
   #data mining
   ####################################################
@@ -951,52 +951,56 @@ function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 1/10,
                  {
-          incProgress(2 / 10)
-    qc_label1 <- input$DManno
-    if (!is.null(qc_label1) &
-        qc_label1 != "None") {
-      sample_names <- colnames(readProteinM())[-1]
-      qc_label <-
-        as.vector(getAnnoTable()[sample_names, qc_label1])
-    }
-    data <- readProteinM()
-    col_name <- colnames(data)
-    row_name <- as.matrix(data[, 1])
-    row_name <- as.vector(row_name[, 1])
-    data <-
-      data.matrix(data)
-    trainData <-
-      data[, -1]
-    colnames(trainData) <-
-      col_name[2:length(col_name)]
-    row.names(trainData) <- row_name
-    if(input$DMclusertingLog!="none" & !is.null(input$DMclusertingLog)){
-      trainData<-log(trainData,as.numeric(input$DMclusertingLog))
-    }
-    trainData[is.na(trainData)] <-0
-    incProgress(9 / 10, message = "Ready to finish!")
+                   incProgress(2 / 10)
+                   qc_label1 <- input$DManno
+                   if (!is.null(qc_label1) &
+                       qc_label1 != "None") {
+                     sample_names <- colnames(readProteinM())[-1]
+                     qc_label <-
+                       as.vector(getAnnoTable()[sample_names, qc_label1])
+                   }
+                   data <- readProteinM()
+                   col_name <- colnames(data)
+                   row_name <- as.matrix(data[, 1])
+                   row_name <- as.vector(row_name[, 1])
+                   data <-
+                     data.matrix(data)
+                   trainData <-
+                     data[, -1]
+                   colnames(trainData) <-
+                     col_name[2:length(col_name)]
+                   row.names(trainData) <- row_name
+                   if(input$DMclusertingLog!="none" & !is.null(input$DMclusertingLog)){
+                     trainData<-log(trainData,as.numeric(input$DMclusertingLog))
+                   }
+                   trainData[is.na(trainData)] <-0
+                   incProgress(9 / 10, message = "Ready to finish!")
                  })
     #################################
     # Heatmap
     #################################
     #print(qc_label)
-    withProgress(message = 'Calculation heatmap',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   incProgress(1 / 10)
-    output$DMheatmapparameters <-
-      renderPlot({
-        if (input$dmheatmap) {
-          if (!is.null(readProteinM()))
-          {
-            print(drawheatmap(trainData, qc_label))
-          }
-        }
-        
-      })
-    incProgress(9 / 10, message = "Heatmap ready to finish!")
-                 })
+
+                   output$DMheatmapparameters <-
+                     renderPlot({
+                       if (input$dmheatmap) {
+                         if (!is.null(readProteinM()))
+                         {    withProgress(message = 'Calculation heatmap',
+                                           detail = 'This may take a while...',
+                                           value = 0,
+                                           {
+                                             incProgress(1 / 10)
+                           p<-drawheatmap(trainData, qc_label)
+                           incProgress(9 / 10, message = "Heatmap ready to finish!")
+                                           })
+                           print(p)
+                           
+                         }
+                       }
+
+                     })
+                   
+
     #################################
     # PCA
     #################################
@@ -1008,23 +1012,26 @@ function(input, output, session) {
     #     }
     #   }
     # })
-    withProgress(message = 'Calculation PCA',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   incProgress(1 / 10)
-    output$Qpcaplot <-
-      renderPlotly({
-        if (input$qcPca) {
-          if (!is.null(trainData))
-          {
-            p <- drawPCA(trainData, qc_label)
-            ggplotly(p) %>% config(displaylogo = F)
-          }
-        }
-      })
-    incProgress(9 / 10, message = "PCA ready to finish!")
-  })
+
+                   output$Qpcaplot <-
+                     renderPlotly({
+                       if (input$qcPca) {
+                         if (!is.null(trainData))
+                         {    withProgress(message = 'Calculation PCA',
+                                           detail = 'This may take a while...',
+                                           value = 0,
+                                           {
+                                             incProgress(1 / 10)
+                           p <- drawPCA(trainData, qc_label)
+                           incProgress(9 / 10, message = "PCA ready to finish!")
+                                           })
+                           ggplotly(p) %>% config(displaylogo = F)
+                           
+                           }
+                       }
+                       
+                     })
+
     #################################
     # T-sne
     #################################
@@ -1036,24 +1043,25 @@ function(input, output, session) {
     #     }
     #   }
     # })
-    withProgress(message = 'Calculation t-sne',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   incProgress(1 / 10)
-    output$Qtsneplot <-
-      renderPlotly({
-        if (input$qctsne) {
-          if (!is.null(trainData))
-          {
-            p <- drawTSNE(trainData, qc_label)
-            ggplotly(p) %>% config(displaylogo = F)
-          }
-        }
-        
-      })
-    incProgress(9 / 10, message = "t-sne ready to finish!")
-                 })
+
+                   output$Qtsneplot <-
+                     renderPlotly({
+                       if (input$qctsne) {
+                         if (!is.null(trainData))
+                         {    withProgress(message = 'Calculation t-sne',
+                                           detail = 'This may take a while...',
+                                           value = 0,
+                                           {
+                                             incProgress(1 / 10)
+                           p <- drawTSNE(trainData, qc_label)
+                           incProgress(9 / 10, message = "t-sne ready to finish!")
+                                           })
+                           ggplotly(p) %>% config(displaylogo = F)
+                         }
+                       }
+                       
+                     })
+
     #################################
     # umap
     #################################
@@ -1065,25 +1073,26 @@ function(input, output, session) {
     #     }
     #   }
     # })
-    withProgress(message = 'Calculation umap',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   incProgress(1 / 10)
-    output$Qumapplot <-
-      renderPlotly({
-        if (input$qcUmap) {
-          if (!is.null(trainData))
-          {
-            p <- drawUMAP(trainData, qc_label)
-            ggplotly(p) %>% config(displaylogo = F)
-          }
-        }
-      })
-    incProgress(9 / 10, message = "umap ready to finish!")
-    
+
+                   output$Qumapplot <-
+                     renderPlotly({
+                       if (input$qcUmap) {
+                         if (!is.null(trainData))
+                         {    withProgress(message = 'Calculation umap',
+                                           detail = 'This may take a while...',
+                                           value = 0,
+                                           {
+                                             incProgress(1 / 10)
+                           p <- drawUMAP(trainData, qc_label)
+                           incProgress(9 / 10, message = "umap ready to finish!")
+                           
+                                           })
+                           ggplotly(p) %>% config(displaylogo = F)
+                         }
+                       }
+                     })
+
   })
-})
   #################################
   # ML
   #################################
@@ -1203,10 +1212,10 @@ function(input, output, session) {
             cat("\n error rate: " , ndiff, "/",
                 nrows, " = ", ndiff/nrows, sep = "")
           })
-          # output$DMmltables <-
-          # renderRHandsontable({
-          #   rhandsontable(head(data, n = 20L))
-          # })
+        # output$DMmltables <-
+        # renderRHandsontable({
+        #   rhandsontable(head(data, n = 20L))
+        # })
       }
     } else if (input$mlmethod == "Random Forest")
     {
@@ -1259,8 +1268,8 @@ function(input, output, session) {
             # layout(matrix(c(1,1), nrow = 2, ncol=1),
             #        respect = FALSE)
             # layout.show(n=2)
-              varImpPlot(model.forest, main = "variable importance")
-              #plot(model.forest)
+            varImpPlot(model.forest, main = "variable importance")
+            #plot(model.forest)
             # plot(
             #   ran_roc,
             #   print.auc = TRUE,
@@ -1276,15 +1285,15 @@ function(input, output, session) {
         
         output$DMmloutputText <-
           renderPrint({
-                  # imp <- importance(model.forest)
-                  # imp <- round(imp, digits = 3)
-                  # imp <- imp[, 1:3]
-                  # impvar <- imp[order(imp[, 3], decreasing=TRUE),]
-                  # if(length(impvar > 50)){
-                  #   print(head(impvar, n=50L))
-                  # }else{
-                  #   print(impvar)
-                  # }
+            # imp <- importance(model.forest)
+            # imp <- round(imp, digits = 3)
+            # imp <- imp[, 1:3]
+            # impvar <- imp[order(imp[, 3], decreasing=TRUE),]
+            # if(length(impvar > 50)){
+            #   print(head(impvar, n=50L))
+            # }else{
+            #   print(impvar)
+            # }
             print(model.forest)
             #
             #Verification
@@ -1423,7 +1432,7 @@ function(input, output, session) {
           cat("predict result:\n")
           print(pre.forest)
         })
-        
+      
     }else if(input$mlmethod == "XGBoost"){
       result <- xgboost_classfier_predict(model.xgboost_classifier, testdata2)
       result <- formatXgbResult(result, trainYy, sampleNames2)
@@ -1448,48 +1457,48 @@ function(input, output, session) {
                                  value = 0,
                                  {
                                    incProgress(1 / 15)
-                    if (!is.null(isolate(input$DMprotM))) {
-                      if (isolate(input$DMprotM) == "uploadedProtMatrix") {
-                        protM <- isolate(readProteinM())
-                      }
-                      #if(length(isolate(input$DManno))==1){
-                      label = isolate(input$DManno)
-                      #}
-                      rownames(protM) <-
-                        protM[, 1]
-                      protM <-
-                        protM[, -1]
-                      protM <-
-                        t(protM)
-                      sample_names <-
-                        rownames(protM)
-                      label_temp <-
-                        as.vector(getAnnoTable()[sample_names, label])
-                      
-                      labeled_protM <-
-                        cbind(label = label_temp, protM, stringsAsFactors = FALSE)
-                      fs_features <-
-                        colnames(protM)
-                      if (!is.null(input$featureSel_filter))
-                        fs_features <-
-                        featureFilter(labeled_protM, !is.na(match(
-                          c("nearZeoVar", "high_correlation"),
-                          input$featureSel_filter
-                        )), input$fs_missing_ratio)
-                      # if('random_forest' %in% input$featureSel_algorithm)
-                      #   use_rf=TRUE
-                      # if('lasso' %in% input$featureSel_algorithm)
-                      #   use_lasso = TRUE
-                      #nfeatures<-input$feature_num
-                      print(input$featureSel_algorithm)
-                      incProgress(2 / 15, message = "Initial feature selection!")
-                      if (!is.null(input$featureSel_algorithm))
-                        fs_features <-
-                        featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
-                      
-                      return(fs_features)
-                    }
-                    incProgress(14 / 15, message = "Ready to finish!")
+                                   if (!is.null(isolate(input$DMprotM))) {
+                                     if (isolate(input$DMprotM) == "uploadedProtMatrix") {
+                                       protM <- isolate(readProteinM())
+                                     }
+                                     #if(length(isolate(input$DManno))==1){
+                                     label = isolate(input$DManno)
+                                     #}
+                                     rownames(protM) <-
+                                       protM[, 1]
+                                     protM <-
+                                       protM[, -1]
+                                     protM <-
+                                       t(protM)
+                                     sample_names <-
+                                       rownames(protM)
+                                     label_temp <-
+                                       as.vector(getAnnoTable()[sample_names, label])
+                                     
+                                     labeled_protM <-
+                                       cbind(label = label_temp, protM, stringsAsFactors = FALSE)
+                                     fs_features <-
+                                       colnames(protM)
+                                     if (!is.null(input$featureSel_filter))
+                                       fs_features <-
+                                       featureFilter(labeled_protM, !is.na(match(
+                                         c("nearZeoVar", "high_correlation"),
+                                         input$featureSel_filter
+                                       )), input$fs_missing_ratio)
+                                     # if('random_forest' %in% input$featureSel_algorithm)
+                                     #   use_rf=TRUE
+                                     # if('lasso' %in% input$featureSel_algorithm)
+                                     #   use_lasso = TRUE
+                                     #nfeatures<-input$feature_num
+                                     print(input$featureSel_algorithm)
+                                     incProgress(2 / 15, message = "Initial feature selection!")
+                                     if (!is.null(input$featureSel_algorithm))
+                                       fs_features <-
+                                       featureSel(labeled_protM[, c("label", fs_features)], input$featureSel_algorithm)
+                                     
+                                     return(fs_features)
+                                   }
+                                   incProgress(14 / 15, message = "Ready to finish!")
                                  })
                   },
                   ignoreNULL = T,
@@ -1520,23 +1529,23 @@ function(input, output, session) {
                    value = 0,
                    {
                      incProgress(1 / 15)
-      #DT::datatable({
-      print("Feature sel print")
-      features<-feature_sel_prot()$features
-      gene<-c()
-      desctription<-c()
-      i=0
-      for(f in features){i=i+1
-        incProgress(1/15+(11/15)*(i/length(features)), message = "Ready to finish!")
-        gene_desc<-getAnnoFromUniprot(f)
-        gene<-c(gene,gene_desc[1])
-        desctription<-c(desctription,gene_desc[2])
-      }
-      features<-linkUniprot(features)
-      incProgress(14 / 15, message = "Ready to finish!")
+                     #DT::datatable({
+                     print("Feature sel print")
+                     features<-feature_sel_prot()$features
+                     gene<-c()
+                     desctription<-c()
+                     i=0
+                     for(f in features){i=i+1
+                     incProgress(1/15+(11/15)*(i/length(features)), message = "Ready to finish!")
+                     gene_desc<-getAnnoFromUniprot(f)
+                     gene<-c(gene,gene_desc[1])
+                     desctription<-c(desctription,gene_desc[2])
+                     }
+                     features<-linkUniprot(features)
+                     incProgress(14 / 15, message = "Ready to finish!")
                    })
       data.frame(Proteins=features,Gene=gene,Desctription=desctription)
-    #})
+      #})
     }, escape = FALSE)
   #####download
   output$downloadfeatureSelData <-
