@@ -87,6 +87,14 @@ auto_preprocess <-
                    header = theader,
                    sep = tsep,
                    check.names = F)
+      if(nrow(anno)!=ncol(pep.data.log2.qn))
+        return("Number of samples do not match in peptide file and technical replicate file!")
+      else if(length(intersect(unlist(anno[,1]),colnames(pep.data.log2.qn)))!=nrow(batch)){
+        return("Samples do not match in peptide file and technical replicate file!")
+      }
+      else{
+        
+      }
       colnames(anno) <- c("V1", "V2")
       rownames(anno) <- anno$V1
       anno <- anno[colnames(pep.data.log2.qn), ]
@@ -126,8 +134,14 @@ auto_preprocess <-
       #print(batchf)
       
       batch <- read.table(batchf, header = bheader, sep = bsep)
-      #head(batch)
-      data.tech.rep <- mycombat(data.tech.rep, batch)
+      if(nrow(batch)!=ncol(data.tech.rep)-2)
+        return("Number of samples do not match in peptide file and batch file!")
+      else if(length(intersect(unlist(batch[,1]),colnames(data.tech.rep[,-c(1:2)])))!=nrow(batch)){
+        return("Samples do not match in peptide file and batch file!")
+      }
+      else
+        data.tech.rep <- mycombat(data.tech.rep, batch)
+    
     }
     
     ###order

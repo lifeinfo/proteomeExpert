@@ -126,8 +126,84 @@ navbarPage(
   #################################
   # Data console
   #################################
-  tabPanel(
+  navbarMenu(
     "Data Console",
+    tabPanel(
+      "Two files",
+      "",
+      h4("Description:"),
+      HTML("<p></p>"),
+      sidebarPanel(
+        tags$h4("Upload Data:"),
+        hr(),
+        
+        fileInput(
+          "protein_matrix2",
+          "Select your protein file( if file is xlsx format ,protein data sheet must be the first sheet):",
+          multiple = F,
+          accept = c(
+            "text/csv",
+            "text/comma-separated-values,text/plain",
+            ".csv",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            ".xlsx"
+          ),
+          placeholder = "*.csv/*.TXT or *.xlsx file required!"
+        ),
+        radioButtons(
+          "DCprotmSep",
+          "Separator for your file",
+          choices = c(
+            "Comma(,)" = ",",
+            "Semicolon(;)" = ";",
+            "Tab(\\t)" = "\t"
+          ),
+          inline = TRUE,
+          selected = "\t"
+        ),
+        hr(),
+        
+        fileInput(
+          "anno_info",
+          "Select your sample annotation file (if file is xlsx format ,sample data sheet must be the first sheet):",
+          multiple = F,
+          accept = c(
+            "text/csv",
+            "text/comma-separated-values,text/plain",
+            ".csv",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            ".xlsx"
+          ),
+          placeholder = "*.csv/*.TXT or *.xlsx file required!"
+        ),
+        radioButtons(
+          "DCsampleSep2",
+          "Separator for your file",
+          choices = c(
+            Comma = ",",
+            Semicolon = ";",
+            Tab = "\t"
+          ),
+          inline = TRUE,
+          selected = ","
+        ),
+        hr()
+        #actionButton("DC_anno", "Submit", class = "btn-primary")
+        
+        
+      ),
+      mainPanel(
+          h4("Data preview"),
+          
+          h5("Protien matrix preview"),
+          tableOutput("prot_matrix2_preview"),
+          hr(),
+          h5("Sample annotation display"),
+          DT::dataTableOutput("DC_annoShow")
+      )),
+    ######################################
+  tabPanel(
+    "Three files",
     "",
     h4("Description:"),
     HTML("<p></p>"),
@@ -253,6 +329,7 @@ navbarPage(
         
       )))
     )
+  )
   ),
   
   #################################
@@ -430,14 +507,14 @@ navbarPage(
         h5("The correlation between two variables reflects the degree to which the variables are related."),
         #HTML("<p>None</p>"),
         hr(),
-        plotOutput("Qpccplot", height = "800px"),
+        plotOutput("Qpccplot", height = "800px")
         #column(6, plotOutput("Qpccplot")),
         #column(6, plotOutput("Qsmoothplot")),
-        hr(),
-        h4("Data:"),
-        column(12, rHandsontableOutput("Qpcctable")),
-        br(),
-        h4("Note:")
+        #hr(),
+        #h4("Data:"),
+        #column(12, rHandsontableOutput("Qpcctable")),
+        #br(),
+        #h4("Note:")
       )
     ))
   ),

@@ -1,7 +1,35 @@
+####global variable/functions
 ###label update
 function(input, output, session) {
   observe({
-    anno_name <- colnames(getAnnoTable())
+      print('observe update')
+       anno_name <- colnames(getAnnoTable())
+
+      
+    updateSelectInput(session,
+                      "DManno2",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "DPTR",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "DPBR",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+    updateSelectInput(session,
+                      "QCLabel",
+                      choices = c("None", anno_name),
+                      selected = NULL)
+
+  })
+  observe({
+    print('observe update2')
+    anno_name <- colnames(getAnnoTable2())
+      getAnnoTable<-getAnnoTable2
+      readProteinM<-readProteinM2
+
     updateSelectInput(session,
                       "DManno2",
                       choices = c("None", anno_name),
@@ -20,15 +48,26 @@ function(input, output, session) {
                       selected = NULL)
     
   })
-  ####statistics t_test
-  # observeEvent(input$stat_do,{
-  #   anno_vector<-unique(getAnnoTable()[,input$STanno])
-  #   
-  #   updateSelectInput(session,
-  #                       "label_vector",
-  #                       choices = c(anno_vector),
-  #                       selected = NULL)
-  # })
+  
+  setDataAnno<-function(readProt3,readProt2,readAnno3,readAnno2){
+    if (class(readProt3) != "data.frame"){
+      data0 <- readProt2
+      anno0<-readAnno2
+    }
+    else{
+      data0 <-readProt3
+      anno0<-readAnno3
+    }
+    return(list(protM=data0,anno=anno0))
+  }
+  
+  dataAnno <- reactive({
+    setDataAnno(readProteinM(),
+                           readProteinM2(),
+                           getAnnoTable(),
+                           getAnnoTable2())
+  })
+  ####end global
   #################################
   # batch Design
   #################################
@@ -172,33 +211,38 @@ function(input, output, session) {
   # data preprocess
   #################################
   DPdataprecessInput <- eventReactive(input$DPDo, {
+    withProgress(message = 'Checking in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   incProgress(1/10)
+          data0 <- dataAnno()$protM
+          anno0 <- dataAnno()$anno
     batch_factor <- input$DManno2
     if (!is.null(batch_factor) & batch_factor != "None") {
-      sample_names <- colnames(readProteinM())[-1]
+      sample_names <- colnames(data0)[-1]
       batch_factor <-
-        as.vector(getAnnoTable()[sample_names, batch_factor])
+        as.vector(anno0[sample_names, batch_factor])
     }
     else
       batch_factor = NULL
     technical_col <- input$DPTR
     if (!is.null(technical_col) & technical_col != "None") {
-      sample_names <- colnames(readProteinM())[-1]
+      sample_names <- colnames(data0)[-1]
       technical_col <-
-        as.vector(getAnnoTable()[sample_names, technical_col])
+        as.vector(anno0[sample_names, technical_col])
     }
     else
       technical_col = NULL
     biological_col <- input$DPBR
     if (!is.null(biological_col) & biological_col != "None") {
-      sample_names <- colnames(readProteinM())[-1]
+      sample_names <- colnames(data0)[-1]
       biological_col <-
-        as.vector(getAnnoTable()[sample_names, biological_col])
+        as.vector(anno0[sample_names, biological_col])
     }
     else
       biological_col = NULL
-    
-    dataPreprocess(
-      readProteinM(),
+    incProgress(2/10,"Preprocessing now")
+    preProcessedData<-dataPreprocess(
+      data0,
       input$DPmissingV,
       input$DPLog,
       input$DPnormaliztion,
@@ -208,6 +252,9 @@ function(input, output, session) {
       biological_col,
       input$DPBiologicalRep
     )
+    incProgress(9/10,"Prepare to return")
+                 })
+    preProcessedData
   })
   ####download data
   output$preprocessedprotM <- DT::renderDataTable(DT::datatable({
@@ -237,18 +284,19 @@ function(input, output, session) {
     if (is.null(input$PeptideMatrix))
       "Please upload your files"
     else{
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...',
+                   value = 0,
+                   {
       errors<-protein_file_check(input$PeptideMatrix$datapath,input$Dpsep,input$Dpheader)
       if(!is.null(errors)){
         showModal(modalDialog(
           title = "Important message",errors))
         stop()
       }
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...',
-                   value = 0,
-                   {
+
                      incProgress(1 / 10)
-                     prot_matrix <- auto_preprocess(
+                     prot_matrix <- try(auto_preprocess(
                        isolate(input$PeptideMatrix$datapath),
                        isolate(input$TechnicalReplicate$datapath),
                        isolate(input$BatchFile$datapath),
@@ -258,7 +306,15 @@ function(input, output, session) {
                        theader = isolate(input$Dtheader),
                        bsep = isolate(input$Dbsep),
                        bheader = isolate(input$Dbheader)
-                     )
+                     ),silent = T)
+                     if("try-error" %in% class(prot_matrix)){
+                       showModal(modalDialog(
+                         title = "An error occur",
+                         prot_matrix[1],
+                         easyClose = TRUE
+                       ))
+                       stop("Error")
+                     }
                      incProgress(9 / 10, message = "Ready to finish!")
                    })
       prot_matrix
@@ -391,8 +447,18 @@ function(input, output, session) {
   
   observeEvent(input$QC, {
     qc_label <- input$QCLabel
-    
-    data <- readProteinM()
+    # if (class(readProteinM()) != "data.frame"){
+    #   data0 <- readProteinM2()
+    #   anno0<-getAnnoTable2()
+    # }
+    #   
+    # else{
+    #   data0 <- readProteinM()
+    #   anno0<-getAnnoTable()
+    # }
+    #dataAnno<-setDataAnno(readProteinM(),readProteinM2(),getAnnoTable(),getAnnoTable2())
+    data<-dataAnno()$protM
+    anno<-dataAnno()$anno
     col_name <- colnames(data)
     row_name <- as.matrix(data[, 1])
     row_name <- as.vector(row_name[, 1])
@@ -406,9 +472,9 @@ function(input, output, session) {
     
     if (!is.null(qc_label) &
         qc_label != "None") {
-      sample_names <- colnames(readProteinM())[-1]
+      sample_names <- colnames(dataAnno()$protM)[-1]
       qc_label <-
-        as.vector(getAnnoTable()[sample_names, qc_label])
+        as.vector(dataAnno()$anno[sample_names, qc_label])
     }
     #print(qc_label)
     
@@ -417,16 +483,16 @@ function(input, output, session) {
     #################################
     
     
-    output$Qpcctable <-
-      renderRHandsontable({
-        if (input$reproducibility) {
-          if (!is.null(data))
-          {
-            rhandsontable(head(data, n = 20L))
-          }
-        }
-        
-      })
+    # output$Qpcctable <-
+    #   renderRHandsontable({
+    #     if (input$reproducibility) {
+    #       if (!is.null(data))
+    #       {
+    #         rhandsontable(head(data, n = 20L))
+    #       }
+    #     }
+    #     
+    #   })
     output$Qpccplot <-
       renderPlot({
         if (input$reproducibility) {
@@ -450,13 +516,15 @@ function(input, output, session) {
   output$missingPlot <-
     renderPlot({
       if (input$MissingValueExplore_check & input$QC) {
-        if (class(QCdatasetInput()) == "data.frame") {
+        if (class(QCdatasetInput()) == "data.frame"|class(readProteinM2()) == "data.frame") {
           output$QMparameters <- renderText({
             "Results are showed below:"
           })
-          missing_plot(readProteinM())
+          if(class(readProteinM()) == "data.frame")
+             missing_plot(readProteinM())
+          else missing_plot(readProteinM2())
         }
-        else if (is.null(readProteinM()))
+        else if (is.null(readProteinM())&is.null(readProteinM2()))
         {
           output$QMparameters <-
             renderText({
@@ -485,7 +553,10 @@ function(input, output, session) {
       },
       content = function(file) {
         pdf(file)
-        missing_plot(readProteinM())
+        if(class(readProteinM()) == "data.frame")
+          missing_plot(readProteinM())
+        else missing_plot(readProteinM2())
+        
         dev.off()
       }
     )
@@ -493,7 +564,52 @@ function(input, output, session) {
   #################################
   # data console
   #################################
-  
+  ##two files
+
+  readProteinM2 <-reactive({
+    print("two files")
+    if (!is.null(input$protein_matrix2)){
+      #prot <- getSampleInfo(input$protein_matrix$datapath,input$DCprotmSep)
+      fileName = input$protein_matrix2$datapath
+      len <- nchar(as.vector(fileName))
+      last <- substring(fileName,len-3, len)
+      if(identical(last, "xlsx") || identical(last, ".xls")){
+        prot <- openxlsx::read.xlsx(fileName)
+      }else{
+        prot <-
+          read.table(
+            input$protein_matrix2$datapath,
+            header = T,
+            sep = input$DCprotmSep,
+            check.names = F,
+            encoding = "UTF-8",
+            stringsAsFactors = F
+          )
+      }
+      prot
+    }
+  })
+ 
+  getAnnoTable2 <-
+    #eventReactive(input$DC_anno,{
+    reactive({
+      if(!is.null(input$anno_info)){
+        anno <-getSampleInfo(input$anno_info$datapath,input$DCsampleSep2)
+        rownames(anno) <- anno[,1]
+        #print(anno[1:3,1:2])
+        anno
+      }
+
+    })
+  if(!is.null(getAnnoTable2)){
+    output$DC_annoShow <-
+      DT::renderDataTable(DT::datatable({
+        #anno_name<<-colnames(getAnnoTable())
+        getAnnoTable2()
+      })) 
+  }
+
+  ##three files
   #for read protein matrix
   readProteinM <-
     reactive({
@@ -626,8 +742,10 @@ function(input, output, session) {
       getAnnoTable()
     }))
   
-  
-  
+  output$prot_matrix2_preview <- renderTable({
+    req(input$protein_matrix2)
+    myhead(readProteinM2())
+    })
   ###############################################################
   ##statistics
   observeEvent(input$stat_do,
@@ -635,17 +753,18 @@ function(input, output, session) {
                  stat_label <- input$STanno
                  if (!is.null(stat_label) &
                      stat_label != "None") {
-                   sample_names <- colnames(readProteinM())[-1]
+                   
+
+
+                   sample_names <- colnames(dataAnno()$protM)[-1]
                    stat_label <-
-                     as.vector(getAnnoTable()[sample_names, stat_label])
+                     as.vector(dataAnno()$anno[sample_names, stat_label])
                  } else{
                    return()
                  }
                  
-                 prot_data <-
-                   readProteinM()
-                 col_name <-
-                   colnames(prot_data)
+                 prot_data <-dataAnno()$protM
+                 col_name <-colnames(prot_data)
                  row_name <-
                    prot_data[, 1]
                  prot_data <-
@@ -673,7 +792,8 @@ function(input, output, session) {
                ignoreNULL = TRUE,
                ignoreInit = T)
   output$STprot_anno_Ui <- renderUI({
-    anno_name <<- colnames(getAnnoTable())
+
+    anno_name <- colnames(dataAnno()$anno)
     tagList(
       selectInput(
         'STanno',
@@ -692,7 +812,7 @@ function(input, output, session) {
         selectInput(
           'rader_var',
           'Select proteins:',
-          readProteinM()[,1],
+          dataAnno()$protM[,1],
           multiple = T,
           selectize = TRUE
         )),
@@ -705,13 +825,13 @@ function(input, output, session) {
   observeEvent(input$stat_do, {
     stat_label <- input$STanno
     if (!is.null(stat_label) & stat_label != "None") {
-      sample_names <- colnames(readProteinM())[-1]
-      stat_label <- as.vector(getAnnoTable()[sample_names, stat_label])
+      sample_names <- colnames(dataAnno()$protM)[-1]
+      stat_label <- as.vector(dataAnno()$anno[sample_names, stat_label])
     } else{
       return()
     }
     
-    prot_data <- readProteinM()
+    prot_data <- dataAnno()$protM
     col_name <- colnames(prot_data)
     row_name <- prot_data[, 1]
     prot_data <- prot_data[,-1]
@@ -810,10 +930,10 @@ function(input, output, session) {
   ##ttest
   observeEvent(input$ttest_do,{
     stat_label <- input$STanno
-    sample_names <- colnames(readProteinM())[-1]
-    anno<-getAnnoTable()
+    sample_names <- colnames(dataAnno()$protM)[-1]
+    anno<-dataAnno()$anno
     stat_label <- as.vector(anno[sample_names, stat_label])
-    prot_data <- readProteinM()
+    prot_data <- dataAnno()$protM
     col_name <- colnames(prot_data)
     row_name <- prot_data[, 1]
     prot_data <- prot_data[,-1]
@@ -852,10 +972,10 @@ function(input, output, session) {
   ##vocano plot
   observeEvent(input$volcano_ttest_do,{
     stat_label <- input$STanno
-    sample_names <- colnames(readProteinM())[-1]
-    anno<-getAnnoTable()
+    sample_names <- colnames(dataAnno()$protM)[-1]
+    anno<-dataAnno()$anno
     stat_label <- as.vector(anno[sample_names, stat_label])
-    prot_data <- readProteinM()
+    prot_data <- dataAnno()$protM
     col_name <- colnames(prot_data)
     row_name <- prot_data[, 1]
     prot_data <- prot_data[,-1]
@@ -876,7 +996,7 @@ function(input, output, session) {
     #   ggplotly(myVolcano(ttest_res,input$volcano_adjp_threshold,input$volcano_fc))
     # })
     volcano_data<-myVolcanoData(ttest_res,input$volcano_adjp_threshold,input$volcano_fc)
-    print(volcano_data)
+    #print(volcano_data)
     output$volcano_ttest_out <- renderRHandsontable({
       rhandsontable(volcano_data,height = 300,width = 300)
     })
