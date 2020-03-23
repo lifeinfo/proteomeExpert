@@ -1025,7 +1025,7 @@ function(input, output, session) {
   ####################################################
   output$DMprot_anno_Ui <-
     renderUI({
-      anno_name <<- colnames(getAnnoTable())
+      anno_name <<- colnames(dataAnno()$anno)
       tagList(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
@@ -1039,7 +1039,8 @@ function(input, output, session) {
     })
   output$DMprot_anno_Ui_fs <-
     renderUI({
-      anno_name <<- colnames(getAnnoTable())
+      
+      anno_name <- colnames(dataAnno()$anno)
       tagList(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
@@ -1053,7 +1054,7 @@ function(input, output, session) {
     })
   output$DMprot_anno_Ui_class <-
     renderUI({
-      anno_name <<- colnames(getAnnoTable())
+      anno_name <- colnames(dataAnno()$anno)
       tagList(
         selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
         selectInput(
@@ -1075,11 +1076,11 @@ function(input, output, session) {
                    qc_label1 <- input$DManno
                    if (!is.null(qc_label1) &
                        qc_label1 != "None") {
-                     sample_names <- colnames(readProteinM())[-1]
+                     sample_names <- colnames(dataAnno()$protM)[-1]
                      qc_label <-
-                       as.vector(getAnnoTable()[sample_names, qc_label1])
+                       as.vector(dataAnno()$anno[sample_names, qc_label1])
                    }
-                   data <- readProteinM()
+                   data <- dataAnno()$protM
                    col_name <- colnames(data)
                    row_name <- as.matrix(data[, 1])
                    row_name <- as.vector(row_name[, 1])
@@ -1104,7 +1105,7 @@ function(input, output, session) {
                    output$DMheatmapparameters <-
                      renderPlot({
                        if (input$dmheatmap) {
-                         if (!is.null(readProteinM()))
+                         if (!is.null(dataAnno()$protM))
                          {    withProgress(message = 'Calculation heatmap',
                                            detail = 'This may take a while...',
                                            value = 0,
@@ -1225,8 +1226,12 @@ function(input, output, session) {
   
   trainYy <- NULL
   observeEvent(input$mlsubmitTrain, {
-    
-    if (is.null(input$protein_matrix)) {
+    withProgress(message = 'Data prepare in progress',
+                 detail = 'This may take a while...',
+                 value = 1/10,
+                 {
+                  
+    if (is.null(input$protein_matrix & is.null(input$protein_matrix2))) {
       #hint to upload train data
       output$DMmlText <-
         renderPrint({
@@ -1237,8 +1242,8 @@ function(input, output, session) {
     
     qc_label1 <- input$DManno
     if (!is.null(qc_label1) &  qc_label1 != "None") {
-      sample_names <- colnames(readProteinM())[-1]
-      qc_label <- as.vector(getAnnoTable()[sample_names, qc_label1])
+      sample_names <- colnames(dataAnno()$protM)[-1]
+      qc_label <- as.vector(dataAnno()$anno[sample_names, qc_label1])
     } else{
       return()
     }
@@ -1264,7 +1269,7 @@ function(input, output, session) {
     {
       return()
     }
-    if (is.null(input$protein_matrix)) {
+    if (is.null(input$protein_matrix) & is.null(input$protein_matrix2)) {
       #hint to upload train data
       output$DMmlText <-
         renderPrint({
@@ -1274,17 +1279,17 @@ function(input, output, session) {
     }
     #data <- as.data.frame(t(trainData))
     #colnames(data) <- readProteinM()[, 1]
-    proteinData <- readProteinM()
+    proteinData <-dataAnno()$protM
     data <- formatProteinMatrix(proteinData)
-    #data$Label <- qc_label
-    #print(head(data))
+    
+    incProgress(2 / 10,"Data is ready, caculating now!")
     #################################
     # Decision Tree
     #################################
     
     if (input$mlmethod == "Decision Tree") {
       print("Decision tree starting")
-      if (!is.null(readProteinM()))
+      if (!is.null(dataAnno()$protM))
       {
         data$Label <- as.factor(qc_label)
         ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.8, 0.2))
@@ -1342,7 +1347,7 @@ function(input, output, session) {
       #################################
       # Random Forest
       #################################
-      if (!is.null(readProteinM()))
+      if (!is.null(dataAnno()$protM))
       {
         #print(dim(data))
         #print(class(data))
@@ -1503,7 +1508,7 @@ function(input, output, session) {
       # })
       
     }
-    
+    incProgress(9 / 10, message = "Ready to finish!")})
     shinyjs::show(id = "mlPredictDiv")
   })
   
@@ -1563,7 +1568,7 @@ function(input, output, session) {
           print(as.table(result), digits = 3)
         })
     }
-    
+   
     
   })
   #################################
@@ -1579,7 +1584,7 @@ function(input, output, session) {
                                    incProgress(1 / 15)
                                    if (!is.null(isolate(input$DMprotM))) {
                                      if (isolate(input$DMprotM) == "uploadedProtMatrix") {
-                                       protM <- isolate(readProteinM())
+                                       protM <- isolate(dataAnno()$protM)
                                      }
                                      #if(length(isolate(input$DManno))==1){
                                      label = isolate(input$DManno)
@@ -1593,7 +1598,7 @@ function(input, output, session) {
                                      sample_names <-
                                        rownames(protM)
                                      label_temp <-
-                                       as.vector(getAnnoTable()[sample_names, label])
+                                       as.vector(dataAnno()$anno[sample_names, label])
                                      
                                      labeled_protM <-
                                        cbind(label = label_temp, protM, stringsAsFactors = FALSE)
@@ -1674,7 +1679,7 @@ function(input, output, session) {
         paste("featureSelected", Sys.Date(), ".txt", sep = "")
       },
       content = function(file) {
-        protM <- readProteinM()
+        protM <- dataAnno()$protM
         rownames(protM) <-
           as.vector(unlist(protM[1]))
         protM <-

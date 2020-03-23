@@ -129,7 +129,7 @@ navbarPage(
   navbarMenu(
     "Data Console",
     tabPanel(
-      "Two files",
+      "Two files input",
       "",
       h4("Description:"),
       HTML("<p></p>"),
@@ -203,7 +203,7 @@ navbarPage(
       )),
     ######################################
   tabPanel(
-    "Three files",
+    "Three files input",
     "",
     h4("Description:"),
     HTML("<p></p>"),
