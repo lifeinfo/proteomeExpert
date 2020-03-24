@@ -89,7 +89,7 @@ auto_preprocess <-
                    check.names = F)
       if(nrow(anno)!=ncol(pep.data.log2.qn))
         return("Number of samples do not match in peptide file and technical replicate file!")
-      else if(length(intersect(unlist(anno[,1]),colnames(pep.data.log2.qn)))!=nrow(batch)){
+      else if(length(intersect(unlist(anno[,1]),colnames(pep.data.log2.qn)))!=nrow(anno)){
         return("Samples do not match in peptide file and technical replicate file!")
       }
       else{
