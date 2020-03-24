@@ -8,7 +8,7 @@ mycombat<-cmpfun(function(peptide,batch){
   
   mydata<-peptide[,-c(1,2)]
   rownames(mydata)<-peptide[,1]
-  #mydata[is.na(mydata)]<-0
+  mydata[is.na(mydata)]<-0
   combat.peptide<-ComBat(data.matrix(mydata),batch=as.factor(batch[,2]),mod = NULL)
   combat.peptide<-data.frame(combat.peptide)
   combat.peptide[is.na(peptide[,-c(1:2)])]<-NA
