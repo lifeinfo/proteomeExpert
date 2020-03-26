@@ -305,7 +305,8 @@ function(input, output, session) {
                        tsep = isolate(input$Dtsep),
                        theader = isolate(input$Dtheader),
                        bsep = isolate(input$Dbsep),
-                       bheader = isolate(input$Dbheader)
+                       bheader = isolate(input$Dbheader),
+                       isLR = isolate(input$pep2prot_lr)
                      ),silent = T)
                      if("try-error" %in% class(prot_matrix)){
                        showModal(modalDialog(

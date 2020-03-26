@@ -1173,7 +1173,7 @@ navbarMenu(
       ),
       
       hr(),
-      
+      checkboxInput("pep2prot_lr", "Using linear regression imputation", TRUE),
       tags$h5("Click to process:"),
       actionButton("process", "Submit", class = "btn-primary")
       

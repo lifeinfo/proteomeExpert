@@ -22,7 +22,8 @@ auto_preprocess <-
            pheader = TRUE,
            theader = FALSE,
            bheader = TRUE,
-           bsep = "\t") {
+           bsep = "\t",
+           isLR = TRUE) {
     t1 <- proc.time()
     cat("1: ", proc.time() - t1)
     pep.data <-
@@ -138,10 +139,16 @@ auto_preprocess <-
         return("Number of samples do not match in peptide file and batch file!")
       else if(length(intersect(unlist(batch[,1]),colnames(data.tech.rep[,-c(1:2)])))!=nrow(batch)){
         return("Samples do not match in peptide file and batch file!")
-      }
-      else
+      }else{
         data.tech.rep <- mycombat(data.tech.rep, batch)
-    
+        temp<-data.tech.rep
+        temp<-data.tech.rep[,-c(1,2)]
+        temp[temp<0]<-NA
+        data.tech.rep[,-c(1,2)]<-temp
+        rm(temp)
+      }
+
+
     }
     
     ###order
@@ -199,10 +206,24 @@ auto_preprocess <-
     pep_order2.top3 <-
       pep_order2.top3[c("prot", "tg", colnames(pep_order2.top3)[3:ncol(pep_order2.top3)])]
     pep_order2.top3[pep_order2.top3 == 0] <- NA
+    if(!isLR){
+      incProgress(1/2,message = "Protein inferencing using mean of top 3!")
+      
+      top3.prot.group<-split(pep_order2.top3,pep_order2.top3$prot)
+      top3.mean<-lapply(top3.prot.group, function(l){
+        apply(l[,3:ncol(l)],2,mean,na.rm=T)
+      })
+      
+      top3.mean<-do.call(rbind,top3.mean)
+      top3.mean<-cbind(prot=rownames(top3.mean),top3.mean)
+      incProgress(8/10,message = "Protein matrix completed!")
+      top3.mean[is.na(top3.mean)]<-''
+      return(top3.mean)
+    }
     #write.table(pep_order2.top3, paste("data/",Sys.Date(),"pep.top3.txt",sep = ""),row.names = F,  quote = F,sep = "\t",na = "NA")
     cat("10", proc.time() - t1)
     #############lr for pep2prot
-    incProgress(1/2,message = "Peptide inferencing now!")
+    incProgress(1/2,message = "Protein inferencing using LR!")
     prot.matrix <- pep2prot(pep_order2.top3)
     prot.matrix[, -c(1:2)] <- round(prot.matrix[, -c(1:2)], 2)
     prot.matrix <- prot.matrix[, -2]
