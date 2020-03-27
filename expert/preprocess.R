@@ -23,7 +23,7 @@ auto_preprocess <-
            theader = FALSE,
            bheader = TRUE,
            bsep = "\t",
-           isLR = TRUE) {
+           lr_top3 = "top3") {
     t1 <- proc.time()
     cat("1: ", proc.time() - t1)
     pep.data <-
@@ -206,30 +206,39 @@ auto_preprocess <-
     pep_order2.top3 <-
       pep_order2.top3[c("prot", "tg", colnames(pep_order2.top3)[3:ncol(pep_order2.top3)])]
     pep_order2.top3[pep_order2.top3 == 0] <- NA
-    if(!isLR){
+    if(lr_top3=="top3"){
       incProgress(1/2,message = "Protein inferencing using mean of top 3!")
       
       top3.prot.group<-split(pep_order2.top3,pep_order2.top3$prot)
       top3.mean<-lapply(top3.prot.group, function(l){
-        apply(l[,3:ncol(l)],2,mean,na.rm=T)
+        #apply(l[,3:ncol(l)],2,mean,na.rm=T)
+        apply(l[,3:ncol(l)],2,function(x){round(mean(x,na.rm=T),2)})
+        
+        # apply(l[,3:ncol(l)],2,function(v){
+        #   if(is.nan(mean(v,na.rm=T)))
+        #     return('')
+        #   else return(mean(v,na.rm=T))
+        # })
       })
-      
       top3.mean<-do.call(rbind,top3.mean)
+      top3.mean<-data.frame(top3.mean)
+      top3.mean[is.na(top3.mean)]<-''
       top3.mean<-cbind(prot=rownames(top3.mean),top3.mean)
       incProgress(8/10,message = "Protein matrix completed!")
-      top3.mean[is.na(top3.mean)]<-''
       return(top3.mean)
+    }else{
+      #write.table(pep_order2.top3, paste("data/",Sys.Date(),"pep.top3.txt",sep = ""),row.names = F,  quote = F,sep = "\t",na = "NA")
+      cat("10", proc.time() - t1)
+      #############lr for pep2prot
+      incProgress(1/2,message = "Protein inferencing using LR!")
+      prot.matrix <- pep2prot(pep_order2.top3)
+      prot.matrix <- prot.matrix[, -2]
+      incProgress(8/10,message = "Protein matrix completed!")
+      cat("11", proc.time() - t1)
+      
+      return(prot.matrix)
     }
-    #write.table(pep_order2.top3, paste("data/",Sys.Date(),"pep.top3.txt",sep = ""),row.names = F,  quote = F,sep = "\t",na = "NA")
-    cat("10", proc.time() - t1)
-    #############lr for pep2prot
-    incProgress(1/2,message = "Protein inferencing using LR!")
-    prot.matrix <- pep2prot(pep_order2.top3)
-    prot.matrix[, -c(1:2)] <- round(prot.matrix[, -c(1:2)], 2)
-    prot.matrix <- prot.matrix[, -2]
-    incProgress(8/10,message = "Protein matrix completed!")
-    return(prot.matrix)
-    cat("11", proc.time() - t1)
+
   }
 
 #t<-auto_preprocess("\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\data.tech.rep.txt","\\\\172.16.13.5\\sky\\workspace\\r\\common\\data\\tech.txt")

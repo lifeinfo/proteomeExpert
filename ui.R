@@ -1173,7 +1173,18 @@ navbarMenu(
       ),
       
       hr(),
-      checkboxInput("pep2prot_lr", "Using linear regression imputation", TRUE),
+      radioButtons(
+        "lr_top3",
+        "Please select protein inference method",
+        choices = c(
+          "Linear regression of top3" = "LR",
+          "mean of top 3" = "top3"
+        ),
+        inline = TRUE,
+        selected = "top3"
+      ),
+      hr(),
+      
       tags$h5("Click to process:"),
       actionButton("process", "Submit", class = "btn-primary")
       
