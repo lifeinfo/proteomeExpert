@@ -361,8 +361,8 @@ function(input, output, session) {
   #  calculating  server is running the combining function
   #  cal_finished combining function is finished.
   pulseDIAStatus <- reactiveValues(status = "initStatus")
-  observeEvent(input$pulseDiaFile, {
-    if (!is.null(input$pulseDiaFile)) {
+  observeEvent(input$pulseDia_part1, {
+    if (!is.null(input$pulseDia_part1)) {
       pulseDIAStatus$status = "selected"
       shinyjs::enable("submit_pulseDia_file")
     }
@@ -371,8 +371,8 @@ function(input, output, session) {
   observeEvent(input$submit_pulseDia_file, {
     #pulseDIAStatus$status = "submited"
     
-    input_name <- input$pulseDiaFile$datapath
-    #output_file_name <<- tempfile("pulseDIACombined", fileext = ".txt")
+    input_names <- input$pulseDiaFile[,"name"]
+    file_paths <-input$pulseDiaFile[,"datapath"]
     print(input_name)
     #print(output_file_name)
     shinyjs::disable("submit_pulseDia_file")
@@ -380,7 +380,7 @@ function(input, output, session) {
     #   #source(file.path("server", "pulse_dia_combine.R"),  local = TRUE)$value
     #   # sourced in global.R
     pulseDIAStatus$status = "calculating"
-    result <<- pulseDIACombine(input_name)
+    #result <- pulseDIACombine(input_name)
     pulseDIAStatus$status = "cal_finished"
     #print(result)
     #
@@ -392,7 +392,8 @@ function(input, output, session) {
     ##
     
   })
-  output$ui <- renderUI({
+
+  output$pulsedia_ui <- renderUI({
     switch (
       pulseDIAStatus$status,
       "initStatus" = tags$h4("Please select a DIA file to upload"),
@@ -1740,7 +1741,7 @@ function(input, output, session) {
   output$anno_table <-
     renderRHandsontable({
       DF = data.frame(
-        Name = c("Uniport",
+        Name = c("UniProt",
                  "String",
                  "KEGG",
                  "GO",
