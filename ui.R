@@ -1198,119 +1198,83 @@ navbarMenu(
         downloadButton("downloadData", "Download", class = "btn-primary")
         
       )
-      
-    ))
-  ),
-  
-  ########################################################
-  ###  PulseDIA preprocess
-  ########################################################
-  tabPanel(
-    "PulseDIA preprocess",
-    h5("Description:"),
-    HTML("<p>Combine PulseDIA all runs into one peptide matrix.</p>")
-    ,
-    sidebarPanel(
-
-      # fileInput(
-      #   "pulseDiaFile",
-      #   "Select all PulseDIA part files :",
-      #   multiple = T,
-      #   accept = c("text/tsv",
-      #              "text/comma-separated-values,text/plain",
-      #              ".tsv"),
-      #   placeholder = "*.tsv or *.TXT required!"
-      # ),
-      selectInput("dia_engine", "Choose a DIA software:",
-                  choices = c("OpenSWATH", "Spectronaut", "DIA-NN")),
-      fileInput(
-        "pulseDia_part1",
-        "Select all PulseDIA part 1 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-      fileInput(
-        "pulseDia_part2",
-        "Select all PulseDIA part 2 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-      fileInput(
-        "pulseDia_part3",
-        "Select all PulseDIA part 3 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-      fileInput(
-        "pulseDia_part4",
-        "Select all PulseDIA part 4 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-      fileInput(
-        "pulseDia_part5",
-        "Select all PulseDIA part 5 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-      fileInput(
-        "pulseDia_part6",
-        "Select all PulseDIA part 6 files :",
-        multiple = T,
-        accept = c("text/tsv",
-                   "text/comma-separated-values,text/plain",
-                   ".tsv"),
-        placeholder = "*.tsv or *.TXT required!"
-      ),
-
-      # fileInput(
-      #   "pulseDia_part7",
-      #   "Select all PulseDIA part 7 files :",
-      #   multiple = T,
-      #   accept = c("text/tsv",
-      #              "text/comma-separated-values,text/plain",
-      #              ".tsv"),
-      #   placeholder = "*.tsv or *.TXT required!"
-      # ),
-      # fileInput(
-      #   "pulseDia_part8",
-      #   "Select all PulseDIA part 8 files :",
-      #   multiple = T,
-      #   accept = c("text/tsv",
-      #              "text/comma-separated-values,text/plain",
-      #              ".tsv"),
-      #   placeholder = "*.tsv or *.TXT required!"
-      # ),
-      # fileInput(
-      #   "pulseDia_part9",
-      #   "Select all PulseDIA part 9 files :",
-      #   multiple = T,
-      #   accept = c("text/tsv",
-      #              "text/comma-separated-values,text/plain",
-      #              ".tsv"),
-      #   placeholder = "*.tsv or *.TXT required!"
-      # ),
-      shinyjs::disabled(
-        actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
-      )
-    ),
-    mainPanel(uiOutput("pulsedia_ui"))
-  )
+    )))
+  # ),
+  # 
+  # ########################################################
+  # ###  PulseDIA preprocess  discarded20200512
+  # ########################################################
+  # tabPanel(
+  #   "PulseDIA preprocess",
+  #   h5("Description:"),
+  #   HTML("<p>Combine PulseDIA all runs into one peptide matrix.</p>")
+  #   ,
+  #   sidebarPanel(
+  # 
+  #     selectInput("dia_engine", "Choose a DIA software:",
+  #                 choices = c("OpenSWATH", "Spectronaut", "DIA_NN")),
+  #     fileInput(
+  #       "pulseDia_part1",
+  #       "Select all PulseDIA part 1 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  #     fileInput(
+  #       "pulseDia_part2",
+  #       "Select all PulseDIA part 2 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  #     fileInput(
+  #       "pulseDia_part3",
+  #       "Select all PulseDIA part 3 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  #     fileInput(
+  #       "pulseDia_part4",
+  #       "Select all PulseDIA part 4 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  #     fileInput(
+  #       "pulseDia_part5",
+  #       "Select all PulseDIA part 5 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  #     fileInput(
+  #       "pulseDia_part6",
+  #       "Select all PulseDIA part 6 files :",
+  #       multiple = T,
+  #       accept = c("text/tsv",
+  #                  "text/comma-separated-values,text/plain",
+  #                  ".tsv"),
+  #       placeholder = "*.tsv or *.TXT required!"
+  #     ),
+  # 
+  # 
+  #     shinyjs::disabled(
+  #       actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
+  #     )
+  #   ),
+  #   mainPanel(uiOutput("pulsedia_ui"))
+  # )
 ),
 #################################
 # help

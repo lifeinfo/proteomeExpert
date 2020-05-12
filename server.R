@@ -278,6 +278,7 @@ function(input, output, session) {
       )
     }
   )
+  ##########################other tools
   ###pep2prot
   DdatasetInput <- eventReactive(input$process, {
     
@@ -351,7 +352,7 @@ function(input, output, session) {
     }
   )
   #################################
-  # pulseDIA preprocess
+  # pulseDIA preprocess discarded20200512
   #################################
   #
   #puslseDIAStatus
@@ -360,78 +361,70 @@ function(input, output, session) {
   #  submited  DIAData file is submited.
   #  calculating  server is running the combining function
   #  cal_finished combining function is finished.
-  pulseDIAStatus <- reactiveValues(status = "initStatus")
-  observeEvent(input$pulseDia_part1, {
-    if (!is.null(input$pulseDia_part1)) {
-      pulseDIAStatus$status = "selected"
-      shinyjs::enable("submit_pulseDia_file")
-    }
-  })
-  #output_file_name <- ""
-  observeEvent(input$submit_pulseDia_file, {
-    #pulseDIAStatus$status = "submited"
-    
-    input_names <- input$pulseDiaFile[,"name"]
-    file_paths <-input$pulseDiaFile[,"datapath"]
-    print(input_name)
-    #print(output_file_name)
-    shinyjs::disable("submit_pulseDia_file")
-    
-    #   #source(file.path("server", "pulse_dia_combine.R"),  local = TRUE)$value
-    #   # sourced in global.R
-    pulseDIAStatus$status = "calculating"
-    #result <- pulseDIACombine(input_name)
-    pulseDIAStatus$status = "cal_finished"
-    #print(result)
-    #
-    #   shinyjs::enable("downloadPulseDIAResult")
-    #   output$tabPulseDIAcombined <- renderTable(
-    #
-    #   )
-    ##to do
-    ##
-    
-  })
-
-  output$pulsedia_ui <- renderUI({
-    switch (
-      pulseDIAStatus$status,
-      "initStatus" = tags$h4("Please select a DIA file to upload"),
-      "selected"   = tags$h4("Please click Submit button, then waiting "),
-      "submited"   = tags$h4("calculate in progress ... Please waiting"),
-      "calculating"   = tags$h4("calculate in progeress ... Please waiting"),
-      "cal_finished"   = tags$div(
-        tags$h4("calculate finished! Please download the result file"),
-        downloadButton(
-          "downloadPulseDIAResult",
-          label = "Download",
-          class = "btn-primary"
-        )
-      ),
-      "nextTry" = tags$div(
-        tags$h4("download finished! ,Please select a DIA file to upload"),
-        shinyjs::disabled(
-          downloadButton(
-            "downloadPulseDIAResult",
-            label = "Download",
-            class = "btn-primary"
-          )
-        )
-      ),
-    )
-  })
-  output$downloadPulseDIAResult <- downloadHandler(filename = "result.txt",
-                                                   content <- function(file) {
-                                                     write.table(
-                                                       result,
-                                                       file,
-                                                       sep = "\t",
-                                                       col.names = T,
-                                                       row.names = F,
-                                                       quote = F
-                                                     )
-                                                     pulseDIAStatus$status = "nextTry"
-                                                   })
+  # pulseDIAStatus <- reactiveValues(status = "initStatus")
+  # observeEvent(input$pulseDia_part1, {
+  #   if (!is.null(input$pulseDia_part1)) {
+  #     pulseDIAStatus$status = "selected"
+  #     shinyjs::enable("submit_pulseDia_file")
+  #   }
+  # })
+  # pulseDIA_out<-eventReactive(input$submit_pulseDia_file, {
+  #   if(!is.null(input$pulseDia_part1$datapath))
+  #     parts<-input$pulseDia_part1$datapath
+  #   if(!is.null(input$pulseDia_part2$datapath))
+  #     parts<-list(parts,input$pulseDia_part2$datapath)
+  #   if(!is.null(input$pulseDia_part3$datapath))
+  #     parts<-list(parts,input$pulseDia_part3$datapath)
+  #   if(!is.null(input$pulseDia_part4$datapath))
+  #     parts<-list(parts,input$pulseDia_part4$datapath)
+  #   if(!is.null(input$pulseDia_part5$datapath))
+  #     parts<-list(parts,input$pulseDia_part5$datapath)
+  #   if(!is.null(input$pulseDia_part6$datapath))
+  #     parts<-list(parts,input$pulseDia_part6$datapath)
+  # 
+  #   pulseDIA_res<-ForpulseDIA(parts)
+  #   return(pulseDIA_res)
+  # }, ignoreNULL = FALSE)
+  # 
+  # output$pulsedia_ui <- renderUI({
+  #   switch (
+  #     pulseDIAStatus$status,
+  #     "initStatus" = tags$h4("Please select a DIA file to upload"),
+  #     "selected"   = tags$h4("Please click Submit button, then waiting "),
+  #     "submited"   = tags$h4("calculate in progress ... Please waiting"),
+  #     "calculating"   = tags$h4("calculate in progeress ... Please waiting"),
+  #     "cal_finished"   = tags$div(
+  #       tags$h4("calculate finished! Please download the result file"),
+  #       downloadButton(
+  #         "downloadPulseDIAResult",
+  #         label = "Download",
+  #         class = "btn-primary"
+  #       )
+  #     ),
+  #     "nextTry" = tags$div(
+  #       tags$h4("download finished! ,Please select a DIA file to upload"),
+  #       shinyjs::disabled(
+  #         downloadButton(
+  #           "downloadPulseDIAResult",
+  #           label = "Download",
+  #           class = "btn-primary"
+  #         )
+  #       )
+  #     ),
+  #   )
+  # })
+  # output$downloadPulseDIAResult <- downloadHandler(filename = "result.txt",
+  #                                                  content <- function(file) {
+  #                                                    write.table(
+  #                                                      pulseDIA_out(),
+  #                                                      file,
+  #                                                      sep = "\t",
+  #                                                      col.names = T,
+  #                                                      row.names = F,
+  #                                                      quote = F
+  #                                                    )
+  #                                                    pulseDIAStatus$status = "nextTry"
+  #                                                  })
   
   #################################
   # QC
