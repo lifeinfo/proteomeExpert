@@ -6,8 +6,6 @@ The application is based on the Shiny package and can be run locally or on a ser
 
 # Guomics Team
 
-Team:http://www.guomics.com/col.jsp?id=108
-
 web: http://www.guomics.com
 
 
@@ -29,7 +27,7 @@ web: http://www.guomics.com
 # How to install
 
 - Required: [R](https://cran.r-project.org/) version 3.4.0 or later
-
+- Required: Install all the packages in global.R
 - Required: [Rstudio](https://www.rstudio.com/products/rstudio/download/) version 1.1.453 or later
 
 
