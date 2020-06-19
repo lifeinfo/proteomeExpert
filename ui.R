@@ -11,18 +11,17 @@ navbarPage(
     "Home",
     sidebarPanel(
       tags$h5("Welcome to ProteomeExpert, it makes your research easy!"),
-      HTML("<p>A user friendly Web for protein analysis.</p>")
+      HTML("<p>A user friendly Web server for quantitative proteomics data analysis.</p>")
     ),
     mainPanel(tabsetPanel(tabPanel(
       "Introduction",
-      h4("Summary"),
-      HTML("<p>proteomeExpert was published in * 2019 </p>")
+      includeMarkdown("help/home.md")
       
     )),
     tabsetPanel(tabPanel(
       "Citation",
       h4(""),
-      HTML("<p>proteomeExpert was published in * 2019 </p>")
+      HTML("<p>proteomeExpert was published in * 2020 </p>")
       
     )))
   ),
