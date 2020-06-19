@@ -14,19 +14,10 @@ web: http://www.guomics.com
 ![](http://19241930.s21i.faiusr.com/2/ABUIABACGAAg9qrY5wUo4JuMgAYw3BE4sQc.jpg)
 
 
-# Key Features
-
-* Faster
-
-* Deeper
-
-* Smarter
-
-* Machine Learning
 
 # How to Use
 
-* step 1. upload your protein matrix(*.TXT or *.csv)
+* step 1. upload your protein matrix(*.TXT or *.csv or xls/xlsx) and sample information (individual file if has)
 
 * step 2. click submit & analysis
 
@@ -49,21 +40,4 @@ Although ProteomeExpert web-interface can handle quite a few data and analysis t
 ## Reporting issues
 
 Please use the GitHub issue tracker at https://github.com/lifeinfo/proteomeExpert/issues/new if you have any problems.
-
-## Note:
-
-All across sessions object should be put in the global.R, such as global functions
-other session level object should not be in the global.R
-
-## session level object
-
-### getAnnoTable():
-
-* reactive function return a dataframe which store sample and individual information
-
-* important column name {sampleId, sampleType,batchId,technicalId,individualId,individualType}
-
-### readProteinM()
-
-* reactive function return a dataframe which store protein matrix
 
