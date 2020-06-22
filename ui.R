@@ -10,19 +10,14 @@ navbarPage(
   tabPanel(
     "Home",
     sidebarPanel(
-      tags$h5("Welcome to ProteomeExpert, it makes your research easy!"),
-      HTML("<p>A user friendly Web server for quantitative proteomics data analysis.</p>")
+      tags$h4("Upade log"),
+      HTML("<p>proteomeExpert is first released in 2020 </p>")
+     
     ),
     mainPanel(tabsetPanel(tabPanel(
       "Introduction",
       includeMarkdown("help/home.md")
-      
-    )),
-    tabsetPanel(tabPanel(
-      "Citation",
-      h4(""),
-      HTML("<p>proteomeExpert was published in * 2020 </p>")
-      
+
     )))
   ),
   #################################
@@ -92,7 +87,7 @@ navbarPage(
         hr(),
         selectInput(
           'BDcol',
-          'Select columns for balanced batch design:',
+          'Select columns for balanced batch design (requried):',
           BDcol_name,
           multiple = T,
           selectize = TRUE
@@ -106,9 +101,9 @@ navbarPage(
         ),
         textInput(
           "BDweight",
-          "Weights for columns (using ',' to separate mutilplue columns.)"
+          "Weights for columns (using ',' to separate mutilplue columns. Requried)"
         ),
-        numericInput("BDsize", "Number of samples in each batch:", 15),
+        numericInput("BDsize", "Number of samples in each batch (requried):", 15),
         
         tags$h5("Click to design:"),
         actionButton("BDdo", "Submit", class = "btn-primary")
