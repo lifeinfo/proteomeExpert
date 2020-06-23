@@ -1338,11 +1338,12 @@ tabPanel("Online Help",
                    includeMarkdown("help/ProteomeExpert-Statistics.md")
                  ),
                  tabPanel("Data Mining",
-                          "Coming Soon"),
+                   includeMarkdown("help/dataMing.md")
+                 ),
                  tabPanel("Other Tools",
-                          "Coming Soon"),
+                          includeMarkdown("help/otherTool.md")),
                  fluid = TRUE,
-                 widths = c(2, 8)
+                 widths = c(3, 8)
                )
              ),
              tabPanel("Q&A",
