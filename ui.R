@@ -10,7 +10,7 @@ navbarPage(
   tabPanel(
     "Home",
     sidebarPanel(
-      tags$h4("Upade log"),
+      tags$h4("Update log"),
       HTML("<p>proteomeExpert is first released in 2020 </p>")
      
     ),
