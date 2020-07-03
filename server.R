@@ -1776,7 +1776,7 @@ function(input, output, session) {
     content = function(file) {file.copy("demo/peptides.txt",file)}
   )
   output$downlaod_test_technical <- downloadHandler(
-    filename ="test_technial_replica.txt",
+    filename ="technical_replicas.txt",
     content = function(file) {file.copy("demo/technical_replicas.txt",file)}
   )
   output$downlaod_test_batch <- downloadHandler(

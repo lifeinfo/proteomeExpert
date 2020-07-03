@@ -1284,7 +1284,7 @@ tabPanel("Online Help",
                downloadButton("downlaod_test_pep", label = "Get", class = "btn-primary"),
                h5("The test technical replicas file"),
                downloadButton(
-                 "downlaod_test_techincal",
+                 "downlaod_test_technical",
                  label = "Get",
                  class = "btn-primary"
                ),
