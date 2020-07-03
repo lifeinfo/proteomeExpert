@@ -1297,7 +1297,7 @@ tabPanel("Online Help",
                downloadButton("downlaod_test_prot", label = "Get", class = "btn-primary"),
                h5("The test sample information file contains 24 DIA samples."),
                downloadButton("downlaod_test_sample", label = "Get", class = "btn-primary"),
-               h5("The test individual file contains 21 individuals."),
+               h5("The test individual file contains 21 individuals (Only for three files input)."),
                downloadButton(
                  "downlaod_test_individual",
                  label = "Get",
@@ -1311,10 +1311,10 @@ tabPanel("Online Help",
                  label = "Get",
                  class = "btn-primary"
                ),
-               hr(),
-               h4("Test data files used for pulseDIA"),
-               hr(),
-               downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary"),
+               # hr(),
+               # h4("Test data files used for pulseDIA"),
+               # hr(),
+               # downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary"),
                hr()
              ),
              tabPanel(
@@ -1348,7 +1348,7 @@ tabPanel("Online Help",
              ),
              tabPanel("Q&A",
                       hr(),
-                      h4("Comming")
+                      h4("Comming soon")
                       )
            )
            

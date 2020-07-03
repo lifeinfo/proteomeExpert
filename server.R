@@ -1696,14 +1696,14 @@ function(input, output, session) {
   observeEvent(input$annosubmit, {
     output$anno_parameters1 <- renderPrint({
       print(paste0("Protein list: ", input$proteinlist))
-      print(paste0(
-        "Database: ",
-        "Uniport, ",
-        "StringDB, ",
-        "KEGG, ",
-        "GO, ",
-        "Reactome, "
-      ))
+      # print(paste0(
+      #   "Database: ",
+      #   "Uniport, ",
+      #   "StringDB, ",
+      #   "KEGG, ",
+      #   "GO, ",
+      #   "Reactome, "
+      # ))
     })
     
     output$annouistring <-
