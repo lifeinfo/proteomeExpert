@@ -185,13 +185,16 @@ function(input, output, session) {
       PWmat = matrix(PW, 1, length(PW))
       colnames(PWmat) = ceiling(nc)
       PWmat_data = data.frame(Power = as.numeric(t(PWmat)[, 1]), Sample_size = colnames(PWmat))
+      PWmat_data$Sample_size=as.numeric(PWmat_data$Sample_size)
+      PWmat_data = PWmat_data[order(PWmat_data$Sample_size),]
+      #print(PWmat_data$Sample_size)
+      print(head(PWmat_data))
       p <- ggplot() +
         geom_bar(
           data = PWmat_data,
           aes(x = Sample_size, y = Power),
           stat = "identity",
-          fill = "#87CEFA",
-          width = 0.6
+          fill = "#87CEFA"
         ) +
         geom_hline(
           yintercept = 0.5,
@@ -203,7 +206,8 @@ function(input, output, session) {
           yintercept = 1 - as.numeric(input$Pbeta),
           size = 0.1,
           linetype = "dashed"
-        )
+        )+
+        scale_x_continuous(breaks = PWmat_data$Sample_size)
       ggplotly(p) %>% config(displaylogo = F)
     })
   })

@@ -94,7 +94,7 @@ navbarPage(
         ),
         selectInput(
           'BDnumeric_headers',
-          'Among above selected columns which are numeric:',
+          'Among above selected columns which are continuous variable:',
           BDcol_name,
           multiple = T,
           selectize = TRUE
