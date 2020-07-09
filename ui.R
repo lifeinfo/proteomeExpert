@@ -122,7 +122,7 @@ navbarPage(
   # Data console
   #################################
   navbarMenu(
-    "Data Console",
+    "Upload",
     tabPanel(
       "Two files input",
       "",
@@ -1098,7 +1098,7 @@ tabPanel(
 ### other tools
 #################################
 navbarMenu(
-  "Other Tools",
+  "More>>",
   tabPanel(
     "Peptide2Protein",
     h5("Description:"),

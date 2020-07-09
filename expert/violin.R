@@ -6,17 +6,36 @@ drawviolin <-
            cluster_row = T,
            cluster_col = F) {
     df <- data.frame(type = sample , value = value)
-    ggplot(df, aes(x = type, y = value, fill = type)) +
-      geom_violin(trim = FALSE) +
-      ylab(ylabel) + xlab("") +
-      geom_boxplot(width = 0.1) +
-      theme(
-        legend.direction = 'horizontal',
-        legend.position = 'top',
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        axis.line = element_line(colour = "black")
+    # ggplot(df, aes(x = type, y = value, fill = type)) +
+    #   geom_violin(trim = FALSE) +
+    #   geom_boxplot(width = 0.05, position = position_dodge(0.9)) +
+    #   ylab(ylabel) + xlab("") +
+    #   theme(
+    #     legend.direction = 'horizontal',
+    #     legend.position = 'top',
+    #     panel.grid.major = element_blank(),
+    #     panel.grid.minor = element_blank(),
+    #     panel.background = element_blank(),
+    #     axis.line = element_line(colour = "black")
+    #   )
+    df %>%
+    plot_ly(
+      x = ~type,
+      y = ~value,
+      color = df$type,
+      type = 'violin',
+      box = list(
+        visible = T
+      ),
+      meanline = list(
+        visible = T
+      )
+    )%>%
+      layout(
+        yaxis = list(
+          title = strTitle,
+          zeroline = F
+        )
       )
     
   }

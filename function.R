@@ -3,7 +3,6 @@
 #################################
 
 
-
 #myhead function
 
 myhead <- function(d) {
