@@ -85,9 +85,10 @@ navbarPage(
           selected = "\t"
         ),
         hr(),
+        numericInput('BD_tech_rep', 'Add number of technical replicates:', 0, min = 0, max = 100),
         selectInput(
           'BDcol',
-          'Select columns for balanced batch design (requried):',
+          'Select columns for balanced batch design (Required):',
           BDcol_name,
           multiple = T,
           selectize = TRUE
@@ -101,9 +102,9 @@ navbarPage(
         ),
         textInput(
           "BDweight",
-          "Weights for columns (using ',' to separate mutilplue columns. Requried)"
+          "Weights for columns (using ',' to separate mutilplue columns. Required)"
         ),
-        numericInput("BDsize", "Number of samples in each batch (requried):", 15),
+        numericInput("BDsize", "Number of samples in each batch (Required):", 15),
         
         tags$h5("Click to design:"),
         actionButton("BDdo", "Submit", class = "btn-primary")

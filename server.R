@@ -119,7 +119,8 @@ function(input, output, session) {
                        input$BDnumeric_headers,
                        col_weights,
                        input$BDsize,
-                       input$BDsep
+                       input$BDsep,
+                       input$BD_tech_rep
                      )
                    incProgress(14 / 15, message = "Ready to finish!")
                  })

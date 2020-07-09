@@ -12,7 +12,7 @@ continue2discrete<-cmpfun(function(a){
   return(a)
 })
 
-batchGenerator<-cmpfun(function(fpath,headers,numeric_headers,weights,batchSize,sep){
+batchGenerator<-cmpfun(function(fpath,headers,numeric_headers,weights,batchSize,sep,n.rep=0){
 # print(fpath)
 # print(headers)
 # print(numeric_headers)
@@ -20,6 +20,13 @@ batchGenerator<-cmpfun(function(fpath,headers,numeric_headers,weights,batchSize,
 # print(batchSize)
 weights<-normWeights(weights)
 samples <- read.csv(fpath,stringsAsFactors=F,header = T,encoding = "UTF-8",check.names=F,sep=sep)
+if(n.rep!=0){
+  replicas<-samples[sample(1:nrow(samples),n.rep),]
+  rownames(replicas)<-(nrow(samples)+1):(nrow(samples)+n.rep)
+  replicas[,1]<-paste(replicas[,1],"rep",sep="_")
+  samples<-rbind(samples,replicas)
+}
+
 steps = nrow(samples)*100
 samples_ori<-samples
 if(numeric_headers!="None" & !is.null(numeric_headers)){
