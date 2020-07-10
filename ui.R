@@ -618,7 +618,7 @@ navbarPage(
           "volcano_adjP",
           "Adjust P value method",
           choices = c(
-            none = "none",
+            #none = "none",
             bonferroni = "bonferroni",
             hochberg = "hochberg",
             hommel = "hommel",
@@ -628,7 +628,7 @@ navbarPage(
             fdr = "fdr"
           ),
           inline = TRUE,
-          selected = "none"
+          selected = "BH"
         ),
         uiOutput("volcano_ttest_groups_ui"),
         uiOutput("volcano_ttest_do_ui"),
