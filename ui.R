@@ -767,7 +767,7 @@ navbarPage(
             "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
           ),
           hr(),
-          column(8, plotOutput("DMheatmapparameters"))
+          plotOutput("DMheatmapparameters")
           #,column(6, rHandsontableOutput("DMheatmaptable"))
         ),
         
@@ -781,8 +781,8 @@ navbarPage(
             <p>Mark 2: If blank controls (AQUA) are available in the experiment, the coordinates of blank controls can tell the quality of the data.</p>"
           ),
           hr(),
-          column(6, plotlyOutput("Qpcaplot")),
-          column(6, rHandsontableOutput("Qpcatable"))
+          plotlyOutput("Qpcaplot", width = "800px", height = "400px"),
+          rHandsontableOutput("Qpcatable")
           ),
         tabPanel(
           "t-SNE",
@@ -796,8 +796,8 @@ navbarPage(
             "<p>L. van der Maaten, H. Geoffrey, Visualizing Data using t-SNE. Journal of Machine Learning Research.</p>"
           ),
           hr(),
-          column(6, plotlyOutput("Qtsneplot")),
-          column(6, rHandsontableOutput("Qtsnetable"))
+          plotlyOutput("Qtsneplot", width = "800px", height = "400px"),
+          rHandsontableOutput("Qtsnetable")
         ),
         tabPanel(
           "UMAP",
@@ -811,8 +811,8 @@ navbarPage(
             "<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction, ArXiv e-prints 1802.03426,2018</p>"
           ),
           hr(),
-          column(6, plotlyOutput("Qumapplot")),
-          column(6, rHandsontableOutput("Qumaptable"))
+          plotlyOutput("Qumapplot", width = "800px", height = "400px"),
+          rHandsontableOutput("Qumaptable")
         )
         ))
     ),
@@ -1264,7 +1264,6 @@ navbarMenu(
   #     ),
   # 
   # 
-  #     shinyjs::disabled(
   #       actionButton("submit_pulseDia_file", label = "Submit", class = "btn-primary")
   #     )
   #   ),
