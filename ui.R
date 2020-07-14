@@ -682,12 +682,12 @@ navbarPage(
         tabPanel(
           "FeatureSelection",
           h5(
-            "Please note that feature selection including two parts: filter rules and feature selection algorithm"
+            "Feature selection including three catgory: filter, wrapper and embedding"
           ),
           textInput(
             inputId = "fs_missing_ratio",
-            label = "Allowable missing ratio",
-            value = 0.8
+            label = "Allowable missing ratio per protein (%).",
+            value = 80
           ),
           checkboxGroupInput(
             "featureSel_filter",

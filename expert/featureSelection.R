@@ -77,11 +77,13 @@ fsRf<-cmpfun(function(label_protM,nfeatures){
     #   protM <- protM[,-near_zero_vars]
     Processed_protM <- preProcess(protM)
     Processed_protM <- predict(Processed_protM, protM)
+    set.seed(1)
     data.filter <- sbf(Processed_protM,label,
                        sbfControl = sbfControl(functions=rfSBF,
                                                verbose=F,
                                                method='cv'))
     x <- Processed_protM[data.filter$optVariables]
+    set.seed(1)
     profile <- rfe(x,label,
                    #sizes = c(3,5,8,12,15,20),
                    rfeControl = rfeControl(functions=rfFuncs

@@ -1599,6 +1599,7 @@ function(input, output, session) {
                                        rownames(protM)
                                      label_temp <-
                                        as.vector(dataAnno()$anno[sample_names, label])
+                                     allowable_missing_ratio<-as.numeric(input$fs_missing_ratio)/100
                                      
                                      labeled_protM <-
                                        cbind(label = label_temp, protM, stringsAsFactors = FALSE)
@@ -1609,7 +1610,7 @@ function(input, output, session) {
                                        featureFilter(labeled_protM, !is.na(match(
                                          c("nearZeoVar", "high_correlation"),
                                          input$featureSel_filter
-                                       )), input$fs_missing_ratio)
+                                       )), allowable_missing_ratio)
                                      # if('random_forest' %in% input$featureSel_algorithm)
                                      #   use_rf=TRUE
                                      # if('lasso' %in% input$featureSel_algorithm)
