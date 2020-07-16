@@ -567,7 +567,7 @@ function(input, output, session) {
   ##two files
 
   readProteinM2 <-reactive({
-    print("two files")
+    #print("two files")
     if (!is.null(input$protein_matrix2)){
       #prot <- getSampleInfo(input$protein_matrix$datapath,input$DCprotmSep)
       fileName = input$protein_matrix2$datapath

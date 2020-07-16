@@ -124,14 +124,14 @@ navbarPage(
   navbarMenu(
     "Upload",
     tabPanel(
-      "Two files input",
+      "Two files format",
       "",
       h4("Description:"),
       HTML("<p></p>"),
       sidebarPanel(
-        tags$h4("Upload Data:"),
+        tags$h4("Upload Data (require two steps):"),
         hr(),
-        
+        tags$h5("Step 1"),
         fileInput(
           "protein_matrix2",
           "Select your protein file( if file is xlsx format ,protein data sheet must be the first sheet):",
@@ -157,7 +157,7 @@ navbarPage(
           selected = "\t"
         ),
         hr(),
-        
+        tags$h5("Step 2"),
         fileInput(
           "anno_info",
           "Select your sample annotation file (if file is xlsx format ,sample data sheet must be the first sheet):",
@@ -198,14 +198,14 @@ navbarPage(
       )),
     ######################################
   tabPanel(
-    "Three files input",
+    "Three files format",
     "",
     h4("Description:"),
     HTML("<p></p>"),
     sidebarPanel(
-      tags$h4("Upload Data:"),
+      tags$h4("Upload Data (require 3 steps):"),
       hr(),
-      
+      tags$h5("Step 1"),
       fileInput(
         "protein_matrix",
         "Select your protein file( if file is xlsx format ,protein data sheet must be the first sheet):",
@@ -231,7 +231,7 @@ navbarPage(
         selected = "\t"
       ),
       hr(),
-      
+      tags$h5("Step 2"),
       fileInput(
         "sample_info",
         "Select your sample file (if file is xlsx format ,sample data sheet must be the first sheet):",
@@ -258,7 +258,7 @@ navbarPage(
       ),
       #actionButton("sampleInfo", "annotation", class = "btn-primary"),
       hr(),
-      
+      tags$h5("Step 3"),
       fileInput(
         "individual_info",
         "Select your individual file (if file is xlsx format ,individual data sheet must be the first sheet):",
@@ -1037,7 +1037,7 @@ navbarPage(
           ),
         column(
           8,
-          h3("Result"),
+          h3("Results"),
           #plotlyOutput(),
           verbatimTextOutput("DMmlText"),
           plotOutput("DMmlPlot"),
