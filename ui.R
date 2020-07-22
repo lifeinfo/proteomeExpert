@@ -1098,7 +1098,7 @@ tabPanel(
 ### other tools
 #################################
 navbarMenu(
-  "More>>",
+  "Other tools>>",
   tabPanel(
     "Peptide2Protein",
     h5("Description:"),
