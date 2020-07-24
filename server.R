@@ -189,7 +189,6 @@ function(input, output, session) {
       PWmat_data$Sample_size=as.numeric(PWmat_data$Sample_size)
       PWmat_data = PWmat_data[order(PWmat_data$Sample_size),]
       #print(PWmat_data$Sample_size)
-      print(head(PWmat_data))
       p <- ggplot() +
         geom_bar(
           data = PWmat_data,
@@ -211,6 +210,98 @@ function(input, output, session) {
         scale_x_continuous(breaks = PWmat_data$Sample_size)
       ggplotly(p) %>% config(displaylogo = F)
     })
+  })
+  ###with pilot experiment
+  output$PowerD_anno_Ui <- renderUI({
+    
+    anno_name <- colnames(dataAnno()$anno)
+    tagList(
+      selectInput(
+        'PowerDanno',
+        'Select case/control column',
+        anno_name,
+        multiple = F,
+        selectize = TRUE
+      ),
+      tags$div(title="Alpha is the significance level of the test, here the type I error rate.",
+               textInput("Palpha2", "Alpha:", 0.05, width = "60%")),
+      tags$div(title="Beta is the probability of accepting the null hypothesis even though the null hypothesis is false",
+               textInput("Pbeta2", "Beta (Power=1-beta):", 0.2, width = "60%")),
+      hr(),
+      tags$h5("Click to process:"),
+      actionButton("powerD_do", "Submit", class = "btn-primary")
+    )
+  })
+  powerD2<- eventReactive(input$powerD_do, {
+    data<-dataAnno()$protM
+    anno<-dataAnno()$anno
+    col_name <- colnames(data)
+    row_name <- as.matrix(data[, 1])
+    row_name <- as.vector(row_name[, 1])
+    data <- data.matrix(data)
+    data <- data[, -1]
+    colnames(data) <- col_name[2:length(col_name)]
+    row.names(data) <-row_name
+    data<-log2(data)
+    label2<-as.vector(unlist(anno[colnames(data),input$PowerDanno]))
+    index.null<-label2==(unique(label2)[1])
+    index.alt<-label2==(unique(label2)[2])
+    mean_null = mean(data[,index.null],na.rm = T)
+    mean_alt = mean(data[,index.alt],na.rm = T)
+    sd<-sd(data,na.rm = T)
+    nprots<-length(unique(rownames(data)))
+    #
+    ap = as.numeric(input$Palpha2) / as.numeric(nprots)
+    z1 = qnorm(1 - ap / 2)
+    zb = qnorm(1 - as.numeric(input$Pbeta2))
+    proN = 2 * (sd * (z1 + zb) / (mean_null - mean_alt)) ^ 2
+    print(nprots)
+    cat(mean_null)
+    print(mean_alt)
+    print(sd)
+    nc = c(0.25, 0.5, 0.75, 1, 1.25, 1.5) * proN
+    NCP = (mean_null - mean_alt) ^ 2 / sd ^ 2 * (nc / 2)
+    #        print(NCP)
+    PW = pchisq(qchisq(ap, 1, lower.tail = F),
+                1,
+                ncp = NCP,
+                lower.tail = F)
+    PWmat = matrix(PW, 1, length(PW))
+    colnames(PWmat) = ceiling(nc)
+    PWmat_data = data.frame(Power = as.numeric(t(PWmat)[, 1]), Sample_size = colnames(PWmat))
+    PWmat_data$Sample_size=as.numeric(PWmat_data$Sample_size)
+    PWmat_data = PWmat_data[order(PWmat_data$Sample_size),]
+    
+      output$powerSize <- renderText({
+        pa.res<-paste0("Number of proteins: ", nprots,"\n","Alpha: ", input$Palpha2,"\n","Power: ",
+                       1 - as.numeric(input$Pbeta2),"\n","Sample size required for cases (controls) is: ",
+                       ceiling(proN))
+      })
+      
+    return(PWmat_data)
+  })
+  output$powerPlot <- renderPlotly({
+    PWmat_data<-powerD2()
+    p <- ggplot() +
+      geom_bar(
+        data = PWmat_data,
+        aes(x = Sample_size, y = Power),
+        stat = "identity",
+        fill = "#87CEFA"
+      ) +
+      geom_hline(
+        yintercept = 0.5,
+        colour = 'red',
+        size = 0.1,
+        linetype = "dashed"
+      ) +
+      geom_hline(
+        yintercept = 1 - as.numeric(input$Pbeta2),
+        size = 0.1,
+        linetype = "dashed"
+      )+
+      scale_x_continuous(breaks = PWmat_data$Sample_size)
+    ggplotly(p) %>% config(displaylogo = F)
   })
   #################################
   # data preprocess

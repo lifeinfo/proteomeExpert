@@ -28,26 +28,41 @@ navbarPage(
     tabPanel(
       "Power Analysis",
       sidebarPanel(
+        tabsetPanel(
+          tabPanel("With out pilot experiment",
         tags$h4("Power analysis"),
         hr(),
         textInput("Pm", "Number of Proteins (estimated):", 5000, width = "60%"),
-        textInput("Pmu", "Mean abundance:", 13, width = "60%"),
-        textInput("Pmu0", "Mean abundance 0:", 13.5, width = "60%"),
-        textInput("Psd", "Standard deviation:", 0.75, width = "60%"),
-        textInput("Palpha", "Alpha:", 0.05, width = "60%"),
-        textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "60%"),
+        textInput("Pmu", "Mean abundance of case group:", 13, width = "60%",placeholder = "log2 transformed"),
+        textInput("Pmu0", "Mean abundance of control group:", 13.5, width = "60%",placeholder = "log2 transformed"),
+        
+        textInput("Psd", "Standard deviation of all samples:", 0.75, width = "60%"),
+        tags$div(title="Alpha is the significance level of the test, here the type I error rate.",
+        textInput("Palpha", "Alpha:", 0.05, width = "60%")),
+        tags$div(title="Beta is the probability of accepting the null hypothesis even though the null hypothesis is false",
+        textInput("Pbeta", "Beta (Power=1-beta):", 0.2, width = "60%")),
         hr(),
         actionButton("powerb", "Submit", class = "btn-primary")
       ),
+      tabPanel("With pilot experiment",
+               tags$h4("Power analysis"),
+               tags$h5("Pilot experiment is a small scale preliminary study conducted in order to evaluate feasibility, duration,
+                       cost, adverse events, and improve upon the study design prior to performance of a full-scale research project. 
+                       Pilot experiments are frequently carried out before large-scale quantitative research, in an attempt to avoid 
+                       time and money being used on an inadequately designed project."),
+               hr(),
+               uiOutput("PowerD_anno_Ui")
+      )
+      )),
       
       mainPanel(tabsetPanel(
         tabPanel(
           "Summary",
-          tags$h4("Result:"),
-          hr(),
+          #tags$h4("Result:"),
+          #hr(),
           h5("Description:"),
           HTML(
-            "<p>Power analysis is a statistical device that allows us to determine the sample size required to detect a preset effect under a given test statistics, such as Chi-square test or t-test. In particular, here we need pay attention to the calculated sample size and the realized sample size in an experiment. As observed empirically, when the expression of a protein is not that high, say less than 17 after log2 scale transformation, the required sample size will be compromised due to missing data???the statistical power is compromised too.</p>"
+            "<p>Power analysis is a statistical device that allows us to determine the sample size required to detect a preset effect under a given test statistics, such as Chi-square test or t-test. In particular, here we need pay attention to the calculated sample size and the realized sample size in an experiment. As observed empirically, when the expression of a protein is not that high, say less than 17 after log2 scale transformation, the required sample size will be compromised due to missing data. The statistical power is compromised too.</p>"
           ),
           h5("Reference:"),
           HTML(
