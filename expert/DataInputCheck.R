@@ -17,13 +17,15 @@ technical_file_check<-function(file,sep,header){
 batch_file_check<-function(file,sep,header){
   
 }
-batch_design_check<-function(file,sep,header){
+batch_design_check<-function(file,sep,header,colname){
   errors<-NULL
   d<-read.table(file,sep = sep,header = header)
   if(ncol(d)==1){
     errors<-"Please select correct separator for your file. One sample is not allowed"
   }else if(nrow(d)!=length(unique(d[,1]))){
     errors<-"Duplicated values in first column is not allowed "
+  }else if(sum(is.na(d[,colname]))>0){
+    errors<-"Missing value is not allowed in your upload file"
   }
   return(errors)
 }
