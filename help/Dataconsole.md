@@ -1,9 +1,9 @@
-# ProteomeExpert Data console
+# ProteomeExpert-Data Upload
 
 ## Parameters
 
-### Data console
-Data Console is the core data input interface for user to upload your own data file through web interface. The data console allows uploading your specific protein matrix and experiment meta-data (including experiment run sample file and individual file) as the input data for most of modules. And much more, it interactively merges the sample and individual information into one file which is required by some modules such as statistics, data mining, data pre-processing etc.
+### Data Upload
+Data Upload is the core data input interface for user to upload your own data file through web interface. The data Upload allows uploading your specific protein matrix and experiment meta-data (including experiment run sample file and individual file) as the input data for most of modules. And much more, it interactively merges the sample and individual information into one file which is required by some modules such as statistics, data mining, data pre-processing etc.
 Upload your files (`protein`, `sample`, `individual`) .txt or .csv format with the bottom Browse . Choose separator for the file according to its format. `Comma` for .csv, `Semicolon`  ,   `Comma`  or   `Tab`   for .txt. file. Select `sample id` (protein file should have the same sample id as sample file) columns for further analysis,  `individual id/name` in sample file and individual file as reference for data merge. This tool will merge multiple files  as template for further analysis.
 
 ## Tutorial

@@ -3,7 +3,7 @@
 ## Overview
 Here we provide some statistics methods for identified proteins:
   
-  - T-test
+  - t-test
 
 T-test is any statistical hypothesis test in which the test statistic follows a Student's t-distribution under the null hypothesis.
 
@@ -28,11 +28,11 @@ For **t-test**, we provide the following parameters to be set:
 	- Less (H0: mu=0, Ha: mu<0)
 	- Greater (H0: mu=0, Ha: mu>0)
 	- Click on `Paired samples` if you need to test whether the average of two samples is significantly different from the population they represent.
-	- Click on `Equal variance` for Two Independent Samples
+	- Click on `Equal variance` if two samples with equal variance suppose
 
 	**Critical:** In the case of single-group design, a standard value or population mean must be given and a set of quantitative observation results should be provided. In the case of paired design, the difference of each pair of data must follow normal distribution. In the case of group design, individuals are independent of each other. Both groups of data are taken from the population of normal distribution and meet the homogeneity of variance. The reason why these preconditions are needed is that t statistics calculated under such preconditions must obey t distribution, and t test is the test method that takes t distribution as its theoretical basis.
 
-2. Confidence level: usually 0.95~0.90
+2. Confidence level: usually 95%
 3. Adjust P value method:
 	- none 
 	- bonferroni 

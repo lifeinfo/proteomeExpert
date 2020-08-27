@@ -405,7 +405,7 @@ navbarPage(
         selectize = TRUE
       ),
       hr(),
-      tags$h5("Technical Replicas:"),
+      tags$h5("Technical Replicates:"),
       selectInput(
         'DPTR',
         'Select technical replica column name',
@@ -425,7 +425,7 @@ navbarPage(
         selected = NULL
       ),
       hr(),
-      tags$h5("Biological Replicas :"),
+      tags$h5("Biological Replicates :"),
       selectInput(
         'DPBR',
         'Select biological replica column name',
@@ -458,7 +458,7 @@ navbarPage(
   # QC
   #################################
   tabPanel(
-    "QC",
+    "Quality Control",
     "",
     sidebarPanel(
       tags$h3("Select matrix and label you want to process:"),
@@ -483,7 +483,7 @@ navbarPage(
       hr(),
       
       tags$h5("Click to process:"),
-      actionButton("QC", "Submit", class = "btn-primary")
+      actionButton("Quality Control", "Submit", class = "btn-primary")
       
     ),
     
@@ -679,7 +679,7 @@ navbarPage(
   # data mining
   #################################
   navbarMenu(
-    "Data Mining",
+    "Machine Learning",
     tabPanel(
       "Feature Selection",
       "",
@@ -737,7 +737,7 @@ navbarPage(
     ),
     #####clustering
     tabPanel(
-      "Clustering",
+      "Unsupervised",
       "",
       sidebarPanel(
         h3("Set parameters:"),
@@ -835,7 +835,7 @@ navbarPage(
     # Machine Learning
     #################################
     tabPanel(
-      "Classification",
+      "Supervised",
       "",
       sidebarPanel(
         h3("Data section:"),
@@ -1292,12 +1292,45 @@ tabPanel("Online Help",
          mainPanel(
            tabsetPanel(
              tabPanel(
+               "Docs",
+               hr(),
+               navlistPanel(
+                 tabPanel(
+                   "Overview",
+                   includeMarkdown("help/overview.md")
+                 ), 
+                 tabPanel(
+                   "Experimental Design",
+                   includeMarkdown("help/ExperimentalDesign.md")
+                 ),
+                 tabPanel("Data Upload",
+                          includeMarkdown("help/Dataconsole.md")),
+                 tabPanel(
+                   "Data Preprocessing",
+                   includeMarkdown("help/DataPreprocessing.md")
+                 ),
+                 tabPanel("QC",
+                          includeMarkdown("help/ProteomeExpert-QC.md")),
+                 tabPanel(
+                   "Statistics",
+                   includeMarkdown("help/ProteomeExpert-Statistics.md")
+                 ),
+                 tabPanel("Machine learning",
+                          includeMarkdown("help/dataMing.md")
+                 ),
+                 tabPanel("Other Tools",
+                          includeMarkdown("help/otherTool.md")),
+                 fluid = TRUE,
+                 widths = c(3, 8)
+               )
+             ),
+             tabPanel(
                "Test Data",
                h4("Test data files used for peptide to protein inference"),
                hr(),
                h5("The test peptide matrix contains 24 DIA runs."),
                downloadButton("downlaod_test_pep", label = "Get", class = "btn-primary"),
-               h5("The test technical replicas file"),
+               h5("The test technical replicates file"),
                downloadButton(
                  "downlaod_test_technical",
                  label = "Get",
@@ -1332,35 +1365,7 @@ tabPanel("Online Help",
                # downloadButton("downlaod_test_pulseDIA", label = "Get", class = "btn-primary"),
                hr()
              ),
-             tabPanel(
-               "Docs",
-               hr(),
-               navlistPanel(
-                 tabPanel(
-                   "Experimental Design",
-                   includeMarkdown("help/ExperimentalDesign.md")
-                 ),
-                 tabPanel("Data Console",
-                          includeMarkdown("help/Dataconsole.md")),
-                 tabPanel(
-                   "Data Preprocessing",
-                   includeMarkdown("help/DataPreprocessing.md")
-                 ),
-                 tabPanel("QC",
-                          includeMarkdown("help/ProteomeExpert-QC.md")),
-                 tabPanel(
-                   "Statistics",
-                   includeMarkdown("help/ProteomeExpert-Statistics.md")
-                 ),
-                 tabPanel("Data Mining",
-                   includeMarkdown("help/dataMing.md")
-                 ),
-                 tabPanel("Other Tools",
-                          includeMarkdown("help/otherTool.md")),
-                 fluid = TRUE,
-                 widths = c(3, 8)
-               )
-             ),
+
              tabPanel("Q&A",
                       hr(),
                       h4("Comming soon")

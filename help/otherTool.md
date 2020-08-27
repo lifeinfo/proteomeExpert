@@ -1,4 +1,4 @@
-# ProteomeExpert Other tools
+# ProteomeExpert-Other tools
 
 ## Overview
 This module provide some optional tools may be used in quantitative proteomics data analysis.
