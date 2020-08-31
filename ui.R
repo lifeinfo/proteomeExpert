@@ -137,7 +137,7 @@ navbarPage(
   # Data console
   #################################
   navbarMenu(
-    "Upload",
+    "Data Upload",
     tabPanel(
       "Two files format",
       "",
@@ -467,7 +467,7 @@ navbarPage(
       
       selectInput(
         'QCLabel',
-        "Select your intresting column name, is't usually tissue/disease type.",
+        "Select your interesting column name, it's usually tissue/disease type.",
         anno_name,
         multiple = FALSE,
         selectize = TRUE
@@ -483,7 +483,7 @@ navbarPage(
       hr(),
       
       tags$h5("Click to process:"),
-      actionButton("Quality Control", "Submit", class = "btn-primary")
+      actionButton("QC", "Submit", class = "btn-primary")
       
     ),
     
@@ -1309,7 +1309,7 @@ tabPanel("Online Help",
                    "Data Preprocessing",
                    includeMarkdown("help/DataPreprocessing.md")
                  ),
-                 tabPanel("QC",
+                 tabPanel("Quality Control",
                           includeMarkdown("help/ProteomeExpert-QC.md")),
                  tabPanel(
                    "Statistics",
@@ -1339,7 +1339,7 @@ tabPanel("Online Help",
                h5("The test batch name file"),
                downloadButton("downlaod_test_batch", label = "Get", class = "btn-primary"),
                hr(),
-               h4("Test data files used for data console"),
+               h4("Test data files used for data upload"),
                hr(),
                h5("The test protein matrix contains 24 DIA runs."),
                downloadButton("downlaod_test_prot", label = "Get", class = "btn-primary"),
