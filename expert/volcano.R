@@ -1,7 +1,7 @@
 myVolcano<-cmpfun(function(data,adjp_threshold=0.05,fc_threshold=2){
   plot(data$log2fc,-log10(data$adjp),col="#00000033",pch=19,las=1,
-       xlab="Log2(FC)",
-       ylab="-log10 adjusted P value"
+       xlab="Log2 (Fold change)",
+       ylab="-log10 (Adjusted P value)"
   )  
   up<-subset(data,data$adjp<adjp_threshold&data$log2fc>log2(fc_threshold))
   points(up[,1],-log10(up[,3]),col=1,bg=brewer.pal(9,"YlOrRd")[6],pch=21,cex=1.5)

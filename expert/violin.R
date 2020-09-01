@@ -2,15 +2,15 @@ drawviolin <-
   function(value,
            sample,
            ylabel,
-           strTitle = "Violin plot",
+           strTitle = "Abundance",
            cluster_row = T,
            cluster_col = F) {
-    df <- data.frame(type = sample , value = value)
+    df <- data.frame(Type = sample , value = value)
     df %>%
     plot_ly(
-      x = ~type,
+      x = ~Type,
       y = ~value,
-      color = df$type,
+      color = df$Type,
       type = 'violin',
       box = list(
         visible = T

@@ -12,7 +12,7 @@ mytest<-function(v,a,isLog,alternative,paired,var.equal,conf.level){
   x<-v[1:a]
   y<-v[(a+1):length(v)]
   t<-t.test(x,y,alternative=alternative,paired=paired,var.equal=var.equal,conf.level=conf.level)
-  if(!isLog)
+  if(isLog)
     return(c(log2fc=(mean(y,na.rm = T)-mean(x,na.rm = T)),p=t$p.value))
   else return(c(log2fc=log2(mean(y,na.rm = T)/(mean(x,na.rm = T))),p=t$p.value))
 }

@@ -11,7 +11,7 @@ navbarPage(
     "Home",
     sidebarPanel(
       tags$h4("Update log"),
-      HTML("<p>proteomeExpert is first released in 2020 </p>")
+      HTML("<p>ProteomeExpert was first released in September 2020. </p>")
      
     ),
     mainPanel(tabsetPanel(tabPanel(
@@ -601,7 +601,7 @@ navbarPage(
         ),
         hr(),
         h5("Set parameters for volcano plot"),
-        checkboxInput("volcano_isLog", "Already Log2 transformed protein matrix", TRUE),
+        checkboxInput("volcano_isLog", "Already Log2 transformed protein matrix", FALSE),
         numericInput(
           "volcano_adjp_threshold",
           "Adjust P value threshold",
@@ -1315,7 +1315,7 @@ tabPanel("Online Help",
                    "Statistics",
                    includeMarkdown("help/ProteomeExpert-Statistics.md")
                  ),
-                 tabPanel("Machine learning",
+                 tabPanel("Machine Learning",
                           includeMarkdown("help/dataMing.md")
                  ),
                  tabPanel("Other Tools",

@@ -1,7 +1,7 @@
 # ProteomeExpert-Statistics
 
 ## Overview
-Here we provide some statistical methods for identified proteins:
+Here we provide some statistical methods for analyzing identified proteins:
   
   - *t*-test
 
@@ -52,7 +52,7 @@ For **VolcanoPlot**, we provide the following parameters to be set:
 ## Tutorial 
 
 1. The data analyzed in this part should have been uploaded in Data Console part.
-2. Select your interesting column name, it's usually tissue/disease type. Here we choose **TissueType**.
+2. Select your interesting column name, it is usually tissue/disease type. Here we choose **TissueType**.
 3. Click on the four statistic methods: `t test`, `Volcano Plot`, `Violin Plot` and `Radar Map`
 4. Click on `Submit`.
 5. Click on `t-test` and set t-test parameters on the right side as following:
@@ -60,8 +60,8 @@ For **VolcanoPlot**, we provide the following parameters to be set:
 - Equal variance
 - Confidence level = 0.95
 - Adjust *p*-value method: none
-- select the first group: Prostate cancer
-- select the second group: Benign prostate hyperplasia tissue
+- Select the first group: Prostate cancer
+- Select the second group: Benign prostate hyperplasia tissue
 6. Click on `Submit`.
 7. Click on `VocanoPlot` and set VocanoPlot parameters on the right side as following:
   - Already Log2 transformed protein matrix
