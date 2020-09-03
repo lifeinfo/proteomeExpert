@@ -24,9 +24,9 @@ navbarPage(
   # Experimental Design
   #################################
   navbarMenu(
-    "Experimental Design",
+    "Experimental design",
     tabPanel(
-      "Power Analysis",
+      "Power analysis",
       sidebarPanel(
         tabsetPanel(
           tabPanel("With out pilot experiment",
@@ -75,7 +75,7 @@ navbarPage(
       ))
     ),
     tabPanel(
-      "Batch Design",
+      "Batch design",
       sidebarPanel(
         tags$h4("Batch Design"),
         hr(),
@@ -137,7 +137,7 @@ navbarPage(
   # Data console
   #################################
   navbarMenu(
-    "Data Upload",
+    "Data upload",
     tabPanel(
       "Two files format",
       "",
@@ -346,7 +346,7 @@ navbarPage(
   # data preprocessing
   #################################
   tabPanel(
-    "Data Preprocessing",
+    "Data preprocessing",
     h5("Description:"),
     HTML(
       "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
@@ -458,7 +458,7 @@ navbarPage(
   # QC
   #################################
   tabPanel(
-    "Quality Control",
+    "Quality control",
     "",
     sidebarPanel(
       tags$h3("Select matrix and label you want to process:"),
@@ -679,7 +679,7 @@ navbarPage(
   # data mining
   #################################
   navbarMenu(
-    "Machine Learning",
+    "Machine learning",
     tabPanel(
       "Feature Selection",
       "",
@@ -1288,7 +1288,7 @@ navbarMenu(
 #################################
 # help
 #################################
-tabPanel("Online Help",
+tabPanel("Online help",
          mainPanel(
            tabsetPanel(
              tabPanel(
