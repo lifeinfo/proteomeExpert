@@ -701,8 +701,8 @@ navbarPage(
           ),
           textInput(
             inputId = "fs_missing_ratio",
-            label = "Allowable missing ratio per protein (%).",
-            value = 80
+            label = "Allowable maximum missing ratio per protein.",
+            value = 0.8
           ),
           checkboxGroupInput(
             "featureSel_filter",

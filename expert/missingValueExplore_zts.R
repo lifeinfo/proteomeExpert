@@ -1,7 +1,7 @@
 missing_plot <- function(df) {
   cbbPalette <-
     c(
-      "#000000",
+      #"#000000",
       "#E69F00",
       "#56B4E9",
       "#009E73",

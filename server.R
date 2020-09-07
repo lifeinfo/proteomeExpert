@@ -1690,7 +1690,7 @@ function(input, output, session) {
                                        rownames(protM)
                                      label_temp <-
                                        as.vector(dataAnno()$anno[sample_names, label])
-                                     allowable_missing_ratio<-as.numeric(input$fs_missing_ratio)/100
+                                     allowable_missing_ratio<-as.numeric(input$fs_missing_ratio)
                                      
                                      labeled_protM <-
                                        cbind(label = label_temp, protM, stringsAsFactors = FALSE)
