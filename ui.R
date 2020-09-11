@@ -11,7 +11,7 @@ navbarPage(
     "Home",
     sidebarPanel(
       tags$h4("Update log"),
-      HTML("<p>ProteomeExpert was first released in September 2020. </p>")
+      HTML("<p>ProteomeExpert v1.0 was first released in September 2020. </p>")
      
     ),
     mainPanel(tabsetPanel(tabPanel(
@@ -28,9 +28,10 @@ navbarPage(
     tabPanel(
       "Power analysis",
       sidebarPanel(
+        tags$h4("Power analysis"),
         tabsetPanel(
           tabPanel("With out pilot experiment",
-        tags$h4("Power analysis"),
+       
         hr(),
         textInput("Pm", "Number of Proteins (estimated):", 5000, width = "60%"),
         textInput("Pmu", "Mean abundance of case group:", 13, width = "60%",placeholder = "log2 transformed"),
@@ -45,7 +46,6 @@ navbarPage(
         actionButton("powerb", "Submit", class = "btn-primary")
       ),
       tabPanel("With pilot experiment",
-               tags$h4("Power analysis"),
                tags$h5("Pilot experiment is a small scale preliminary study conducted in order to evaluate feasibility, duration,
                        cost, adverse events, and improve upon the study design prior to performance of a full-scale research project. 
                        Pilot experiments are frequently carried out before large-scale quantitative research, in an attempt to avoid 
@@ -347,12 +347,9 @@ navbarPage(
   #################################
   tabPanel(
     "Data preprocessing",
-    h5("Description:"),
-    HTML(
-      "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
-    ),
+
     sidebarPanel(
-      selectInput('DMprotM', 'select matrix', protM_name, selectize = FALSE),
+      selectInput('DMprotM', ' ', protM_name, selectize = FALSE),
       tags$h5("Log Transform:"),
       radioButtons(
         "DPLog",
@@ -449,6 +446,10 @@ navbarPage(
     ),
     mainPanel(tabPanel(
       "Methods",
+      h5("Description:"),
+      HTML(
+        "<p>Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project.</p>"
+      ),
       DTOutput("preprocessedprotM"),
       downloadButton("downloadpreprocessedData", "Download", class = "btn-primary")
     ))
@@ -461,7 +462,7 @@ navbarPage(
     "Quality control",
     "",
     sidebarPanel(
-      tags$h3("Select matrix and label you want to process:"),
+      tags$h5("Select matrix and label you want to process:"),
       
       selectInput('QCprotM', 'select matrix', protM_name, selectize = FALSE),
       
@@ -474,7 +475,7 @@ navbarPage(
       ),
       
       hr(),
-      tags$h3("Select modules you want to process:"),
+      tags$h5("Select modules you want to process:"),
       
       hr(),
       checkboxInput("MissingValueExplore_check", "MissingValueExplore", TRUE),
@@ -512,7 +513,7 @@ navbarPage(
         
       ),
       tabPanel(
-        "Pearson Correlation",
+        "Pearson correlation",
         h5("Description"),
         h5("The correlation between two variables reflects the degree to which the variables are related."),
         #HTML("<p>None</p>"),
@@ -545,7 +546,6 @@ navbarPage(
       #################################
       tabPanel(
         "t-test",
-        h4("Summary"),
         h5("Description:"),
         HTML(
           "<p>A t-test is any statistical hypothesis test in which the test statistic follows a Student's t-distribution under the null hypothesis.</p>"
@@ -594,7 +594,6 @@ navbarPage(
       #################################
       tabPanel(
         "VolcanoPlot",
-        h4("Summary"),
         h5("Description:"),
         HTML(
           "<p>In statistics, a volcano plot is a type of scatter-plot that is used to quickly identify chans in large datasets composed of replicate data. It plots significance versus fold-change on the y-and-axes, respectively.</p>"
@@ -654,7 +653,6 @@ navbarPage(
       ),
       tabPanel(
         "ViolinPlot",
-        h4("Summary"),
         h5("Description:"),
         HTML(
           "<p>A violin plot is a method of plotting numeric data. It is a box plot with a rotated kernel densy plot on each side. The violin plot is similar to box plots, except that they also show the probility density of the data at different values (in the simplest case this could be a histogram).</p>"
@@ -664,7 +662,6 @@ navbarPage(
       ),
       tabPanel(
         "RadarMap",
-        h4("Summary"),
         h5("Description:"),
         HTML(
           "<p>A radar chart is a graphical method of displaying multivariate data in the form of a two-dimensional chart of three or more quantitative variables represented on axes starting from the same point. The relative position and angle of the axes is typically uninformative.</p>"
@@ -681,10 +678,10 @@ navbarPage(
   navbarMenu(
     "Machine learning",
     tabPanel(
-      "Feature Selection",
+      "Feature selection",
       "",
       sidebarPanel(
-        h3("Set parameters:"),
+        h3("Data section:"),
         h5(
           "Please note: protein matrix and annotation file shoule be upload in data console first."
         ),
@@ -740,7 +737,7 @@ navbarPage(
       "Unsupervised",
       "",
       sidebarPanel(
-        h3("Set parameters:"),
+        h3("Data section:"),
         h5(
           "Please note: protein matrix and annotation file shoule be upload in data console first."
         ),
@@ -776,7 +773,6 @@ navbarPage(
         #################################
         tabPanel(
           "HeatMap",
-          h4("Summary"),
           h5("Description:"),
           HTML(
             "<p>A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.</p>"
@@ -788,7 +784,6 @@ navbarPage(
         
         tabPanel(
           "PCA",
-          h4("Summary"),
           h5("Description:"),
           HTML(
             "<p>Principal component analysis (PCA) is an exploratory analysis tool that emphasizes variation and visualizes possible patterns underlying a dataset. It uses an orthogonal transformation to convert a set of observations of possibly correlated variables into a set of values of linearly uncorrelated variables called principal components. Upon on the context, PCA is also called eigenvalue decomposition, and eigenvalues (vector) and eigenvectors (matrix) are often used to represent the data.</p>
@@ -801,7 +796,6 @@ navbarPage(
           ),
         tabPanel(
           "t-SNE",
-          h4("Summary"),
           h5("Description:"),
           HTML(
             "<p>T-distributed Stochastic Neighbor Embedding (t-SNE) is a nonlinear dimensionality reductiontechnique well-suited for embedding high-dimensional data for visualization in a low-dimensional space of two or three dimensions.</p>"
@@ -816,7 +810,6 @@ navbarPage(
         ),
         tabPanel(
           "UMAP",
-          h4("Summary"),
           h5("Description:"),
           HTML(
             "<p>UMAP (Uniform Manifold Approximation and Projection) is a novel manifold learning technique for dimension reduction. The UMAP algorithm is competitive with t-SNE for visualization quality, and arguably preserves more of the global structure with superior run time performance.</p>"
