@@ -1,28 +1,12 @@
-# ProteomeExpert: A Docker image based web-server for exploring, modeling, visualizing, and mining large-scale proteomic data sets
+# ProteomeExpert: A Docker image based web-server for exploring, modeling, visualizing, and mining large-scale proteomic data sets.
 ![guomics](http://www.guomics.com/assets/img/home/home3.jpg)
 
 ProteomeExpert is an open-source platform-independent browser-based interface for proteome analytics in R. 
 The application is based on the Shiny package and can be run locally or on a server. 
 
-# Guomics Team
+# Supported by Guomics Team
 
-web: http://www.guomics.com
-
-
-![](http://19241930.s21i.faiusr.com/2/ABUIABACGAAg9qrY5wUo4JuMgAYw3BE4sQc.jpg)
-
-
-
-# How to Use
-
-* step 1. upload your protein matrix(*.TXT or *.csv or xls/xlsx) and sample information (individual file if has)
-
-* step 2. click submit & analysis
-
-* step 3. browser diffrent tab
-
-* step 4. download 
-
+http://www.guomics.com
 
 # How to install
 
