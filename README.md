@@ -1,4 +1,4 @@
-# ProteomeExpert - A user friendly Tool for quantitive proteome data analysis.
+# ProteomeExpert: A Docker image based web-server for exploring, modeling, visualizing, and mining large-scale proteomic data sets
 ![guomics](http://www.guomics.com/assets/img/home/home3.jpg)
 
 ProteomeExpert is an open-source platform-independent browser-based interface for proteome analytics in R. 
