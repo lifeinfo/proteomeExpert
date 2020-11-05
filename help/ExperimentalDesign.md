@@ -9,6 +9,8 @@ probability of accepting the null hypothesis even though the null hypothesis is 
 when the real difference is equal to the minimum effect size. Beta = 1 - power.<br />`Standard
 deviations (default=0.75)` have to be estimated for measured variables, usually we assumed it equals to the standard deviation of control group. <br />Click on the `Submit` and the estimated sample size and figure will be shown on theright side of the browser window. 
 
+<img src="poweranalysis.png" align=center>
+
 ### Batch Design
 The main purpose for batch design is to allocate samples into balanced groups to minimize technical bias, say instrumental variations, for large cohort studies. <br />Upload your sample data matrix in **.txt** or **.csv** format with the bottom `Browse`. Choose separator for the file according to its format. `Comma` for .csv, `Semicolon` ,  `Comma` or  `Tab`  for .txt. file.<br />`Select columns for balanced batch design` means choosing the column names (attributes) of your sample dataset that need to be balanced.<br />`Weights for columns` is the different weights between different attributes when the influencers  are considered together.  For example, if you submit `1,1,2` as input for selected columns A, B, C. This means the weight of column A is 25%, of column B is 25% and of column C is 50%. Normalize with <img src="gongshi.jpg" width="133" height = "53" align=center>, n is the number of attributes.<br />`Number of samples in each batch` means how many samples you expected in each balanced group.<br />`Select numeric columns for balanced batch design` means if the attribute is numeric type, such as age, tumor node, metastasis, et.al, it needed to be clarified.
 

@@ -1361,7 +1361,7 @@ tabPanel("Online help",
 
              tabPanel("Q&A",
                       hr(),
-                      h4("Comming soon")
+                      h4("Please go to https://github.com/lifeinfo/proteomeExpert/issues")
                       )
            )
            
