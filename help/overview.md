@@ -8,7 +8,7 @@ Availability: The Docker image of ProteomeExpert is freely available from https:
 ## Modules include:
 
 - Experimental Design: Power Analysis & Batch Design
-- Data Upload
+- Data Upload `All modules rely on data uploading at this step, except experimental design and other tools`
 - Data Preprocesing
 - Quality Control: Missing Value & Pearson Correlation
 - Statistics

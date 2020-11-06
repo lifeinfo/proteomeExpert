@@ -17,7 +17,7 @@ Besides,  we also offer replacement of **Mean** value or **Median** value in the
 
 1. Download the  test data<br/>For this demo, we will be using a proteins matrix dataset, comprised of 3724 identified proteins from 24 samples. Download the _test_prot.txt_ file from "Online Help - Test data files used for data console - The test protein matrix contains 24 DIA runs"<br/>
 2. Upload the test file to "Data Upload - select your protein file".<br/>
-3. Go to Data Preprocessing and select "uploadedProtMatrix", set parameters as following: <br/>
+3. Go to Data Preprocessing and select "uploadedProtMatrix", set parameters *e.g.*: <br/>
 	- Log Transform: Log2
 	- Missing Value Substitution: 0
 	- Normalization: Quantile

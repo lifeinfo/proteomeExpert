@@ -67,7 +67,11 @@ For **VolcanoPlot**, we provide the following parameters to be set:
   - Already Log2 transformed protein matrix
 - Adjust *p*-value threshold: 0.05
 - Fold change threshold: 2
+![image.png](volcano.png)
 8. Click on `Submit`.
+![image.png](volcano2.png)
 9. Click on `ViolinPlot` to see the ViolinPlot figure.
+![image.png](violin.png)
 10. Click on `RadarMap` to see the ViolinPlot figure.
-11. Click on `Download` 
+
+![image.png](radar.png)

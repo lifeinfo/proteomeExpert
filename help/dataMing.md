@@ -12,17 +12,23 @@ Genetic Algorithm (GA) are a is a stochastic optimization method inspired by the
 
  
 
-## Machine Learning: Unsupervised
-It includes the following algorithm:
+## Unsupervised
+Upload the test files in "Data Upload" then set parameters *e.g.*:<br>
+![image.png](unsupervisedParas.png)
+</br>
+Following algorithms are provieded for selection:
 
 - Heatmap
 - PCA
 - t-SNE 
 - UMAP
 
-## Machine Learning: Supervised
+![image.png](pca.png)<br>
+The result of PCA (example).
+## Supervised
 It includes the following algorithm:
 
 - Decision Tree
 - Random forest
 - XGBoost
+![image.png](decisionTree.png)
