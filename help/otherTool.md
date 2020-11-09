@@ -5,6 +5,8 @@ This module provides some optional tools which may be used in quantitative prote
 <br />
 
 ## Procedure
+The peptide to protein inference integrates data normalization, batch effects reduction, missing value imputation and peptide matrix to protein matrix transformation. We provide two alternative methods: the mean of the top 3 precursor intensity and the linear regression of top 3 precursor intensity.
+### Steps of the linear regression of top 3 precursor intensity
 	1.Prepare the peptide matrix, where each row represents a peptide and each column represents a sample.
 	2.Log2 -transform the precursor intensities.
 	3.perform quantile normalization across all samples via the normalize.quantiles function from Bioconductor R library preprocessCore.
@@ -15,7 +17,8 @@ This module provides some optional tools which may be used in quantitative prote
 	8.Keep no more than top 3 precursors (# of NAs ascending and order by mean expression descending) for each protein group. 
 	9.To impute some missing values at protein level for some sample from multiple peptides quantified, we built linear model for step 8 matrix, always use the top protein groups as dependent variable (γ) and chose values greater than 0 as multiple independent variables (χ) by decreasing order of priority. Moreover, impute y using a linear combination of X. Only the regression coefficient with P value<=0.05 and R2 > 0.36 were accepted and rounded up to two decimal places. Then we used the intensity value from the top1 peptide precursor to represent the protein intensity. We apply lm function in R to build the model and do the above imputation.  
 	10.Keep the top1 precursor corresponding proteins and its' intensity. 
-
+### Steps of the mean of top 3 precursor intensity
+  Steps 1 to 8 are the same as above. Then, calculate the mean of the top 3 precursors intensity for each protein as its protein intensity. Finally, keep proteins along with its intensity.
 ## Tutorial
 1. Download the `peptides.txt`, `technical_replicas.txt` and `batch_file.txt` files from "Online Help - Test data files used for peptide to protein inference - Get"
 2. Select your peptide file: click on the  `Browse..` to upload the _peptides.txt_ file, choose `Tab` as separator and with `Header` checkbox selected.

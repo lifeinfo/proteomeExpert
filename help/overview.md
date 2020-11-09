@@ -5,6 +5,11 @@ Availability: The Docker image of ProteomeExpert is freely available from https:
 
 <br />
 
+![image.png](home.png)
+
+&nbsp;
+
+
 ## Modules include:
 
 - Experimental Design: Power Analysis & Batch Design
