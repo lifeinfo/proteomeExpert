@@ -5,11 +5,11 @@ Here we provide some statistical methods for analyzing identified proteins:
   
   - *t*-test
 
-*t*-test is any statistical hypothesis test in which the test statistic follows a Student's t-distribution under the null hypothesis.
+*t*-test is any statistical hypothesis test in which the test statistic follows a student's *t*-distribution under the null hypothesis.
 
 - VolcanoPlot
 
-Volcano plot is a type of scatterplot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y-and-axes, respectively.
+Volcano plot is a type of scatterplot that is used to quickly identify changes in large datasets composed of replicate data. It plots significance versus fold-change on the y- and x-axes, respectively.
 
 - ViolinPlot
 
@@ -33,7 +33,7 @@ For ***t*-test**, we provide the following parameters to be set:
 	**Critical:** In the case of single-group design, a standard value or population mean must be given and a set of quantitative observation results should be provided. In the case of paired design, the difference of each pair of data must follow normal distribution. In the case of group design, individuals are independent with each other. Both groups of data are taken from the population of normal distribution and meet the homogeneity of variance. The reason why these preconditions are needed is that t statistics calculated under such preconditions must obey *t* distribution, and *t* test is the test method that takes *t* distribution as its theoretical basis.
 
 2. Confidence level: usually 95%
-3. Adjust *p* value method:
+3. Adjust *p*-value method:
 	- none 
 	- bonferroni 
 	- hochberg 
@@ -46,8 +46,8 @@ For ***t*-test**, we provide the following parameters to be set:
 For **VolcanoPlot**, we provide the following parameters to be set:
 
 1. Click on `Already Log2 transformed protein matrix` if your proteins data had already been transformed at Data Preprocessing.
-2. Adjust *p*-value threshold
-3. Fold change threshold
+2. Adjust *p*-value threshold.
+3. Fold change threshold.
 
 ## Tutorial 
 
@@ -72,6 +72,6 @@ For **VolcanoPlot**, we provide the following parameters to be set:
 ![image.png](volcano2.png)
 9. Click on `ViolinPlot` to see the ViolinPlot figure.
 ![image.png](violin.png)
-10. Click on `RadarMap` to see the ViolinPlot figure.
+10. Click on `RadarMap` to see the RadarMap figure.
 
 ![image.png](radar.png)

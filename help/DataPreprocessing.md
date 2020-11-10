@@ -4,12 +4,12 @@
 ### Data Preprocessing
 Data Preprocessing is used to transform data in accordance with modeling experiment conditions configured in the project. 
 
-The protein matrix analyzed in Data Preprocessing should be uploaded in "Data Upload - select your protein file". Choose `select matrix: uploadedProtMatrix` for the following analysis. This module including methods for log transform, missing value substitution,
-normalization, batch effects adjustments, and replicates treatment. 
+The protein matrix analyzed in Data Preprocessing should be uploaded in "Data Upload - select your protein file". Choose `select matrix: uploadedProtMatrix` for the following analysis. This module including methods for log transformation, missing value substitution,
+normalization, batch effects adjustments (using Combat), and replicates treatment (using values of replicates to fill up missing values). 
 
 - If you need to do a logarithmic transformation of the data, select `Log Transform` to accomplish. Here we display **Log2** and **Log10** method. Choose **None** to skip this step. 
 - We provide four options for Missing Value Substitution: "**1**", "**0**", "**10% of minimum**" or "**minimum**".Choose **None** to skip this step.
-- "**Quantile**", "**Z-score**" and "**Max-Min**" three functions could be used to do `Normalization` of data.
+- Three functions, i.e. "Quantile", "Z-score" and "Max-Min" could be used for data Normalization.
 
 Besides,  we also offer replacement of **Mean** value or **Median** value in the treatment of `Technical Replicates` and `Biological Replicates` data. For unnecessary batches, select batch column name to `Remove Batch Effects`.
 

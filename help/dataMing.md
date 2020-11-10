@@ -6,16 +6,16 @@ In the feature selection module, users not only apply filter methods to filter f
 <br />
 
 ## Feature selection
-The feature selection is the process that choose a reduced number of explanatory variables to describe a response variable. The feature selection is even more important for the high-dimensional datasets, such as genomics and proteomics data. The main goal of proteomics biomarker discovery is to identify which are the most importance proteins contribute to the disease. Here we used three well known feature selection methods: LASSO, genetic algorithm, and random forest. We are showing the process of these feature selection and describing how to use them to biomarker discover. 
+The feature selection is the process that choose a reduced number of explanatory variables to describe a response variable. The feature selection is even more important for the high-dimensional datasets, such as genomics and proteomics data. The main goal of proteomics biomarker discovery is to identify which are the most importance proteins associated with the disease. Here we used three well known feature selection methods: LASSO, genetic algorithm, and random forest. We show the process of these feature selection and describing how to use them for biomarker discover. 
 LASSO is short of Least Absolute Shrinkage and Selection Operator. We used glmnet package in R (employ cv.glmnet function to choose the most appropriate tuning parameter λ, that controls the strength of the penalty and set α = 1 for LASSO regularization). Once the λ is set, glmnet function is used to do the feature selection according to this λ.
-Genetic Algorithm (GA) are a is a stochastic optimization method inspired by the famous Charles Darwin’s idea of natural selection. Here we used the GA to select the right number of proteins in order to find positive biomarkers. We defined fitness function as the ROC divided number of features for two classification and accuracy divided number of features for multiple classification. Selection, crossover and mutation were done automatically by the ga function in GA package. Random forest is very popular in bioinformatics area and has achieved fantastic results. Functions sbf and rfe in randomForest package were applied here to afford feature selection using cross validation.
+Genetic Algorithm (GA) is a stochastic optimization method inspired by the famous Charles Darwin’s idea of natural selection. Here we used the GA to select the right number of proteins to find positive biomarkers. We defined fitness function as the ROC divided number of features for two classification and accuracy divided number of features for multiple classification. Selection, crossover and mutation were done automatically by the ga function in GA package. Random forest is very popular in bioinformatics area and has achieved fantastic results. Functions sbf and rfe in randomForest package were applied here to afford feature selection using cross validation.
 
 Upload the test files in "Data Upload" then set parameters *e.g.*:<br>
 ![image.png](featureSel.png)
 <br>
 
 ## Unsupervised
-Following algorithms are provieded for selection:
+Following algorithms are provided for selection:
 
 - Heatmap
 - PCA

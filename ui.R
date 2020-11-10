@@ -1318,7 +1318,7 @@ tabPanel("Online help",
                )
              ),
              tabPanel(
-               "Test Data",
+               "Test data",
                h4("Test data files used for peptide to protein inference"),
                hr(),
                h5("The test peptide matrix contains 24 DIA runs."),
