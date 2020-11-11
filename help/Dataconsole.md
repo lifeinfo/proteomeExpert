@@ -1,4 +1,4 @@
-# ProteomeExpert-Data Upload
+# ProteomeExpert-Data upload
 
 ## Overview
 

@@ -1,4 +1,4 @@
-# ProteomeExpert-Data Preprocessing
+# ProteomeExpert-Data preprocessing
 
 ## Overview
 ### Data Preprocessing

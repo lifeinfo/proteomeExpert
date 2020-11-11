@@ -1293,25 +1293,25 @@ tabPanel("Online help",
                    includeMarkdown("help/overview.md")
                  ), 
                  tabPanel(
-                   "Experimental Design",
+                   "Experimental design",
                    includeMarkdown("help/ExperimentalDesign.md")
                  ),
-                 tabPanel("Data Upload",
+                 tabPanel("Data upload",
                           includeMarkdown("help/Dataconsole.md")),
                  tabPanel(
-                   "Data Preprocessing",
+                   "Data preprocessing",
                    includeMarkdown("help/DataPreprocessing.md")
                  ),
-                 tabPanel("Quality Control",
+                 tabPanel("Quality control",
                           includeMarkdown("help/ProteomeExpert-QC.md")),
                  tabPanel(
                    "Statistics",
                    includeMarkdown("help/ProteomeExpert-Statistics.md")
                  ),
-                 tabPanel("Machine Learning",
+                 tabPanel("Machine learning",
                           includeMarkdown("help/dataMing.md")
                  ),
-                 tabPanel("Other Tools",
+                 tabPanel("Other tools",
                           includeMarkdown("help/otherTool.md")),
                  fluid = TRUE,
                  widths = c(3, 8)
