@@ -15,7 +15,7 @@ Upload the test files in "Data Upload" then set parameters *e.g.*:<br>
 <br>
 
 ## Unsupervised
-Following algorithms are provided for selection:
+Following algorithms (implementation mainly based on R packages `pheatmap`, `stats` `tsne` and `umap`) are provided for selection:
 
 - Heatmap
 - PCA
@@ -34,9 +34,9 @@ The result of PCA (demo).
 ## Supervised
 It includes the following algorithm:
 
-- Decision Tree
-- Random forest
-- XGBoost
+- Decision Tree: implementation based on R packages `rpart` and `rpart.plot`
+- Random forest: implementation based on R package `randomForest`
+- XGBoost: implementation based on R package `xgboost`
 
 
 Upload the test files in "Data Upload" then set parameters *e.g.*:<br>
