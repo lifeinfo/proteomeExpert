@@ -52,16 +52,6 @@ library(pheatmap)
 #################################
 library(shinyBS)
 library(bsplus)
-#library(colourpicker)
-#library(ECharts2Shiny)
-
-#drag
-#library(dragulaR)
-
-#d3
-#library(networkD3)
-#library(igraph)
-#library(ggvis)
 
 #################################
 # plot
@@ -119,14 +109,7 @@ library(rpart.plot)
 library(pROC)
 library(randomForest)
 
-
-#library(keras)
 # ML
-#library(keras)
-#install
-#1.install.packages("keras")
-#2.library(keras)
-#3.install_keras()
 library(shinyjs)
 library(stringr)
 library(shinycssloaders)
