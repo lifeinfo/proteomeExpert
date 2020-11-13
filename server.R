@@ -1843,7 +1843,7 @@ function(input, output, session) {
           "<a href='http://geneontology.org'>geneontology.org</a>",
           "<a href='https://reactome.org'>reactome.org</a>"
         ),
-        desc = c(
+        Descritpion = c(
           "Comprehensive protein sequence and functional information, including supporting data.",
           "Protein-Protein Interaction Networks.",
           "Kyoto Encyclopedia of Genes and Genomes; diagrams of signaling pathways.",
