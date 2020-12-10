@@ -29,9 +29,12 @@ if(n.rep!=0){
 
 steps = nrow(samples)*100
 samples_ori<-samples
-if(numeric_headers!="None" & !is.null(numeric_headers)){
-  for(h in numeric_headers){
-  samples[h]<-continue2discrete(unlist(samples[h]))
+if(!is.null(numeric_headers)){
+  if(numeric_headers!="None"){
+    for(h in numeric_headers){
+      samples[h]<-continue2discrete(unlist(samples[h]))
+  }
+
 }
 }
 

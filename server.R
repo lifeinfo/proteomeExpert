@@ -104,7 +104,7 @@ function(input, output, session) {
                  value = 0,
                  {
                    incProgress(1 / 15)
-                   errors<-batch_design_check(input$BDfile$datapath,input$BDsep,T,input$BDcol)
+                   errors<-batch_design_check(input$BDfile$datapath,input$BDsep,T,input$BDcol,input$BDweight)
                    if(!is.null(errors)){
                      showModal(modalDialog(
                        title = "Important message",errors))
