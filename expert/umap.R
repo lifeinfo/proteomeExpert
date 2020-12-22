@@ -12,7 +12,7 @@ drawUMAP <- cmpfun(function(data,label, strTitle="UMAP",rowNormalization=F,colNo
     rownames(tmp) <- rownames(M1)
   }
   if(colNormalization){    tmp <- apply(tmp,2,function(v){(v-mean(v,na.rm=T))/sd(v,na.rm=T)})   }
-  tmp[is.na(tmp)] <- 0
+  #tmp[is.na(tmp)] <- 0
   obj = umap(d=tmp,method='naive')
   clnames <- colnames(tmp)
   df1 <- data.frame(obj$layout)

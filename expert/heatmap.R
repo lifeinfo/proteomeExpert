@@ -5,7 +5,7 @@ drawheatmap <-
            cluster_row = T,
            cluster_col = T) {
     df11 <- as.data.frame(data)
-    df11[is.na(df11)] <- 0
+    #df11[is.na(df11)] <- 0
     ann_col <- data.frame(type = Label, row.names = colnames(df11))
     ann_col$type <- factor(ann_col$type)
 

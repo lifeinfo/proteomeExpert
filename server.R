@@ -558,7 +558,7 @@ function(input, output, session) {
     colnames(data) <- col_name[2:length(col_name)]
     row.names(data) <-row_name
     data.ori<-data
-    data[is.na(data)] <-0
+    #data[is.na(data)] <-0
     
     
     if (!is.null(qc_label) &
@@ -1185,7 +1185,7 @@ function(input, output, session) {
                    if(input$DMclusertingLog!="none" & !is.null(input$DMclusertingLog)){
                      trainData<-log(trainData,as.numeric(input$DMclusertingLog))
                    }
-                   trainData[is.na(trainData)] <-0
+                   #trainData[is.na(trainData)] <-0
                    incProgress(9 / 10, message = "Ready to finish!")
                  })
     #################################
